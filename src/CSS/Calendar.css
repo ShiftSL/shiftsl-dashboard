@@ -1,0 +1,71 @@
+
+/* Hiding the display of all grid hours through here*/
+.sx__week-grid__hour {
+    display: none;
+}
+.sx__week-grid__hour-text {
+    font-size: 0;
+/*    Hiding the original text to customize */
+}
+.sx__week-grid__hour-text::before{
+    font-family: Inter, serif;
+    font-weight: bold;
+    font-size: 8px;
+    align-items: flex-start;
+    content: "hours";
+/*    TODO: Hasindie/ Ojitha = Please make sure the design is followed here for the font. Will be adding to do's like this*/
+}
+/* Using the nth-child of week-grid-hours so only the hours we want are displayed*/
+.sx__week-grid__hour:nth-child(8),
+.sx__week-grid__hour:nth-child(14),
+.sx__week-grid__hour:nth-child(20) {
+    display: block;
+    height: 33.33vh;
+    position: relative;
+    background-color: #646cff;
+}
+/*TODO: H/O = Please Make sure the styles Match to the Design colors etc*/
+/* Customized Content to be displayed */
+.sx__week-grid__hour:nth-child(8) .sx__week-grid__hour-text::before {
+    content: "7 AM - 1 PM";
+}
+
+.sx__week-grid__hour:nth-child(14) .sx__week-grid__hour-text::before {
+    content: "1 PM - 7 PM";
+}
+
+.sx__week-grid__hour:nth-child(20) .sx__week-grid__hour-text::before {
+    content: "7 PM - 7 AM";
+}
+
+/* Style the time slots */
+.sx__week-grid__hour {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+
+.sx__week-grid__time-axis {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Add custom labels */
+.sx__week-grid__hour-text {
+    position: relative;
+    display: block;
+}
+
+/* Custom labels for each shift */
+.sx__week-grid__hour:nth-child(1) .sx__week-grid__hour-text::after {
+    content: " Morning Shift (7 AM - 1 PM)";
+}
+
+.sx__week-grid__hour:nth-child(2) .sx__week-grid__hour-text::after {
+    content: " Afternoon Shift (1 PM - 7 PM)";
+}
+
+.sx__week-grid__hour:nth-child(3) .sx__week-grid__hour-text::after {
+    content: " Night Shift (7 PM - 7 AM)";
+}
