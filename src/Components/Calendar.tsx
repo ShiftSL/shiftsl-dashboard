@@ -1,5 +1,6 @@
 import {useState,useEffect} from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
+
 import {
     createViewDay,
     createViewMonthAgenda,
@@ -8,14 +9,15 @@ import {
 } from '@schedule-x/calendar'
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
+import {createDragAndDropPlugin} from "@schedule-x/drag-and-drop";
 
 import '@schedule-x/theme-default/dist/index.css'
+import '../CSS/Calendar.css'
 
 function Calendar() {
     const eventsService = useState(() => createEventsServicePlugin())[0]
-    // const formatDate = (date: Date) => {
-    //     return date.toISOString().split("T")[0] + " " + date.toTimeString().split(" ")[0]; // "YYYY-MM-DD HH:mm:ss"
-    // };
+    const dragdropService = useState(()=>createDragAndDropPlugin())[0]
+
     const [doctors,setDoctors] = useState(new Map<String, {id: number; name: String}>)
     useEffect(() => {
         const doctorsMap = new Map([
@@ -37,7 +39,7 @@ function Calendar() {
 
     const calendar = useCalendarApp({
 
-        views: [createViewDay(), createViewWeek(),
+        views: [ createViewWeek(),
             createViewMonthGrid(), createViewMonthAgenda(),
             ],
 
@@ -66,7 +68,7 @@ function Calendar() {
             },
 
         ],
-        plugins: [eventsService]
+        plugins: [eventsService, dragdropService]
     })
     useEffect(() => {
         const fetchEvents = async () => {
@@ -99,6 +101,7 @@ function Calendar() {
             fetchEvents();
         }
     }, [eventsService, doctors]);
+
     return (
 
         <div>
