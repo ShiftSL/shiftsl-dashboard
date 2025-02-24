@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import Dashboard from "./Pages/Dashboard.tsx";
 import Navbar from "./Components/Navbar.tsx";
+import AssignDoctorForm from "./Components/AssignDoctorForm.tsx";
 
 
 const App: React.FC = () => {
     return (
         <Router>
-            {/*<Navbar/>*/}
             <Box sx={{ display: "flex" }}>
 
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
