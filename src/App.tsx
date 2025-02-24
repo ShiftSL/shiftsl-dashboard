@@ -1,17 +1,19 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
-import Login from "./Pages/Login";
-import Dashboard from "./Pages/Dashboard";
-import Navbar from "./Components/Navbar";
+
+import Dashboard from "./Pages/Dashboard.tsx";
+import Navbar from "./Components/Navbar.tsx";
+import AssignDoctorForm from "./Components/AssignDoctorForm.tsx";
+
+
 
 const App: React.FC = () => {
     return (
         <Router>
-            <AppContent />
-        </Router>
-    );
-};
+
+            <Box sx={{ display: "flex" }}>
+
 
 const AppContent: React.FC = () => {
     const location = useLocation();
