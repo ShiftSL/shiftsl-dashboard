@@ -7,16 +7,15 @@ import "../CSS/Login.css";
 
 interface LoginProps {
   onToggleForm: (form: string) => void;
-  onLoginSuccess: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ onToggleForm }) => {
   const navigate = useNavigate(); 
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Dummy login validation
-    onLoginSuccess();
+    navigate("/calendar");
   };
 
   return (

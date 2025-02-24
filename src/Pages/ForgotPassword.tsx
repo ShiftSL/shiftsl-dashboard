@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, Button, Typography, Link, Box, Container } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
 import "../CSS/ForgotPassword.css";
@@ -10,12 +10,12 @@ interface ForgotPasswordProps {
 }
 
 const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle forgot password logic here
-    navigate("/login"); // Navigate to the login page after submitting the form
+    navigate("/login"); 
   };
 
   return (

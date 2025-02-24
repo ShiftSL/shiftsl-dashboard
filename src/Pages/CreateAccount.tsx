@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, Button, Typography, Link, Box, Container } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
 import "../CSS/CreateAccount.css";

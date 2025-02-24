@@ -4,7 +4,8 @@ import { Box } from "@mui/material";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import CreateAccount from "./Pages/CreateAccount";
-import ForgotPassword from "./Pages/ForgotPassword"; // Import ForgotPassword component
+import ForgotPassword from "./Pages/ForgotPassword";
+import Calendar from "./Components/Calendar"; 
 import Navbar from "./Components/Navbar";
 
 const App: React.FC = () => {
@@ -27,7 +28,8 @@ const AppContent: React.FC = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/create-account" element={<CreateAccount />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add route for ForgotPassword */}
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/calendar" element={<Calendar />} /> {/* Add route for Calendar */}
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 </Box>
