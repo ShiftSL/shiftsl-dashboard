@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, Button, Typography, Link } from "@mui/material";
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import "../CSS/Login.css"; // Updated import
+import "../CSS/Login.css"; 
 
 interface LoginProps {
   onToggleForm: (form: string) => void;
