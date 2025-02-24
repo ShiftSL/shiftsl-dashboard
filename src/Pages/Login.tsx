@@ -43,7 +43,7 @@ const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <TextField label="Email" type="email" variant="outlined" required fullWidth />
             <TextField label="Password" type="password" variant="outlined" required fullWidth />
-            <Link href="#" onClick={() => onToggleForm("forgotPassword")} className="forgot-password">
+            <Link href="#" onClick={() => navigate("/forgot-password")} className="forgot-password">
               Forgot Password?
             </Link>
             <Button type="submit" variant="contained" color="primary" className="mt-4">

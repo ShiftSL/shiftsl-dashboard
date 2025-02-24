@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import CreateAccount from "./Pages/CreateAccount";
+import ForgotPassword from "./Pages/ForgotPassword"; // Import ForgotPassword component
 import Navbar from "./Components/Navbar";
 
 const App: React.FC = () => {
@@ -19,13 +20,14 @@ const AppContent: React.FC = () => {
 
     return (
         <>
-            {location.pathname !== "/login" && location.pathname !== "/create-account" && <Navbar />}
+            {location.pathname !== "/login" && location.pathname !== "/create-account" && location.pathname !== "/forgot-password" && <Navbar />}
             <Box sx={{ display: "flex" }}>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/create-account" element={<CreateAccount />} /> {/* Add route for CreateAccount */}
+                        <Route path="/create-account" element={<CreateAccount />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add route for ForgotPassword */}
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 </Box>
