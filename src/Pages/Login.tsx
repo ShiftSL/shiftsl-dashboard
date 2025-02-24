@@ -1,8 +1,9 @@
 import React from "react";
 import { TextField, Button, Typography, Link } from "@mui/material";
+import { useNavigate } from "react-router-dom"; 
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import "../CSS/Login.css"; 
+import "../CSS/Login.css";
 
 interface LoginProps {
   onToggleForm: (form: string) => void;
@@ -10,6 +11,8 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
+  const navigate = useNavigate(); 
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Dummy login validation
@@ -48,7 +51,7 @@ const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
             </Button>
             <Typography variant="body2" className="signup-text">
               Don’t have an account?{" "}
-              <Link href="#" onClick={() => onToggleForm("createAccount")} className="create-account">
+              <Link href="#" onClick={() => navigate("/create-account")} className="create-account">
                 Create new one
               </Link>
             </Typography>

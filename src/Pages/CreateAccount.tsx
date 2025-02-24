@@ -1,18 +1,21 @@
 import React from "react";
 import { TextField, Button, Typography, Link, Box, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import "../CSS/index.css";
+import "../CSS/CreateAccount.css";
 
 interface CreateAccountProps {
   onToggleForm: (form: string) => void;
 }
 
 const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
+  const navigate = useNavigate(); 
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle account creation logic here
-    onToggleForm("login"); // Navigate to the login page after successful account creation
+    navigate("/login"); 
   };
 
   return (
@@ -43,7 +46,7 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
             </Button>
             <Typography variant="body2" align="center" className="login-text" mt={2}>
               Already have an account?{" "}
-              <Link href="#" onClick={() => onToggleForm("login")} className="login-link">
+              <Link href="#" onClick={() => navigate("/login")} className="login-link">
                 Sign in
               </Link>
             </Typography>
