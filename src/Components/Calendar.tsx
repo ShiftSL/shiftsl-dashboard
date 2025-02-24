@@ -3,7 +3,6 @@ import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import add from "../assests/add_circle.png"
 
 import {
-    createViewDay,
     createViewMonthAgenda,
     createViewMonthGrid,
     createViewWeek,
