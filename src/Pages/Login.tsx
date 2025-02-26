@@ -1,19 +1,21 @@
 import React from "react";
 import { TextField, Button, Typography, Link } from "@mui/material";
+import { useNavigate } from "react-router-dom"; 
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import "../CSS/Login.css"; // Updated import
+import "../CSS/Login.css";
 
 interface LoginProps {
   onToggleForm: (form: string) => void;
-  onLoginSuccess: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
+const Login: React.FC<LoginProps> = ({ onToggleForm }) => {
+  const navigate = useNavigate(); 
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Dummy login validation
-    onLoginSuccess();
+    navigate("/calendar");
   };
 
   return (
@@ -40,7 +42,7 @@ const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <TextField label="Email" type="email" variant="outlined" required fullWidth />
             <TextField label="Password" type="password" variant="outlined" required fullWidth />
-            <Link href="#" onClick={() => onToggleForm("forgotPassword")} className="forgot-password">
+            <Link href="#" onClick={() => navigate("/forgot-password")} className="forgot-password">
               Forgot Password?
             </Link>
             <Button type="submit" variant="contained" color="primary" className="mt-4">
@@ -48,7 +50,7 @@ const Login: React.FC<LoginProps> = ({ onToggleForm, onLoginSuccess }) => {
             </Button>
             <Typography variant="body2" className="signup-text">
               Don’t have an account?{" "}
-              <Link href="#" onClick={() => onToggleForm("createAccount")} className="create-account">
+              <Link href="#" onClick={() => navigate("/create-account")} className="create-account">
                 Create new one
               </Link>
             </Typography>
