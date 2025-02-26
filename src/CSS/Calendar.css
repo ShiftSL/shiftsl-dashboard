@@ -16,6 +16,7 @@
 /*    TODO: Hasindie/ Ojitha = Please make sure the design is followed here for the font. Will be adding to do's like this*/
 }
 /* Using the nth-child of week-grid-hours so only the hours we want are displayed*/
+/*Comment to push*/
 .sx__week-grid__hour:nth-child(8),
 .sx__week-grid__hour:nth-child(14),
 .sx__week-grid__hour:nth-child(20) {
