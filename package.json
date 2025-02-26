@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.4",
     "@mui/material": "^6.4.4",
+    "@schedule-x/drag-and-drop": "^2.20.0",
     "@schedule-x/events-service": "^2.19.0",
     "@schedule-x/react": "^2.19.0",
     "@schedule-x/shared": "^2.19.0",
