@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ShiftFormProps, ShiftFormData } from "../Types"; // Corrected import statement
+import { ShiftFormProps, ShiftFormData } from "../Types.tsx";
 import '../CSS/AssignDoctorForm.css'
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
@@ -121,4 +121,3 @@ export default AssignDoctorForm;
      Issues To Be Checked:
      3. CSS wise not at all coordinated (Ojitha)
  */
-/* Test */
