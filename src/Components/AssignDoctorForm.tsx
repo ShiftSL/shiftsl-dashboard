@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ShiftFormProps, ShiftFormData } from "../Types"; // Corrected import statement
+import { ShiftFormProps, ShiftFormData } from "../Types.tsx";
 import '../CSS/AssignDoctorForm.css'
 import doctordata from '../assests/doctors.json'
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
@@ -77,7 +77,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                         value={Array.isArray(formData.people) ? formData.people : []}
                         onChange={handleSelectChange}
                         multiple
-                    >
+          
                         {doctorList.map((doctor) => (
                             <option key={doctor.id} value={doctor.id}>
                                 Dr. {doctor.first_name} {doctor.last_name}
@@ -106,3 +106,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
 export default AssignDoctorForm;
 
+/* TODO:
+     Issues To Be Checked:
+     3. CSS wise not at all coordinated (Ojitha)
+ */

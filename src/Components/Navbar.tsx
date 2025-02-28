@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
-import logo from "../assests/logo.png"; // Adjust path as needed
+import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import logo from "../assests/logo.png"; 
 
 import {
   Box,
@@ -75,8 +75,19 @@ const menuItems = [
 ];
 
 const Navbar: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState("Employees");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedItem, setSelectedItem] = useState("");
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const currentItem = menuItems
+      .flatMap(section => section.items)
+      .find(item => item.route === currentPath);
+    if (currentItem) {
+      setSelectedItem(currentItem.text);
+    }
+  }, [location]);
 
   return (
     <StyledDrawer variant="permanent" anchor="left">
