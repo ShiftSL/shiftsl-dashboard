@@ -7,6 +7,7 @@ import AssignDoctorForm from "./Components/AssignDoctorForm";
 import Header from "./Components/Header"; 
 import LoginPage from "./Pages/LoginPage"; 
 import CreateAccount from "./Pages/CreateAccount"; 
+import ForgotPassword from "./Pages/ForgotPassword"; 
 
 const App: React.FC = () => {
     return (
@@ -18,7 +19,7 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = () => {
     const location = useLocation();
-    const isLoginPage = location.pathname === "/login" || location.pathname === "/create-account";
+    const isLoginPage = location.pathname === "/login" || location.pathname === "/create-account" || location.pathname === "/forgot-password";
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -28,6 +29,7 @@ const AppContent: React.FC = () => {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} /> {/* Add LoginPage route */}
                     <Route path="/create-account" element={<CreateAccount />} /> {/* Add CreateAccount route */}
+                    <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add ForgotPassword route */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect to LoginPage */}
                 </Routes>
