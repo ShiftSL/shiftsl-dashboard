@@ -6,6 +6,7 @@ import Navbar from "./Components/Navbar";
 import AssignDoctorForm from "./Components/AssignDoctorForm";
 import Header from "./Components/Header"; 
 import LoginPage from "./Pages/LoginPage"; 
+import CreateAccount from "./Pages/CreateAccount"; 
 
 const App: React.FC = () => {
     return (
@@ -17,7 +18,7 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = () => {
     const location = useLocation();
-    const isLoginPage = location.pathname === "/login";
+    const isLoginPage = location.pathname === "/login" || location.pathname === "/create-account";
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -26,6 +27,7 @@ const AppContent: React.FC = () => {
                 {!isLoginPage && <Header />} {/* Conditionally render Header */}
                 <Routes>
                     <Route path="/login" element={<LoginPage />} /> {/* Add LoginPage route */}
+                    <Route path="/create-account" element={<CreateAccount />} /> {/* Add CreateAccount route */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect to LoginPage */}
                 </Routes>
