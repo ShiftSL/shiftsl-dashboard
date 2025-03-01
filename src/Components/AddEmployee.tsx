@@ -13,12 +13,13 @@ import doctorsData from "../assests/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = () => {
+    const generateNewId = (): bigint => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1): BigInt(1);
+        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
     };
+
     const [formData, setFormData] = useState<Doctor>({
-        id: generateNewId(), // Generate ID dynamically
+        id: generateNewId(), // Generate ID dynamically in BigInt
         first_name: "",
         last_name: "",
         email: "",
@@ -31,7 +32,6 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    // ✅ Handle changes for `<Select>` (Dropdown)
     const handleSelectChange = (e: SelectChangeEvent<string>) => {
         setFormData((prev) => ({ ...prev, role: e.target.value }));
     };
@@ -43,11 +43,11 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
             alert("Please fill all fields");
             return;
-        }
+        } // validation
 
-        onDoctorAdded(formData); // ✅ Send data to parent component
+        onDoctorAdded(formData);
         setFormData({
-            id: formData.id + 1,
+            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
             first_name: "",
             last_name: "",
             email: "",

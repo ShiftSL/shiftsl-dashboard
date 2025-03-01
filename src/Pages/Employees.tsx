@@ -4,7 +4,8 @@
     Can add new Doctors
  */
 
-// import "../Components/AddEmployee.tsx" TODO: The Add Doctor Form Needs to Be checked
+import "../Components/AddEmployee.tsx"
+// TODO: The Add Doctor Form Needs to Be checked
 import React, {useEffect} from "react";
 import {
     Box,
@@ -22,6 +23,7 @@ import "../CSS/Employees.css";
 import doctordata from '../assests/doctors.json'
 // creating a doctor interface to make sure data is updated properly
 import {Doctor} from "../Interfaces/Doctor.tsx"
+import AddEmployee from "../Components/AddEmployee.tsx";
 const Employees: React.FC = () => {
     const [ward, setWard] = React.useState("");
     // To set the ward
@@ -34,20 +36,37 @@ const Employees: React.FC = () => {
 
     const [doctors, setDoctors] = React.useState<Doctor[]>([]); // initial state set to an empty list of doctors
     useEffect(() => {
-        setDoctors(doctordata.map(doctor => ({
-            ...doctor,
-            id: BigInt(doctor.id)
-        }))); // Setting Doctor Data from the JSON // TODO: Later fetch this from a GET API
+        const savedDoctors = localStorage.getItem("doctors") // fetches doctors json
+        if(savedDoctors){
+            setDoctors(JSON.parse(savedDoctors).map(doctor => ({
+                ...doctor,
+                id: BigInt(doctor.id)
+            }))); // Setting Doctor Data from the JSON // TODO: Later fetch this from a GET API
+        }
+        else {
+            setDoctors(doctordata.map(doctor =>({
+                ...doctor,
+                id:BigInt((doctor.id))
+            })))
+        }
+
     }, []);
 
-    const [addForm, showAddForm] = React.useState(false)
-    const handleDoctorAdded=(newDoctor: any) =>{
-        console.log("New Doc Added: " +newDoctor);
-        showAddForm(false);
+    const [addForm, setAddForm] = React.useState(false)
+    const handleDoctorAdded=(newDoctor: Doctor) =>{
+        const updatedDoctors = [...doctors, newDoctor];
+        setDoctors(updatedDoctors);
+        localStorage.setItem("doctors", JSON.stringify(updatedDoctors.map(doctor =>({
+            ...doctor,
+            id: doctor.id.toString()
+        }) )))
+        setAddForm(false);
+        console.log("New Doc Added: " +newDoctor.id,+" "+newDoctor.first_name, +" "+newDoctor.last_name,+" " +newDoctor.email, +newDoctor.email);
     }
 
     return (
         <Box sx={{ width: "100%", padding: "20px" }}>
+
             <Grid container alignItems="center" spacing={1} className="heading">
                 <Grid item>
                     <Typography variant="h5" fontWeight="bold">
@@ -106,24 +125,17 @@ const Employees: React.FC = () => {
                             backgroundColor: "#28C77F!important",
                         },
                     }}
-                           
+                            onClick={()=>setAddForm(true)}
                     >
                         Add New
                     </Button>
-                    {/*<Modal open={addForm} onClose={() => showAddForm(false)}>*/}
-                    {/*    <Box sx={{*/}
-                    {/*        position: "absolute",*/}
-                    {/*        top: "50%",*/}
-                    {/*        left: "50%",*/}
-                    {/*        transform: "translate(-50%, -50%)",*/}
-                    {/*        bgcolor: "background.paper",*/}
-                    {/*        boxShadow: 24,*/}
-                    {/*        p: 3,*/}
-                    {/*        borderRadius: 2*/}
-                    {/*    }}>*/}
-                    {/*        <AddEmployee onDoctorAdded={handleDoctorAdded} />*/}
-                    {/*    </Box>*/}
-                    {/*</Modal>*/}
+
+                    <Modal open={addForm} onClose={()=>setAddForm(false)}>
+                        <Box sx={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2}}>
+                        <AddEmployee onDoctorAdded={handleDoctorAdded}/>
+                        </Box>
+                    </Modal>
+
                     <Button variant="outlined" startIcon={<FilterListIcon />} className="panel-btn"  sx={{
                         color: "#2AED8D",
                         borderColor: "#2AED8D",
@@ -151,7 +163,7 @@ const Employees: React.FC = () => {
                         <TableBody>
                             {doctors.map((doctor)=>(
                                 <TableRow sx={{backgroundColor: "#FDFDFD"}} key={doctor.id}>
-                                    <TableCell>{doctor.id}</TableCell>
+                                    <TableCell>{doctor.id.toString()}</TableCell>
                                     <TableCell>{doctor.first_name}</TableCell>
                                     <TableCell>{doctor.last_name}</TableCell>
                                     <TableCell>{doctor.phone_no}</TableCell>
