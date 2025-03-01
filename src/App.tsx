@@ -5,7 +5,8 @@ import Dashboard from "./Pages/Dashboard";
 import Navbar from "./Components/Navbar";
 import AssignDoctorForm from "./Components/AssignDoctorForm";
 import Header from "./Components/Header";
-import Employees from "./Pages/Employees.tsx"; // Import Header component
+import Employees from "./Pages/Employees.tsx";
+import Approval from "./Pages/Approval.tsx"; // Import Header component
 
 const App: React.FC = () => {
     return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="*" element={<Navigate to="/dashboard" />} />
                         <Route path="/employees" element={<Employees/>}/>
+                        <Route path="/approval" element={<Approval/>}/>
                     </Routes>
                 </Box>
             </Box>
