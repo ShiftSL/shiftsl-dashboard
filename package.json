@@ -28,6 +28,7 @@
     "@schedule-x/theme-default": "^2.21.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.1.5"
+    "react-router-dom": "^7.1.5",
+    "react-world-flags": "^1.6.0"
   }
 }
