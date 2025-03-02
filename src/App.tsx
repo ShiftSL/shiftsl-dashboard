@@ -4,8 +4,10 @@ import { Box } from "@mui/material";
 import Dashboard from "./Pages/Dashboard";
 import Navbar from "./Components/Navbar";
 import AssignDoctorForm from "./Components/AssignDoctorForm";
+import AssignNurseForm from "./Components/AssignNurseForm.tsx";
 import Header from "./Components/Header";
 import Employees from "./Pages/Employees.tsx"; // Import Header component
+import NursesDashboard from "./Pages/NursesDashboard";
 
 const App: React.FC = () => {
     return (
@@ -16,6 +18,7 @@ const App: React.FC = () => {
                     <Header /> {/* Add Header component */}
                     <Routes>
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/nurses" element={<NursesDashboard />} />
                         <Route path="*" element={<Navigate to="/dashboard" />} />
                         <Route path="/employees" element={<Employees/>}/>
                     </Routes>
