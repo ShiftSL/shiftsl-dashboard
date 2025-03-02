@@ -20,7 +20,7 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import "../CSS/Employees.css";
-import doctordata from '../assests/doctors.json'
+import doctordata from '../jsonfiles/doctors.json'
 // creating a doctor interface to make sure data is updated properly
 import {Doctor} from "../Interfaces/Doctor.tsx"
 import AddEmployee from "../Components/AddEmployee.tsx";
@@ -33,7 +33,6 @@ const Employees: React.FC = () => {
     };
 
     // Fetching Employee Data. For now from a JSON
-
     const [doctors, setDoctors] = React.useState<Doctor[]>([]); // initial state set to an empty list of doctors
     useEffect(() => {
         const savedDoctors = localStorage.getItem("doctors") // fetches doctors json
@@ -58,7 +57,7 @@ const Employees: React.FC = () => {
         setDoctors(updatedDoctors);
         localStorage.setItem("doctors", JSON.stringify(updatedDoctors.map(doctor =>({
             ...doctor,
-            id: doctor.id.toString()
+            id: doctor.id.toString() // Stores in browser storage later will be saved using a push API
         }) )))
         setAddForm(false);
         console.log("New Doc Added: " +newDoctor.id,+" "+newDoctor.first_name, +" "+newDoctor.last_name,+" " +newDoctor.email, +newDoctor.email);

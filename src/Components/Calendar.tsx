@@ -14,7 +14,7 @@ import {createDragAndDropPlugin} from "@schedule-x/drag-and-drop";
 import AssignDoctorForm from "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
-import {ShiftFormProps, ShiftFormData} from "../Types.tsx"
+import {ShiftFormProps, ShiftFormData} from "../Interfaces/Types.tsx"
 import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
 

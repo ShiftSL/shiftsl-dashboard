@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { ShiftFormProps, ShiftFormData } from "../Types"; // Corrected import statement
+import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx"; // Corrected import statement
 import '../CSS/AssignDoctorForm.css'
-import doctordata from '../assests/doctors.json'
+import doctordata from '../jsonfiles/doctors.json'
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
         title: initialData?.title || "",

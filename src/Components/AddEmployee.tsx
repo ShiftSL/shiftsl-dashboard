@@ -9,7 +9,7 @@ import {
     Typography,
     Paper, SelectChangeEvent
 } from "@mui/material";
-import doctorsData from "../assests/doctors.json";
+import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
