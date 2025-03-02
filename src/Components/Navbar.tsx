@@ -61,7 +61,9 @@ const menuItems = [
       { text: "Dashboard", icon: <Dashboard />, route: "/dashboard" },
       { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
       { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
-      { text: "Employees", icon: <Groups />, route: "/employees" },
+      { text: "Employees", icon: <Groups />, route: "#" }, //no route, act as title
+      { text: "Doctors", icon: <Groups />, route: "/employees" },
+      { text: "Nurses", icon: <Groups />, route: "/nurseList" },
     ],
   },
   {
