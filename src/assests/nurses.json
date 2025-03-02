@@ -1,0 +1,12 @@
+[
+    { "id": "1", "first_name": "Jon", "last_name": "Snow", "email": "jon.snow@example.com", "role": "Permanent", "phone_no": "123-456-7890" },
+    { "id": "2", "first_name": "Brandon", "last_name": "Stark", "email": "brandon.stark@example.com", "role": "Temporary", "phone_no": "234-567-8901" },
+    { "id": "3", "first_name": "Tyrion", "last_name": "Lannister", "email": "tyrion.lannister@example.com", "role": "Permanent", "phone_no": "345-678-9012" },
+    { "id": "4", "first_name": "Daenerys", "last_name": "Targaryen", "email": "daenerys.targaryen@example.com", "role": "Permanent", "phone_no": "456-789-0123" },
+    { "id": "5", "first_name": "Arya", "last_name": "Stark", "email": "arya.stark@example.com", "role": "Temporary", "phone_no": "567-890-1234" },
+    { "id": "6", "first_name": "Sansa", "last_name": "Stark", "email": "sansa.stark@example.com", "role": "Permanent", "phone_no": "678-901-2345" },
+    { "id": "7", "first_name": "Cersei", "last_name": "Lannister", "email": "cersei.lannister@example.com", "role": "Permanent", "phone_no": "789-012-3456" },
+    { "id": "8", "first_name": "Jaime", "last_name": "Lannister", "email": "jaime.lannister@example.com", "role": "Permanent", "phone_no": "890-123-4567" },
+    { "id": "9", "first_name": "Samwell", "last_name": "Tarly", "email": "samwell.tarly@example.com", "role": "Temporary", "phone_no": "901-234-5678" },
+    { "id": "10", "first_name": "Brienne", "last_name": "Tarth", "email": "brienne.tarth@example.com", "role": "Permanent", "phone_no": "012-345-6789" }
+  ]
