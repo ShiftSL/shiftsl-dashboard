@@ -80,7 +80,7 @@ const AssignNurseForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initial
                     >
                         {nurseList.map((nurse) => (
                             <option key={nurse.id} value={nurse.id}>
-                                Dr. {nurse.first_name} {nurse.last_name}
+                                Nurse {nurse.first_name} {nurse.last_name}
                             </option>
                         ))}
                     </select>
