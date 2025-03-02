@@ -28,7 +28,7 @@
 .sx__week-grid__hour:nth-child(14),
 .sx__week-grid__hour:nth-child(20) {
     display: flex;
-    height: 30vh;
+    height: 40vh;
     position: relative;
     align-items: center;
     /* background-color: #646cff; */
@@ -39,16 +39,19 @@
 .sx__week-grid__hour:nth-child(8) .sx__week-grid__hour-text::before {
     content: "7 AM - 1 PM";
     font-family: Inter, serif;
+    font-weight: bold;
 }
 
 .sx__week-grid__hour:nth-child(14) .sx__week-grid__hour-text::before {
     content: "1 PM - 7 PM";
     font-family: Inter, serif;
+    font-weight: bold;
 }
 
 .sx__week-grid__hour:nth-child(20) .sx__week-grid__hour-text::before {
     content: "7 PM - 7 AM";
     font-family: Inter, serif;
+    font-weight: bold;
 }
 
 /* Style the time slots */

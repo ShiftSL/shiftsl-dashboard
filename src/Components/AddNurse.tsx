@@ -102,7 +102,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     required
                 />
 
-                <FormControl fullWidth margin="normal">
+                 <FormControl fullWidth margin="normal">
                     <InputLabel>Role</InputLabel>
                     <Select
                         name="role"
@@ -112,7 +112,8 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                         <MenuItem value="Permanent">Permanent</MenuItem>
                         <MenuItem value="Temporary">Temporary</MenuItem>
                     </Select>
-                </FormControl>
+                </FormControl> 
+                
 
                 <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
                     Add Nurse

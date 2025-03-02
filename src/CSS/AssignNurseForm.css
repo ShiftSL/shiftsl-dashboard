@@ -1,3 +1,6 @@
+.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding-right: 0px !important; /*fix nurse role overflow in mui <select> component*
+}
 /* General form styling */
 .form-container {
     width: 100%;
