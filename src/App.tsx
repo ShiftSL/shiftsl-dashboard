@@ -8,6 +8,7 @@ import AssignNurseForm from "./Components/AssignNurseForm.tsx";
 import Header from "./Components/Header";
 import Employees from "./Pages/Employees.tsx"; // Import Header component
 import NursesDashboard from "./Pages/NursesDashboard";
+import NurseEmployees from "./Pages/NurseEmployees.tsx";
 
 const App: React.FC = () => {
     return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
                         <Route path="/nurses" element={<NursesDashboard />} />
                         <Route path="*" element={<Navigate to="/dashboard" />} />
                         <Route path="/employees" element={<Employees/>}/>
+                        <Route path="/NurseList" element={<NurseEmployees/>}/>
                     </Routes>
                 </Box>
             </Box>
