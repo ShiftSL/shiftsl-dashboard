@@ -1,12 +1,12 @@
 /* Main container */
-.forgot-password-container {
+.success-page-container {
     display: flex;
     min-height: 100vh;
     background-color: #ededed;
   }
   
   /* Left panel styling */
-  .forgot-password-left-panel {
+  .success-page-left-panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -20,7 +20,7 @@
     text-align: center;
   }
   
-  .forgot-password-left-panel h1 {
+  .success-page-left-panel h1 {
     font-size: 2.5rem !important;
     font-weight: 700 !important;
     line-height: 1.3 !important;
@@ -43,7 +43,7 @@
   }
   
   /* Right panel styling */
-  .forgot-password-right-panel {
+  .success-page-right-panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -56,17 +56,11 @@
   }
   
   /* Typography styling */
-  .forgot-password-right-panel h3 {
+  .success-page-right-panel h3 {
     font-size: 1.75rem !important;
     font-weight: 700 !important;
     text-align: center;
     color: #2b3c56 !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .instruction-text {
-    text-align: center;
-    color: #666;
     margin-bottom: 1.5rem !important;
   }
   
@@ -88,7 +82,7 @@
     color: #666 !important;
   }
   
-  /* Send Reset Link button */
+  /* Sign up button */
   .MuiButton-contained {
     background-color: #2b3c56 !important;
     color: white !important;
@@ -123,24 +117,41 @@
     text-decoration: underline !important;
   }
   
+  .verify-button {
+    background-color: #2b3c56;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    text-transform: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .verify-button:hover {
+    background-color: #374b6d;
+  }
+  
   /* Responsive design */
   @media (max-width: 768px) {
-    .forgot-password-container {
+    .success-page-container {
       flex-direction: column;
     }
   
-    .forgot-password-left-panel {
+    .success-page-left-panel {
       width: auto;
       min-height: 300px;
       padding: 1.5rem;
     }
   
-    .forgot-password-right-panel {
+    .success-page-right-panel {
       width: auto;
       padding: 1.5rem;
     }
   
-    .forgot-password-left-panel h1 {
+    .success-page-left-panel h1 {
       font-size: 2rem !important;
     }
   
@@ -151,15 +162,14 @@
   
   /* For very small screens */
   @media (max-width: 480px) {
-    .forgot-password-left-panel {
+    .success-page-left-panel {
       display: none;
     }
   
-    .forgot-password-right-panel {
+    .success-page-right-panel {
       width: 100%;
       margin: 0;
       border-radius: 0;
     }
   }
-  
-  
+

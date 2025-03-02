@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Typography, Box, Container } from "@mui/material";
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import successTick from "../assests/success.png"; // Add the path to your success tick image
-import "../CSS/CreateAccount.css";
+import successTick from "../assests/success.png";
+import "../CSS/SuccessPage.css";
 
-interface CreateAccountProps {
+interface SuccessPageProps {
   onToggleForm: (form: string) => void;
 }
 
-const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
+const SuccessPage: React.FC<SuccessPageProps> = ({ onToggleForm }) => {
   const navigate = useNavigate();
   const [timer, setTimer] = useState(30);
 
@@ -33,8 +33,8 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
   };
 
   return (
-    <div className="create-account-container">
-      <div className="create-account-left-panel">
+    <div className="success-page-container">
+      <div className="success-page-left-panel">
         <Typography variant="h4" component="h1" gutterBottom>
           Account Created Successfully!
         </Typography>
@@ -42,7 +42,7 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
           <img src={illustration} alt="Team collaboration" />
         </div>
       </div>
-      <div className="create-account-right-panel">
+      <div className="success-page-right-panel">
         <Container maxWidth="xs">
           <Box textAlign="center" mb={2}>
             <img src={logo} alt="ShiftSL Logo" style={{ maxWidth: "250px", marginBottom: "5px" }} />
@@ -68,4 +68,4 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ onToggleForm }) => {
   );
 };
 
-export default CreateAccount;
+export default SuccessPage;

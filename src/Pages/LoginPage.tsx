@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
       navigate("/dashboard");
     } else {
       alert("Success");
-      navigate("/forgot-password"); // Redirect to ForgotPassword page
+      navigate("/verification-page"); 
     }
   };
 

@@ -3,21 +3,21 @@ import { TextField, Button, Typography, Link, Box, Container } from "@mui/materi
 import { useNavigate } from "react-router-dom"; 
 import logo from "../img/logo.png";
 import illustration from "../img/Group.svg";
-import notificationGif from "../assests/OTP.gif"; // Add the path to your notification GIF
-import "../CSS/ForgotPassword.css";
+import notificationGif from "../assests/OTP.gif";
+import "../CSS/VerificationPage.css";
 
-interface ForgotPasswordProps {
+interface VerificationPageProps {
   onToggleForm: (form: string) => void;
 }
 
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
+const VerificationPage: React.FC<VerificationPageProps> = ({ onToggleForm }) => {
   const navigate = useNavigate(); 
   const [otp, setOtp] = useState(Array(6).fill(""));
 
   const handleOtpSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle OTP verification logic here
-    navigate("/create-account"); // Redirect to CreateAccount success page
+    navigate("/success-page"); 
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -32,8 +32,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
   };
 
   return (
-    <div className="forgot-password-container">
-      <div className="forgot-password-left-panel">
+    <div className="verification-page-container">
+      <div className="verification-page-left-panel">
         <Typography variant="h4" component="h1" gutterBottom>
         Enter Verification Code 
         </Typography>
@@ -41,7 +41,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
           <img src={illustration} alt="Team collaboration" />
         </div>
       </div>
-      <div className="forgot-password-right-panel">
+      <div className="verification-page-right-panel">
         <Container maxWidth="xs">
           <Box textAlign="center" mb={2}>
             <img src={logo} alt="ShiftSL Logo" style={{ maxWidth: "250px", marginBottom: "5px" }} />
@@ -67,11 +67,11 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   required
                   sx={{
-                    border: '1px solid #ccc', // Add border
+                    border: '1px solid #ccc',
                     borderRadius: '4px',
-                    marginRight: index < otp.length - 1 ? '2px' : '0', // Decrease space between boxes
-                    width: '40px', // Adjust width as needed
-                    height: '40px' // Adjust height as needed
+                    marginRight: index < otp.length - 1 ? '2px' : '0', 
+                    width: '40px', 
+                    height: '40px',
                   }}
                 />
               ))}
@@ -89,4 +89,4 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
   );
 };
 
-export default ForgotPassword;
+export default VerificationPage;
