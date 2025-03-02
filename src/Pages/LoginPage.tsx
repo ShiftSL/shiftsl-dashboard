@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
     if (countryCode === "+1" && mobileNumber === "1234567890") {
       navigate("/dashboard");
     } else {
-      alert("Invalid credentials");
+      alert("Success");
       navigate("/forgot-password"); // Redirect to ForgotPassword page
     }
   };

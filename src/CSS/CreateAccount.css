@@ -117,6 +117,23 @@
     text-decoration: underline !important;
   }
   
+  .verify-button {
+    background-color: #2b3c56;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    text-transform: none;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .verify-button:hover {
+    background-color: #374b6d;
+  }
+  
   /* Responsive design */
   @media (max-width: 768px) {
     .create-account-container {
@@ -155,5 +172,4 @@
       border-radius: 0;
     }
   }
-  
-  
+

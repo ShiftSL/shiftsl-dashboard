@@ -17,7 +17,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onToggleForm }) => {
   const handleOtpSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Handle OTP verification logic here
-    navigate("/login");
+    navigate("/create-account"); // Redirect to CreateAccount success page
   };
 
   const handleOtpChange = (index: number, value: string) => {
