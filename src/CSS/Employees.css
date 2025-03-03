@@ -1,0 +1,26 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ward {
+    display: flex;
+    align-items: center;
+}
+
+.panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+}
+.MuiDivider-root {
+    background-color: #C4C4C4 /* Soft gray */
+}

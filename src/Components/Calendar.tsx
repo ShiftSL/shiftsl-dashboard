@@ -11,10 +11,10 @@ import {
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
 import {createDragAndDropPlugin} from "@schedule-x/drag-and-drop";
-import AssignDoctorForm from "./AssignDoctorForm.tsx";
+import AssignDoctorForm from "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
-import {ShiftFormProps, ShiftFormData} from "../Types.tsx"
+import {ShiftFormProps, ShiftFormData} from "../Interfaces/Types.tsx"
 import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
 
@@ -26,7 +26,7 @@ function Calendar() {
 
 
 
-    const [doctors,setDoctors] = useState(new Map<string, {id: number; name: string}>)
+    const [doctors, setDoctors] = useState<Map<string, { id: string; name: string }>>(new Map());
     useEffect(() => {
 
     }, []);

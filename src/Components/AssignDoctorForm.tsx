@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { ShiftFormProps, ShiftFormData } from "../Types.tsx";
+import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx"; // Corrected import statement
 import '../CSS/AssignDoctorForm.css'
+import doctordata from '../jsonfiles/doctors.json'
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
         title: initialData?.title || "",
@@ -9,20 +10,9 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         people: initialData?.people ?? [],
     });
 
-    const doctorsMap = new Map([
-        ["1", { id: "1", name: "Dr. Jon Snow" }],
-        ["2", { id: "2", name: "Dr. Brandon Stark" }],
-        ["3", { id: "3", name: "Dr. Tyrion Lannister" }],
-        ["4", { id: "4", name: "Dr. Daenerys Targaryen" }],
-        ["5", { id: "5", name: "Dr. Arya Stark" }],
-        ["6", { id: "6", name: "Dr. Sansa Stark" }],
-        ["7", { id: "7", name: "Dr. Cersei Lannister" }],
-        ["8", { id: "8", name: "Dr. Jaime Lannister" }],
-        ["9", { id: "9", name: "Dr. Samwell Tarly" }],
-        ["10", { id: "10", name: "Dr. Brienne Tarth" }],
-    ]);
+    const doctorsMap = new Map(doctordata.map((doctor)=>[doctor.id, doctor]))
 
-    const doctorList = Array.from(doctorsMap.values());
+    const doctorList = doctordata;
 // Function to handle the changes that happen in Input Elements Ward: Title Start: start End: end
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -90,7 +80,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                     >
                         {doctorList.map((doctor) => (
                             <option key={doctor.id} value={doctor.id}>
-                                {doctor.name}
+                                Dr. {doctor.first_name} {doctor.last_name}
                             </option>
                         ))}
                     </select>
@@ -116,8 +106,3 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
 export default AssignDoctorForm;
 
-
-/* TODO:
-     Issues To Be Checked:
-     3. CSS wise not at all coordinated (Ojitha)
- */
