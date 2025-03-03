@@ -1,165 +1,318 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  background-color: #ededed;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
 /* Main container */
 .verification-page-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #ededed;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #ededed;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Left panel styling */
+.verification-page-left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  background-color: #2b3c56;
+  color: white;
+  border-radius: 20px;
+  text-align: center;
+  padding: 40px;
+}
+
+.verification-page-left-panel h1 {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  margin-bottom: 40px !important;
+}
+
+.illustration {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 40px;
+}
+
+.illustration img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Right panel styling */
+.verification-page-right-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.verification-content {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+}
+
+.notification-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.notification-image {
+  height: 150px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Typography styling */
+.verification-title {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-align: center;
+  color: #2b3c56 !important;
+  margin-bottom: 10px !important;
+}
+
+.instruction-text {
+  text-align: center;
+  color: #666;
+  font-size: 16px !important;
+  margin-bottom: 30px !important;
+}
+
+/* OTP Form styling */
+.otp-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.otp-container {
+  display: flex;
+  flex-direction: row; 
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  width: 100%;
+}
+
+.otp-input {
+  width: 55px !important;
+  height: 55px !important;
+}
+
+.otp-input .MuiOutlinedInput-root {
+  height: 55px;
+  width: 55px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.otp-input .MuiOutlinedInput-input {
+  padding: 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  color: #2b3c56;
+}
+
+/* Animation for focus effect */
+.otp-input .MuiOutlinedInput-notchedOutline {
+  border-color: #e0e0e0;
+  transition: border-color 0.3s ease;
+}
+
+.otp-input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #2b3c56;
+  border-width: 2px;
+}
+
+/* Subtle pop effect when typing */
+.otp-input .MuiOutlinedInput-root.Mui-focused {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.otp-input .MuiOutlinedInput-root:not(.Mui-focused) {
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+/* Button styling */
+.verify-otp-button {
+  background-color: #007bff !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 500 !important;
+  width: 100%;
+  font-size: 16px !important;
+  margin-bottom: 15px !important;
+  text-transform: uppercase !important;
+  height: 50px;
+  transition: all 0.3s ease !important;
+}
+
+.verify-otp-button:hover {
+  background-color: #0056b3 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.resend-button {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-radius: 8px !important;
+  padding: 12px 24px !important;
+  font-weight: 500 !important;
+  width: 100%;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  height: 50px;
+  transition: all 0.3s ease !important;
+}
+
+.resend-button:hover {
+  background-color: #e0e0e0 !important;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .verification-page-container {
+    padding: 15px;
+    gap: 15px;
   }
-  
-  /* Left panel styling */
-  .verification-page-left-panel {
-    display: flex;
+
+  .verification-page-left-panel,
+  .verification-page-right-panel {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .verification-page-container {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    background-color: #2b3c56;
-    color: white;
-    padding: 2rem;
-    border-radius: 24px;
-    margin: 1rem;
-    text-align: center;
+    padding: 10px;
+    gap: 10px;
+    height: auto;
+    overflow-y: auto;
   }
-  
-  .verification-page-left-panel h1 {
-    font-size: 2.5rem !important;
-    font-weight: 700 !important;
-    line-height: 1.3 !important;
-    margin-bottom: 2rem !important;
-  }
-  
-  .highlight {
-    color: #459257;
-  }
-  
-  .illustration {
-    margin-top: 2rem;
-    max-width: 400px;
+
+  .verification-page-left-panel,
+  .verification-page-right-panel {
     width: 100%;
+    padding: 25px;
   }
-  
-  .illustration img {
-    width: 100%;
+
+  .verification-page-left-panel {
+    height: auto;
+    min-height: 300px;
+  }
+
+  .verification-page-right-panel {
     height: auto;
   }
-  
-  /* Right panel styling */
+
+  .illustration {
+    max-width: 300px;
+    margin-top: 20px;
+  }
+
+  .notification-image {
+    height: 120px;
+  }
+
+  .otp-container {
+    gap: 8px;
+  }
+
+  .otp-input {
+    width: 50px !important;
+  }
+
+  .otp-input .MuiOutlinedInput-root {
+    height: 50px;
+    width: 50px;
+  }
+
+  .otp-input .MuiOutlinedInput-input {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .otp-container {
+    gap: 8px;
+  }
+
+  .otp-input {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  .otp-input .MuiOutlinedInput-root {
+    height: 45px;
+    width: 45px;
+  }
+
+  .verification-page-container {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .verification-page-left-panel,
   .verification-page-right-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 24px;
-    margin: 1rem;
+    padding: 20px;
+    border-radius: 15px;
   }
-  
-  /* Typography styling */
-  .verification-page-right-panel h3 {
-    font-size: 1.75rem !important;
-    font-weight: 700 !important;
-    text-align: center;
-    color: #2b3c56 !important;
-    margin-bottom: 1rem !important;
+
+  .verification-page-left-panel h1 {
+    font-size: 24px !important;
+    margin-bottom: 20px !important;
   }
-  
-  .instruction-text {
-    text-align: center;
-    color: #666;
-    margin-bottom: 1.5rem !important;
+
+  .illustration {
+    max-width: 250px;
   }
-  
-  /* Form styling */
-  .MuiTextField-root {
-    margin-bottom: 1rem !important;
+
+  .notification-image {
+    height: 100px;
   }
-  
-  .MuiOutlinedInput-root {
-    background-color: #ededed;
-    border-radius: 8px;
-  }
-  
-  .MuiOutlinedInput-notchedOutline {
-    border: none !important;
-  }
-  
-  .MuiInputLabel-root {
-    color: #666 !important;
-  }
-  
-  /* Send Reset Link button */
-  .MuiButton-contained {
-    background-color: #2b3c56 !important;
-    color: white !important;
-    border-radius: 8px !important;
-    padding: 0.75rem 1.5rem !important;
-    font-weight: 500 !important;
-    text-transform: none !important;
-    box-shadow: none !important;
-    width: 100%;
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .MuiButton-contained:hover {
-    background-color: #374b6d !important;
-  }
-  
-  /* Login text */
-  .login-text {
-    text-align: center;
-    color: #666;
-    margin-top: 1rem !important;
-  }
-  
-  .login-link {
-    color: #2b3c56 !important;
-    font-weight: 500 !important;
-    text-decoration: none !important;
-  }
-  
-  .login-link:hover {
-    text-decoration: underline !important;
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .verification-page-container {
-      flex-direction: column;
-    }
-  
-    .verification-page-left-panel {
-      width: auto;
-      min-height: 300px;
-      padding: 1.5rem;
-    }
-  
-    .verification-page-right-panel {
-      width: auto;
-      padding: 1.5rem;
-    }
-  
-    .verification-page-left-panel h1 {
-      font-size: 2rem !important;
-    }
-  
-    .illustration {
-      max-width: 300px;
-    }
-  }
-  
-  /* For very small screens */
-  @media (max-width: 480px) {
-    .verification-page-left-panel {
-      display: none;
-    }
-  
-    .verification-page-right-panel {
-      width: 100%;
-      margin: 0;
-      border-radius: 0;
-    }
-  }
-  
-  
+}
+

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { TextField, Button, Typography, Link, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
-import { useNavigate } from "react-router-dom"; 
-import Flag from "react-world-flags";
-import logo from "../img/logo.png";
-import illustration from "../img/Group.svg";
-import "../CSS/Login.css"; 
+import type React from "react"
+import { useState } from "react"
+import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl } from "@mui/material"
+import { useNavigate } from "react-router-dom"
+import Flag from "react-world-flags"
+import logo from "../img/logo.png"
+import illustration from "../img/Group.svg"
+import "../CSS/Login.css"
 
 const countryCodes = [
   { code: "+1", country: "United States", flag: "US" },
@@ -37,51 +38,53 @@ const countryCodes = [
   { code: "+1-868", country: "Trinidad and Tobago", flag: "TT" },
   { code: "+1-649", country: "Turks and Caicos Islands", flag: "TC" },
   { code: "+1-340", country: "U.S. Virgin Islands", flag: "VI" },
-];
+]
 
 const LoginPage: React.FC = () => {
-  const [countryCode, setCountryCode] = useState(countryCodes[0].code);
-  const [mobileNumber, setMobileNumber] = useState("");
-  const navigate = useNavigate(); 
+  const [countryCode, setCountryCode] = useState(countryCodes[0].code)
+  const [mobileNumber, setMobileNumber] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+    event.preventDefault()
     // Dummy login validation
     if (countryCode === "+1" && mobileNumber === "1234567890") {
-      navigate("/dashboard");
+      navigate("/dashboard")
     } else {
-      alert("Success");
-      navigate("/verification-page"); 
+      // Pass the mobile number to the verification page
+      navigate(`/verification-page?phone=${mobileNumber}`)
     }
-  };
+  }
 
   return (
     <div className="login-container">
       <div className="login-left-panel">
-        <Typography variant="h4" component="h1" className="mb-6">
-          Welcome!<br />Sign in to your <span className="highlight">shiftSL</span> Account
+        <Typography variant="h4" component="h1">
+          Welcome!
+          <br />
+          Sign in to your <span className="highlight">shiftSL</span> Account
         </Typography>
         <div className="illustration">
-          <img src={illustration} alt="Team collaboration" className="max-w-full h-auto" />
+          <img src={illustration || "/placeholder.svg"} alt="Team collaboration" />
         </div>
       </div>
       <div className="login-right-panel">
         <div className="form-container">
           <div className="form-logo">
-            <img src={logo} alt="ShiftSL Logo" className="max-w-xs mx-auto" />
+            <img src={logo || "/placeholder.svg"} alt="ShiftSL Logo" className="logo-image" />
           </div>
           <Typography variant="body1" className="welcome-text">
             Hi! Welcome back
           </Typography>
-          <Typography variant="h5" component="h3" className="mb-2 text-gray-800">
+          <Typography variant="h5" component="h3">
             Please Enter Your Mobile Number
           </Typography>
           <Typography variant="body1" className="welcome-text">
             We will send you a (OTP) to verify your mobile number
           </Typography>
-          
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <FormControl fullWidth variant="outlined">
+
+          <form onSubmit={handleSubmit} className="login-form">
+            <FormControl fullWidth variant="outlined" className="country-code-select">
               <InputLabel id="country-code-label">Country Code</InputLabel>
               <Select
                 labelId="country-code-label"
@@ -97,23 +100,25 @@ const LoginPage: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
-            <TextField 
-              label="Mobile Number" 
-              type="tel" 
-              variant="outlined" 
-              required 
-              fullWidth 
+            <TextField
+              label="Mobile Number"
+              type="tel"
+              variant="outlined"
+              required
+              fullWidth
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
+              className="mobile-input"
             />
-            <Button type="submit" variant="contained" color="primary" className="mt-4">
-              Verify
+            <Button type="submit" variant="contained" color="primary" className="verify-button">
+              VERIFY
             </Button>
           </form>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
+

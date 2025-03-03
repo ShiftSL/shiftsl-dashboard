@@ -1,71 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Typography, Box, Container } from "@mui/material";
-import logo from "../img/logo.png";
-import illustration from "../img/Group.svg";
-import successTick from "../assests/success.png";
-import "../CSS/SuccessPage.css";
+import type React from "react"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Typography } from "@mui/material"
+import logo from "../img/logo.png"
+import illustration from "../img/Group.svg"
+import successTick from "../assests/success.png"
+import "../CSS/SuccessPage.css"
 
 interface SuccessPageProps {
-  onToggleForm: (form: string) => void;
+  onToggleForm: (form: string) => void
 }
 
 const SuccessPage: React.FC<SuccessPageProps> = ({ onToggleForm }) => {
-  const navigate = useNavigate();
-  const [timer, setTimer] = useState(30);
+  const navigate = useNavigate()
+  const [timer, setTimer] = useState(30)
 
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer <= 1) {
-          clearInterval(countdown);
-          navigate("/dashboard");
+          clearInterval(countdown)
+          navigate("/dashboard")
         }
-        return prevTimer - 1;
-      });
-    }, 1000);
+        return prevTimer - 1
+      })
+    }, 1000)
 
-    return () => clearInterval(countdown);
-  }, [navigate]);
+    return () => clearInterval(countdown)
+  }, [navigate])
 
   const handleLoginClick = () => {
-    navigate("/dashboard");
-  };
+    navigate("/dashboard")
+  }
 
   return (
     <div className="success-page-container">
       <div className="success-page-left-panel">
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h4" component="h1">
           Account Created Successfully!
         </Typography>
         <div className="illustration">
-          <img src={illustration} alt="Team collaboration" />
+          <img src={illustration || "/placeholder.svg"} alt="Team collaboration" />
         </div>
       </div>
       <div className="success-page-right-panel">
-        <Container maxWidth="xs">
-          <Box textAlign="center" mb={2}>
-            <img src={logo} alt="ShiftSL Logo" style={{ maxWidth: "250px", marginBottom: "5px" }} />
-          </Box>
-          <Box textAlign="center" mb={2}>
-            <img src={successTick} alt="Success Tick" style={{ maxWidth: "100px", marginBottom: "5px" }} />
-          </Box>
-          <Typography variant="h5" component="h3" gutterBottom>
+        <div className="success-content">
+          <div className="logo-container">
+            <img src={logo || "/placeholder.svg"} alt="ShiftSL Logo" className="logo-image" />
+          </div>
+          <div className="success-icon-container">
+            <img src={successTick || "/placeholder.svg"} alt="Success Tick" className="success-icon" />
+          </div>
+          <Typography variant="h5" component="h3" className="success-title">
             Welcome to shiftSL!
           </Typography>
-          <Typography variant="body2" align="center" className="login-text" mt={2}>
+          <Typography variant="body2" className="login-text">
             Your account has been created successfully. You can now log in to your account.
           </Typography>
-          <Typography variant="body2" align="center" className="login-text" mt={2}>
-            Redirecting to Dashboard in {timer} seconds...
+          <Typography variant="body2" className="login-text timer-text">
+            Redirecting to Dashboard in <span className="timer-count">{timer}</span> seconds...
           </Typography>
-          <Box textAlign="center" mt={2}>
-            <button className="verify-button" onClick={handleLoginClick}>Login to Dashboard</button>
-          </Box>
-        </Container>
+          <button className="verify-button" onClick={handleLoginClick}>
+            LOGIN TO DASHBOARD
+          </button>
+        </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SuccessPage;
+export default SuccessPage
+
