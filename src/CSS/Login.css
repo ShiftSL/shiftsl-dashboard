@@ -157,6 +157,10 @@
     text-decoration: underline !important;
 }
 
+.MuiBox-root.css-zxdg2z {
+    padding: 0 !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .login-container {
