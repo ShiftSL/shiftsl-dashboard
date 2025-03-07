@@ -21,9 +21,11 @@
     import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
     import "../CSS/Employees.css";
     import nursedata from '../assests/nurses.json'
-    // creating a doctor interface to make sure data is updated properly
+  
+    // creating a nurse interface to make sure data is updated properly
     import {Nurse} from "../Interfaces/Nurse.tsx"
     import AddNurse from "../Components/AddNurse.tsx";
+    import NurseAdminData from '../assests/NurseAdmins.json';
 
     const NurseEmployees: React.FC = () => {
         const [ward, setWard] = React.useState("");
@@ -36,6 +38,9 @@
         // Fetching Employee Data. For now from a JSON
     
         const [nurses, setNurses] = React.useState<Nurse[]>([]); // initial state set to an empty list of Nurses
+        const [admins, setAdmins] = React.useState<Nurse[]>([]);
+        const[showAdmins, setShowAdmins] = React.useState(false); // to show the admins
+
         useEffect(() => {
             const savedNurses = localStorage.getItem("nurses") // fetches nurses json
             if(savedNurses){
@@ -48,6 +53,23 @@
                 setNurses(nursedata.map(nurse =>({
                     ...nurse,
                     id:BigInt((nurse.id))
+                })))
+            }
+    
+        }, []);
+
+        useEffect(() => {
+            const savedAdmins = localStorage.getItem("admins") // fetches admins json
+            if(savedAdmins){
+                setAdmins(JSON.parse(savedAdmins).map(admin => ({
+                    ...admin,
+                    id: BigInt(admin.id)
+                }))); // Setting admin Data from the JSON // TODO: Later fetch this from a GET API
+            }
+            else {
+                setAdmins(NurseAdminData.map(admin =>({
+                    ...admin,
+                    id:BigInt((admin.id))
                 })))
             }
     
@@ -99,19 +121,35 @@
     
                 <Box className="panel" sx={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
                     {/*Left Section  With Members and Admins*/}
-                    <Box sx={{ display: "flex", gap: 2 }}>
+                    <Box sx={{ display: "flex", gap: 2 }}> 
+                        {/*toggle between nurses and admins*/}
                         <Button className="panel-btn"  sx={{
-                            color: "#2AED8D",
+                            color: showAdmins? "inherit": "#2AED8D", //if admins tab is active show default color
                             borderColor: "#2AED8D",
-                            backgroundColor: "#2AED8D !important",
+                            backgroundColor: showAdmins? "inherit":"#2AED8D !important",
                             "&:hover": {
-                                backgroundColor: "#28C77F!important",
+                                backgroundColor: showAdmins? "inherit":"#28C77F!important",
     
                             },
-                        }}> Members </Button>
+                        }
+                        }
+                        onClick={()=>setShowAdmins(false)}
+                        > Members </Button>
                         {/*<Divider orientation="vertical" sx={{height:"100%",mx:2}}/>*/}
                         {/*TODO: Not Showing properly check*/}
-                        <Button>Admins</Button>
+                        <Button
+                            className="panel-btn"  sx={{
+                                color: showAdmins? "inherit": "#2AED8D", //if admins tab is active show default color
+                                borderColor: "#2AED8D",
+                                backgroundColor: showAdmins? "#2AED8D !important":"inherit",
+                                "&:hover": {
+                                    backgroundColor: showAdmins? "#28C77F!important":"inherit",
+        
+                                },
+                            }
+                        }
+                        onClick={()=>setShowAdmins(true)}
+                        >Admins</Button>
     
                     </Box>
     
@@ -162,14 +200,15 @@
                             </TableRow>
                         </TableHead>
                             <TableBody>
-                                {nurses.map((nurse)=>(
-                                    <TableRow sx={{backgroundColor: "#FDFDFD"}} key={nurse.id}>
-                                        <TableCell>{nurse.id.toString()}</TableCell>
-                                        <TableCell>{nurse.first_name}</TableCell>
-                                        <TableCell>{nurse.last_name}</TableCell>
-                                        <TableCell>{nurse.phone_no}</TableCell>
-                                        <TableCell>{nurse.email}</TableCell>
-                                        <TableCell>{nurse.role}</TableCell>
+                                {(showAdmins?admins:nurses).map((person)=>(
+                                
+                                    <TableRow sx={{backgroundColor: "#FDFDFD"}} key={person.id}>
+                                        <TableCell>{person.id.toString()}</TableCell>
+                                        <TableCell>{person.first_name}</TableCell>
+                                        <TableCell>{person.last_name}</TableCell>
+                                        <TableCell>{person.phone_no}</TableCell>
+                                        <TableCell>{person.email}</TableCell>
+                                        <TableCell>{person.role}</TableCell>
                                     </TableRow>
                                 ))}
     
