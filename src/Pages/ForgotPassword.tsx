@@ -242,9 +242,7 @@ const ForgotPasswordPage: React.FC = () => {
                       style={{
                         color: "#2b3c56",
                         fontWeight: 500,
-                        textDecoration: "none",
                         textDecoration: "underline",
-                        color: "blue",
                         fontSize: "14px",
                       }}
                     >
@@ -309,9 +307,7 @@ const ForgotPasswordPage: React.FC = () => {
                   style={{
                     color: "#2b3c56",
                     fontWeight: 500,
-                    textDecoration: "none",
                     textDecoration: "underline",
-                    color: "blue",
                     fontSize: "14px",
                   }}
                 >

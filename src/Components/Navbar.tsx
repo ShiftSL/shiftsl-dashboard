@@ -142,7 +142,10 @@ const Navbar: React.FC = () => {
                   backgroundColor: "rgba(239, 68, 68, 0.1)",
                 },
               }}
-              onClick={() => navigate("/")}
+              onClick={() => {
+                // Perform any logout logic here if needed
+                navigate("/login");
+              }}
             >
               <ListItemIcon sx={{ minWidth: "40px", color: "inherit" }}>
                 <Logout />

@@ -1,16 +1,17 @@
 import type React from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 import GoogleLogo from "../assests/Google.png" 
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const navigate = useNavigate()
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -42,6 +43,8 @@ const LoginPage: React.FC = () => {
     if (valid) {
       // Handle login logic here
       console.log("Login with:", email, password)
+      onLogin()
+      navigate("/dashboard")
     }
   }
 
