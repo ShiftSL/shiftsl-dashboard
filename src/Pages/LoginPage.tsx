@@ -2,7 +2,7 @@ import type React from "react"
 import { useState } from "react"
 import { TextField, Button, Typography, MenuItem, Select, InputLabel, FormControl } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import Flag from "react-world-flags"
+import ReactCountryFlag from "react-country-flag"
 import logo from "../img/logo.png"
 import illustration from "../img/Group.svg"
 import "../CSS/Login.css"
@@ -94,7 +94,7 @@ const LoginPage: React.FC = () => {
               >
                 {countryCodes.map((code) => (
                   <MenuItem key={code.code} value={code.code}>
-                    <Flag code={code.flag} style={{ width: 20, height: 15, marginRight: 8 }} />
+                    <ReactCountryFlag countryCode={code.flag} svg style={{ width: 20, height: 15, marginRight: 8 }} />
                     {code.code}
                   </MenuItem>
                 ))}
