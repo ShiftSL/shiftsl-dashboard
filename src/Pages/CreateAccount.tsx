@@ -389,7 +389,6 @@ const CreateAccountPage: React.FC = () => {
                     color: "#2b3c56",
                     fontWeight: 500,
                     textDecoration: "underline",
-                    color: "blue",
                   }}
                 >
                   Sign In
