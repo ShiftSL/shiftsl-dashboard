@@ -1,12 +1,9 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
-import { Google as GoogleIcon } from "@mui/icons-material"
 import GoogleLogo from "../assests/Google.png" 
 
 const LoginPage: React.FC = () => {
@@ -221,14 +218,14 @@ const LoginPage: React.FC = () => {
                 helperText={emailError}
                 InputProps={{
                   sx: {
-                    backgroundColor: "#ededed",
+                    backgroundColor: "#f9f9f9",
                     borderRadius: "8px",
                     height: "48px",
                     "& .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+                      border: "1px solid #ccc",
                     },
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+                      border: "1px solid #bbb",
                     },
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                       border: "1px solid #2b3c56",
@@ -259,14 +256,14 @@ const LoginPage: React.FC = () => {
                 helperText={passwordError}
                 InputProps={{
                   sx: {
-                    backgroundColor: "#ededed",
+                    backgroundColor: "#f9f9f9",
                     borderRadius: "8px",
                     height: "48px",
                     "& .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+                      border: "1px solid #ccc",
                     },
                     "&:hover .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+                      border: "1px solid #bbb",
                     },
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                       border: "1px solid #2b3c56",
@@ -288,8 +285,8 @@ const LoginPage: React.FC = () => {
                 to="/forgot-password"
                 style={{
                   fontSize: "14px",
-                  color: "#666666",
-                  textDecoration: "none",
+                  color: "blue",
+                  textDecoration: "underline",
                 }}
               >
                 Forgot Password?
@@ -359,9 +356,9 @@ const LoginPage: React.FC = () => {
                 <Link
                   to="/create-account"
                   style={{
-                    color: "#2b3c56",
+                    color: "blue",
                     fontWeight: 500,
-                    textDecoration: "none",
+                    textDecoration: "underline",
                   }}
                 >
                   Create new one

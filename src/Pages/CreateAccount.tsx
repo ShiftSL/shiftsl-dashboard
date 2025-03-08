@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -390,7 +388,8 @@ const CreateAccountPage: React.FC = () => {
                   style={{
                     color: "#2b3c56",
                     fontWeight: 500,
-                    textDecoration: "none",
+                    textDecoration: "underline",
+                    color: "blue",
                   }}
                 >
                   Sign In

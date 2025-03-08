@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
@@ -245,6 +243,9 @@ const ForgotPasswordPage: React.FC = () => {
                         color: "#2b3c56",
                         fontWeight: 500,
                         textDecoration: "none",
+                        textDecoration: "underline",
+                        color: "blue",
+                        fontSize: "14px",
                       }}
                     >
                       Back to Sign In
@@ -309,6 +310,8 @@ const ForgotPasswordPage: React.FC = () => {
                     color: "#2b3c56",
                     fontWeight: 500,
                     textDecoration: "none",
+                    textDecoration: "underline",
+                    color: "blue",
                     fontSize: "14px",
                   }}
                 >
