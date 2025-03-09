@@ -1,6 +1,6 @@
 [
-    { "id": "1", "first_name": "Ann", "last_name": "Smith", "email": "ann.smith@example.com", "role": "Permanent", "phone_no": "0771234567" ,"ward":1},
-    { "id": "2", "first_name": "Sarah", "last_name": "Black", "email": "sarah.black@example.com", "role": "Permanent", "phone_no": "0771234578"  ,"ward":2},
-    { "id": "3", "first_name": "Tom", "last_name": "Potter", "email": "tom.potter@example.com", "role": "Permanent", "phone_no": "07712345663" ,"ward":3},
-    { "id": "4", "first_name": "Harry", "last_name": "Brown", "email": "harry.brown@example.com", "role": "Permanent", "phone_no": "0771234543"  ,"ward":1}
+    { "id": "1", "first_name": "Ann", "last_name": "Smith", "email": "ann.smith@example.com", "role": "Permanent", "phone_no": "0771234567" ,"ward":"ward1"},
+    { "id": "2", "first_name": "Sarah", "last_name": "Black", "email": "sarah.black@example.com", "role": "Permanent", "phone_no": "0771234578"  ,"ward":"ward2"},
+    { "id": "3", "first_name": "Tom", "last_name": "Potter", "email": "tom.potter@example.com", "role": "Permanent", "phone_no": "07712345663" ,"ward":"ward3"},
+    { "id": "4", "first_name": "Harry", "last_name": "Brown", "email": "harry.brown@example.com", "role": "Permanent", "phone_no": "0771234543"  ,"ward":"ward1"}
 ]

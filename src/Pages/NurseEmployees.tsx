@@ -29,7 +29,7 @@
     import NurseAdminData from '../assests/NurseAdmins.json';
 
     const NurseEmployees: React.FC = () => {
-        const [ward, setWard] = React.useState("");
+        const [ward, setWard] = React.useState<number| string>(""); //ward state set to a number or empty string if not selected
         // To set the ward
     
         const handleWardChange = (event: SelectChangeEvent) => {
@@ -106,9 +106,10 @@
 
         //filter nurse employees and admins
         const filteredList= (showAdmins? admins: nurses).filter((person) => 
-            person.first_name.toLowerCase().includes(search.toLowerCase()) || //case insensitive
+            (ward===""||person.ward===ward) && //filter by ward
+            (person.first_name.toLowerCase().includes(search.toLowerCase()) || //case insensitive
             person.last_name.toLowerCase().includes(search.toLowerCase()) ||
-            person.email.toLowerCase().includes(search.toLowerCase()) 
+            person.email.toLowerCase().includes(search.toLowerCase()) )
         );
     
         return (
