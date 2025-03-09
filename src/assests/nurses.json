@@ -1,12 +1,12 @@
 [
-    { "id": "1", "first_name": "Florence", "last_name": "gale", "email": "flo.gale@example.com", "role": "Permanent", "phone_no": "123-456-7890" },
-    { "id": "2", "first_name": "Jane", "last_name": "Doe", "email": "jane.doe@example.com", "role": "Temporary", "phone_no": "234-567-8901" },
-    { "id": "3", "first_name": "Alice", "last_name": "Key", "email": "alice@example.com", "role": "Permanent", "phone_no": "345-678-9012" },
-    { "id": "4", "first_name": "Bob", "last_name": "Tea", "email": "bob@example.com", "role": "Permanent", "phone_no": "456-789-0123" },
-    { "id": "5", "first_name": "Bill", "last_name": "Gates", "email": "bill@example.com", "role": "Temporary", "phone_no": "567-890-1234" },
-    { "id": "6", "first_name": "Peter", "last_name": "Parker", "email": "peter@example.com", "role": "Permanent", "phone_no": "678-901-2345" },
-    { "id": "7", "first_name": "Mary", "last_name": "Jane", "email": "mary@example.com", "role": "Permanent", "phone_no": "789-012-3456" },
-    { "id": "8", "first_name": "Gwen", "last_name": "South", "email": "gwen@example.com", "role": "Permanent", "phone_no": "890-123-4567" },
-    { "id": "9", "first_name": "Sam", "last_name": "Spark", "email": "sam@example.com", "role": "Temporary", "phone_no": "901-234-5678" },
-    { "id": "10", "first_name": "Annie", "last_name": "Jay", "email": "annie@example.com", "role": "Permanent", "phone_no": "012-345-6789" }
+    { "id": "1", "first_name": "Florence", "last_name": "gale", "email": "flo.gale@example.com", "role": "Permanent", "phone_no": "123-456-7890","ward":1 },
+    { "id": "2", "first_name": "Jane", "last_name": "Doe", "email": "jane.doe@example.com", "role": "Temporary", "phone_no": "234-567-8901" ,"ward":1},
+    { "id": "3", "first_name": "Alice", "last_name": "Key", "email": "alice@example.com", "role": "Permanent", "phone_no": "345-678-9012"  ,"ward":2},
+    { "id": "4", "first_name": "Bob", "last_name": "Tea", "email": "bob@example.com", "role": "Permanent", "phone_no": "456-789-0123" ,"ward":1 },
+    { "id": "5", "first_name": "Bill", "last_name": "Gates", "email": "bill@example.com", "role": "Temporary", "phone_no": "567-890-1234" ,"ward":2 },
+    { "id": "6", "first_name": "Peter", "last_name": "Parker", "email": "peter@example.com", "role": "Permanent", "phone_no": "678-901-2345" ,"ward":3},
+    { "id": "7", "first_name": "Mary", "last_name": "Jane", "email": "mary@example.com", "role": "Permanent", "phone_no": "789-012-3456" ,"ward":1 },
+    { "id": "8", "first_name": "Gwen", "last_name": "South", "email": "gwen@example.com", "role": "Permanent", "phone_no": "890-123-4567" ,"ward":3 },
+    { "id": "9", "first_name": "Sam", "last_name": "Spark", "email": "sam@example.com", "role": "Temporary", "phone_no": "901-234-5678" ,"ward":2 },
+    { "id": "10", "first_name": "Annie", "last_name": "Jay", "email": "annie@example.com", "role": "Permanent", "phone_no": "012-345-6789"  ,"ward":3}
   ]
