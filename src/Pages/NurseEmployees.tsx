@@ -91,9 +91,17 @@
         //state for search in filtering
         const [search, setSearch] = React.useState("");
 
+        //state to show search bar
+        const [showSearch, setShowSearch] = React.useState(false);
+
         //function for search
         const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
             setSearch(event.target.value);
+        };
+
+        //function to toggle search bar
+        const toggleSearch = () => {
+            setShowSearch((prev) => !prev); //show search bar according to previous state
         };
 
         //filter nurse employees and admins
@@ -191,18 +199,8 @@
                             </Box>
                         </Modal>
 
-                        {/*Search text for filter*/}
-                        <TextField
-                            variant="outlined"
-                            placeholder="Search by name or email"
-                            value={search}
-                            onChange={handleSearch}
-                            size='small'
-                            sx={{width: 200}}
                         
-                        />
-    
-                        <Button variant="outlined" startIcon={<FilterListIcon />} className="panel-btn"  sx={{
+                        <Button variant="outlined" startIcon={<FilterListIcon />} onClick={toggleSearch} className="panel-btn"  sx={{
                             color: "#2AED8D",
                             borderColor: "#2AED8D",
                             backgroundColor: "#2AED8D !important",
@@ -211,6 +209,20 @@
     
                             },
                         }}>Filter</Button>
+                        {/*Search text for filter*/}
+                        {showSearch &&(
+                            <TextField
+                            variant="outlined"
+                            placeholder="Search by name or email"
+                            value={search}
+                            onChange={handleSearch}
+                            size='small'
+                            sx={{width: 200}}
+                        
+                        />
+                        )}
+                        
+    
                     </Box>
                 </Box>
                 <Box className="List" sx={{ padding: "20px", width: "100%"} }>
