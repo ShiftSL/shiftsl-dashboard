@@ -73,6 +73,8 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    // sx={{ input:{px: 2} }} attempt to add padding to the input field but it didn't work
+                    InputProps={{ sx: { px: 2 } }}
                 />
                 <TextField
                     fullWidth
@@ -82,6 +84,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    InputProps={{ sx: { px: 2 } }}
                 />
                 <TextField
                     fullWidth
@@ -92,6 +95,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    InputProps={{ sx: { px: 2 } }}
                 />
                 <TextField
                     fullWidth
@@ -102,6 +106,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    InputProps={{ sx: { px: 2 } }}
                 />
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Select Ward</InputLabel>
