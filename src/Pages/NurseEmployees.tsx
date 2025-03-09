@@ -15,7 +15,8 @@
         MenuItem,
         Select,
         SelectChangeEvent,
-        TableContainer, Paper, TableHead, TableRow, TableCell, Table, TableBody, Modal
+        TableContainer, Paper, TableHead, TableRow, TableCell, Table, TableBody, Modal,
+        TextField
     } from "@mui/material";
     import FilterListIcon from '@mui/icons-material/FilterList';
     import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -86,6 +87,21 @@
             setAddForm(false);
             console.log("New Nurse Added: " +newNurse.id,+" "+newNurse.first_name, +" "+newNurse.last_name,+" " +newNurse.email, +newNurse.email);
         }
+        
+        //state for search in filtering
+        const [search, setSearch] = React.useState("");
+
+        //function for search
+        const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+            setSearch(event.target.value);
+        };
+
+        //filter nurse employees and admins
+        const filteredList= (showAdmins? admins: nurses).filter((person) => 
+            person.first_name.toLowerCase().includes(search.toLowerCase()) || //case insensitive
+            person.last_name.toLowerCase().includes(search.toLowerCase()) ||
+            person.email.toLowerCase().includes(search.toLowerCase()) 
+        );
     
         return (
             <Box sx={{ width: "100%", padding: "20px" }}>
@@ -174,6 +190,17 @@
                             <AddNurse onNurseAdded={handleNurseAdded}/>
                             </Box>
                         </Modal>
+
+                        {/*Search text for filter*/}
+                        <TextField
+                            variant="outlined"
+                            placeholder="Search by name or email"
+                            value={search}
+                            onChange={handleSearch}
+                            size='small'
+                            sx={{width: 200}}
+                        
+                        />
     
                         <Button variant="outlined" startIcon={<FilterListIcon />} className="panel-btn"  sx={{
                             color: "#2AED8D",
@@ -200,7 +227,8 @@
                             </TableRow>
                         </TableHead>
                             <TableBody>
-                                {(showAdmins?admins:nurses).map((person)=>(
+                                {/* {(showAdmins?admins:nurses).map((person)=>( */}
+                                {filteredList.map((person)=>(
                                 
                                     <TableRow sx={{backgroundColor: "#FDFDFD"}} key={person.id}>
                                         <TableCell>{person.id.toString()}</TableCell>
