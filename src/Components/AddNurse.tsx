@@ -25,6 +25,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
         email: "",
         role: "Permanent",
         phone_no: "",
+        ward: ""
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,15 +33,15 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent<string>) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value }));
+    const handleSelectChange = (e: SelectChangeEvent) => {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
+        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no || !formData.ward) {
             alert("Please fill all fields");
             return;
         } // validation
@@ -53,6 +54,7 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
             email: "",
             role: "Permanent",
             phone_no: "",
+            ward: ""
         });
     };
 
@@ -101,6 +103,19 @@ const AddNurse: React.FC = ({ onNurseAdded }: { onNurseAdded: (newNurse: Nurse) 
                     margin="normal"
                     required
                 />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Select Ward</InputLabel>
+                    <Select
+                        name="ward"
+                        value={formData.ward}
+                        onChange={handleSelectChange}
+                    >
+                        <MenuItem value="">Select ward</MenuItem>
+                        <MenuItem value="ward1">Ward 1</MenuItem>
+                        <MenuItem value="ward2">Ward 2</MenuItem>
+                        <MenuItem value="ward3">Ward 3</MenuItem>
+                     </Select>
+                </FormControl> 
 
                  <FormControl fullWidth margin="normal">
                     <InputLabel>Role</InputLabel>
