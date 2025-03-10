@@ -5,13 +5,16 @@ import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 
+// Defining the Forgot Password Page
 const ForgotPasswordPage: React.FC = () => {
+  // Managing the email input and form submission
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
 
+  // Handling the form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle password reset logic here
+    // Handling the password reset logic
     console.log("Reset password for:", email)
     setSubmitted(true)
   }
@@ -40,6 +43,7 @@ const ForgotPasswordPage: React.FC = () => {
           overflow: "hidden",
         }}
       >
+        {/* Left Panel Content */}
         <Box
           sx={{
             maxWidth: "480px",
@@ -95,6 +99,7 @@ const ForgotPasswordPage: React.FC = () => {
           </Box>
         </Box>
 
+        {/* Illustration */}
         <Box
           sx={{
             width: "100%",
@@ -131,6 +136,7 @@ const ForgotPasswordPage: React.FC = () => {
             alignItems: "center",
           }}
         >
+          {/* Logo */}
           <Box
             sx={{
               marginBottom: "40px",
@@ -141,6 +147,7 @@ const ForgotPasswordPage: React.FC = () => {
             <Logo />
           </Box>
 
+          {/* Form Submission Message */}
           {!submitted ? (
             <>
               <Typography
@@ -164,6 +171,7 @@ const ForgotPasswordPage: React.FC = () => {
                 Enter your email and we'll send you instructions to reset your password
               </Typography>
 
+              {/* Form */}
               <form onSubmit={handleSubmit} style={{ width: "100%" }}>
                 <Box sx={{ marginBottom: "24px", width: "100%" }}>
                   <Typography

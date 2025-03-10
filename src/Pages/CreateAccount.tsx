@@ -14,7 +14,7 @@ const CreateAccountPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle registration logic here
+    // Handling the registration logic
     console.log("Register with:", fullName, email, password)
   }
 

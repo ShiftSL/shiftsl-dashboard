@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
                 },
               }}
               onClick={() => {
-                // Perform any logout logic here if needed
+                // Perform any logout logic
                 navigate("/login");
               }}
             >

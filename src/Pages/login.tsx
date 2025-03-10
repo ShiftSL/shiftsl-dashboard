@@ -6,26 +6,32 @@ import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 import GoogleLogo from "../assests/Google.png" 
 
+// Defining the Login Page with onLogin
 const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+  // Variables for email, password and their error messages
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const navigate = useNavigate()
 
+  // Validating the email format
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return re.test(email)
   }
 
+  // Validating the password length
   const validatePassword = (password: string) => {
     return password.length >= 6
   }
 
+  // Handling the form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     let valid = true
 
+    // Validating the email
     if (!validateEmail(email)) {
       setEmailError("Invalid email address")
       valid = false
@@ -33,6 +39,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       setEmailError("")
     }
 
+    // Validating the password
     if (!validatePassword(password)) {
       setPasswordError("Password must be at least 6 characters")
       valid = false
@@ -40,16 +47,16 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       setPasswordError("")
     }
 
+    // If email and password valid handling the login logic
     if (valid) {
-      // Handle login logic here
       console.log("Login with:", email, password)
       onLogin()
       navigate("/dashboard")
     }
   }
 
+  // Handling the Google login
   const handleGoogleLogin = () => {
-    // Handle Google login logic here
     console.log("Login with Google")
   }
 
