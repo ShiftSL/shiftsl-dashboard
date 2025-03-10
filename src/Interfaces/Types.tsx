@@ -5,6 +5,7 @@ export interface ShiftFormProps {
 }
 
 export interface ShiftFormData {
+    id: number;
     title: string;
     start: string; // Expected format: dd-mm-yy hh-mm
     end: string;
