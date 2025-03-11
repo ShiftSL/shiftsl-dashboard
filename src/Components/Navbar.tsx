@@ -111,14 +111,26 @@ const Navbar: React.FC = () => {
                       },
                     }}
                   >
-                    <ListItemIcon
+                    {/* <ListItemIcon
                       sx={{
                         minWidth: "40px",
                         color: "inherit",
+                        visibility:item.text==="Doctors" || item.text==="Nurses" ? "hidden" : "visible", //hide employee icon in doctors and nurses
                       }}
                     >
                       {item.icon}
-                    </ListItemIcon>
+                    </ListItemIcon> */}
+
+                    {item.text!=="Doctors" && item.text!=="Nurses" && ( //remove empty icon gap in nurses and doctors
+                      <ListItemIcon
+                        sx={{
+                          minWidth: "40px",
+                          color: "inherit",
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                    )}
                     <ListItemText
                       primary={item.text}
                       primaryTypographyProps={{
