@@ -1,7 +1,7 @@
 import {useState,useEffect} from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import add from "../assests/add_circle.png"
-
+import AdjustEventPositions from "../Hooks/AdjustEventPositions.tsx";
 import {
     createViewDay,
     createViewMonthAgenda,
@@ -10,7 +10,6 @@ import {
 } from '@schedule-x/calendar'
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
-import {createDragAndDropPlugin} from "@schedule-x/drag-and-drop";
 import AssignDoctorForm from "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
@@ -20,26 +19,28 @@ import '../CSS/Calendar.css'
 import Shift from "./Shift.tsx";
 import {Doctor} from "../Interfaces/Doctor.tsx";
 import {Box} from "@mui/material";
+import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
+import adjustEventPositions from "../Hooks/AdjustEventPositions.tsx";
 
 function Calendar() {
+    useEventPositionAdjustment()
     const eventsService = useState(() => createEventsServicePlugin())[0]
     const [showForm, setshowForm] = useState(false);
-    const [newEvent, setnewEvent] = useState<ShiftFormData[]>([]);
     const [shifts, setShifts] = useState<ShiftFormData[]>([])
     const [doctors, setDoctors] = useState<Map<string, Doctor>>(new Map());
 
     const handleCreateEvent = (formData: ShiftFormData) => {
         eventsService.add({
-            id: "1",
+            id: 1,
             title: formData.title,
             start: formData.start,
             end: formData.end,
             people: formData.people,
             config: {
-                color: '#2AED8D',
+                className: "custom-multi-day-event",
             }
         });
-
+        adjustEventPositions();
             // Verify event was added
             createEventsServicePlugin().getAll().map(events => {
                 console.log("All events after adding:", events);
@@ -51,6 +52,7 @@ function Calendar() {
         setshowForm(false);
         console.log("Shift Created:", formData);
     };
+
 
 
     useEffect(() => {
@@ -99,12 +101,13 @@ function Calendar() {
 
     }, [eventsService, doctors]);
     const calendar = useCalendarApp({
+
         views: [ createViewWeek(),
             createViewMonthGrid(), createViewMonthAgenda(),
         ],
         events:[],
         plugins: [eventsService]
-    })
+      })
     return (
         <div>
             <button onClick={() => setshowForm(true)}><img src={add}/></button>

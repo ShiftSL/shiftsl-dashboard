@@ -54,10 +54,35 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         if (!date || !shift) return;
         const shiftDetails = shiftOptions.find((s) => s.label === shift);
         if (!shiftDetails) return;
-
         const formattedStart = `${date} ${shiftDetails.startHour.toString().padStart(2, '0')}:00`;
-        const formattedEnd = `${shiftDetails.startHour > shiftDetails.endHour ? addOneDay(date) : date} ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
 
+        // const formattedEnd = `${shiftDetails.startHour > shiftDetails.endHour ? addOneDay(date) : date}
+        // ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
+        if (shiftDetails.label === "7 PM - 7 AM") {
+            const nextDay = addOneDay(date);
+
+            const nightShiftPart1 = {
+                start: formattedStart,
+                end: `${date} 23:59`, // Ends just before midnight
+            };
+
+            const nightShiftPart2 = {
+                start: `${nextDay} 00:00`, // Starts at midnight on the next day
+                end: `${nextDay} 07:00`, // Ends at 7 AM
+            };
+
+            setFormData((prev) => ({
+                ...prev,
+                start: nightShiftPart1.start,
+                end: nightShiftPart1.end, // Sets the first shift
+            }));
+
+            console.log("Night Shift Split:", nightShiftPart1, nightShiftPart2);
+
+            // ✅ Return both shift parts so you can save them
+            return [nightShiftPart1, nightShiftPart2];
+        }
+        const formattedEnd = `${date} ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
         setFormData((prev) => ({ ...prev, start: formattedStart, end: formattedEnd }));
     };
 
@@ -71,6 +96,15 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     // Handle Form Submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const newShifts = updateShiftTiming(selectedDate, selectedShift);
+
+        if (Array.isArray(newShifts)) {
+            // If the shift was split, submit both parts
+            onSubmit(newShifts[0]);  // First shift (7 PM - 11:59 PM)
+            onSubmit(newShifts[1]);  // Second shift (12 AM - 7 AM)
+        }else {
+
+        }
         console.log("Submitting Shift Form Data:", formData);
         onSubmit(formData);
     };
