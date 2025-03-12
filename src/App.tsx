@@ -12,6 +12,7 @@ import Approval from "./Pages/Approval.tsx";
 import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
 import CreateAccountPage from "./Pages/CreateAccount";
+import Analytics from "./Pages/Analytics.tsx";
 
 // Create a custom theme
 const theme = createTheme({
@@ -77,6 +78,34 @@ const App: React.FC = () => {
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
+  // Example doctors' analytics data for testing
+  const doctorsAnalytics = [
+    {
+      name: 'Dr. John Doe',
+      coveredShifts: 15,
+      coveredHours: 120,
+      leavesTaken: 3,
+      hoursRemaining: 20,
+    },
+    {
+      name: 'Dr. Jane Smith',
+      coveredShifts: 12,
+      coveredHours: 100,
+      leavesTaken: 5,
+      hoursRemaining: 25,
+    },
+  ];
+   //fetch actual data from APIs later
+  //  const fetchDoctorsAnalytics = async () => {
+  //   try {
+  //     const response = await fetch("/api/doctors-analytics");
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Error fetching doctors' analytics data: ", error);
+  //     return [];
+  //   }
+  // };
 
   return (
     <ThemeProvider theme={theme}>
@@ -98,6 +127,10 @@ const App: React.FC = () => {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/employees" element={<Employees />} />
                       <Route path="/approval" element={<Approval />} />
+                      <Route
+                        path="/analytics"
+                        element={<Analytics doctorsAnalytics={doctorsAnalytics} />} // Add Analytics route
+                      />
                       <Route path="*" element={<Navigate to="/dashboard" />} />
                     </Routes>
                   </Box>
