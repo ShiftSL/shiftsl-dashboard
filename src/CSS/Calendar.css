@@ -1,12 +1,13 @@
-/*define primary color*/ 
+/*define primary color*/
 :root {
     --sx-color-primary: #000 !important;
 }
-/* Hiding the display of all grid hours through here*/
+ /*Hiding the display of all grid hours through here*/
 .sx__week-grid__hour {
     display: none;
-    
+
 }
+
 .sx__week-grid__hour-text {
     font-size: 0;
 /*    Hiding the original text to customize */
@@ -17,7 +18,6 @@
     font-size: 0.5rem;
     align-items: flex-start;
     content: "hours";
-/*    TODO: Hasindie/ Ojitha = Please make sure the design is followed here for the font. Will be adding to do's like this*/
 }
 /* Using the nth-child of week-grid-hours so only the hours we want are displayed*/
 /*Comment to push*/
@@ -30,8 +30,7 @@
     align-items: center;
     /* background-color: #45DFB1; */
 }
-/*TODO: H/O = Please Make sure the styles Match to the Design colors etc*/
-/* Customized Content to be displayed */
+
 .sx__week-grid__hour:nth-child(8) .sx__week-grid__hour-text::before {
     content: "7 AM - 1 PM";
     font-family: Inter, serif;
@@ -46,20 +45,6 @@
     content: "7 PM - 7 AM";
     font-family: Inter, serif;
 }
-
-/* Style the time slots */
-/* .sx__week-grid__hour {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-
-.sx__week-grid__time-axis {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-} */
-
 /* Add custom labels */
 .sx__week-grid__hour-text {
     position: relative;
@@ -90,8 +75,7 @@
     display: flex;
     flex-flow: column;
     align-items: center;
-    padding: var(--sx-spacing-padding3) 0;
-    gap: var(--sx-spacing-padding1);
+    padding: var(--sx-spacing-padding3) 0;    gap: var(--sx-spacing-padding1);
     border-radius: 1rem;
     margin: 1rem 1rem;
     background-color: #D9D9D9;
@@ -122,3 +106,9 @@
 .sx__forward-backward-navigation {
     height: auto;
 }
+
+
+.sx__time-grid-event {
+    top: var(--custom-event-top, 0%)  !important;  height: 33.5% !important; left: 0%; width: 100%; background-color: rgba(42, 237, 141, 0.25) !important;  color: #2AED8D; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 4px solid #148d56 !important;
+}
+/*Dynamically Assigning the Custom Top*/
