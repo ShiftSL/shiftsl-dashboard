@@ -74,29 +74,36 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
+  // Managing the authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Handling the login and authentication status
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
 
+  // Managing the user data
   const [userData, setUserData] = useState({
-    title: "Mr",
-    firstName: "John",
-    lastName: "De Silva",
-    role: "Administrator", 
-    email: "johne@gmail.com",
-    phone: "+94771234567",
+    title: "", 
+    firstName: "", 
+    lastName: "", 
+    role: "", 
+    email: "", 
+    phone: "", 
   });
 
+  // Managing the profile picture
   const [profileImage, setProfileImage] = useState(profilePic);
 
+  // Managing the user profile open close state
   const [open, setOpen] = useState(false);
 
+  // Function to open the user profile dialog
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  // Function to close the user profile dialog
   const handleClose = () => {
     setOpen(false);
   };

@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import {
   Avatar,
   Box,
@@ -37,6 +37,7 @@ const UploadButton = styled(IconButton)({
   },
 })
 
+// Interface for User Profile props
 interface UserProfileDialogProps {
   open: boolean;
   handleClose: () => void;
@@ -53,10 +54,18 @@ interface UserProfileDialogProps {
   setProfileImage: (image: string) => void;
 }
 
+// Components of the User Profile
 const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileImage, setProfileImage }: UserProfileDialogProps) => {
   
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  })
 
+  // Updating the use data when the form field values changes
   interface ChangeEvent {
     target: {
       name: string;
@@ -64,6 +73,7 @@ const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileIm
     };
   }
 
+  // Handling the form field changes
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target;
     setUserData({
@@ -72,17 +82,31 @@ const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileIm
     });
   };
 
+  // Handling the form submission
   const handleSubmit = () => {
-    console.log("Submitting user data:", userData)
-    handleClose()
+    const newErrors = {
+      firstName: userData.firstName ? "" : "First name is required",
+      lastName: userData.lastName ? "" : "Last name is required",
+      email: /\S+@\S+\.\S+/.test(userData.email) ? "" : "Email is invalid",
+      phone: /^\d{10}$/.test(userData.phone) ? "" : "Phone number is invalid",
+    }
+    setErrors(newErrors)
+
+    if (Object.values(newErrors).every((error) => error === "")) {
+      console.log("Submitting user data:", userData)
+      handleClose()
+    }
   }
 
+  // Handling the profile picture by click
   const handleImageClick = () => {
     fileInputRef.current?.click()
   }
 
+  // Interface for image change event
   interface ImageChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
+  // Handling the change of the profile picture
   const handleImageChange = (event: ImageChangeEvent) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -154,6 +178,8 @@ const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileIm
               name="firstName"
               value={userData.firstName}
               onChange={handleChange}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
             />
           </Grid>
 
@@ -165,6 +191,8 @@ const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileIm
               name="lastName"
               value={userData.lastName}
               onChange={handleChange}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
             />
           </Grid>
 
@@ -177,12 +205,14 @@ const UserProfileDialog = ({ open, handleClose, userData, setUserData, profileIm
               type="email"
               value={userData.email}
               onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
             />
           </Grid>
 
           {/* Phone */}
           <Grid item xs={12}>
-            <TextField fullWidth label="Phone Number" name="phone" value={userData.phone} onChange={handleChange} />
+            <TextField fullWidth label="Phone Number" name="phone" value={userData.phone} onChange={handleChange} error={!!errors.phone} helperText={errors.phone} />
           </Grid>
         </Grid>
       </DialogContent>
