@@ -78,23 +78,7 @@ const App: React.FC = () => {
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
-  // Example doctors' analytics data for testing
-  const doctorsAnalytics = [
-    {
-      name: 'Dr. John Doe',
-      coveredShifts: 15,
-      coveredHours: 120,
-      leavesTaken: 3,
-      hoursRemaining: 20,
-    },
-    {
-      name: 'Dr. Jane Smith',
-      coveredShifts: 12,
-      coveredHours: 100,
-      leavesTaken: 5,
-      hoursRemaining: 25,
-    },
-  ];
+ 
    //fetch actual data from APIs later
   //  const fetchDoctorsAnalytics = async () => {
   //   try {
@@ -127,10 +111,7 @@ const App: React.FC = () => {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/employees" element={<Employees />} />
                       <Route path="/approval" element={<Approval />} />
-                      <Route
-                        path="/analytics"
-                        element={<Analytics doctorsAnalytics={doctorsAnalytics} />} // Add Analytics route
-                      />
+                      <Route path="/analytics" element={<Analytics />} />
                       <Route path="*" element={<Navigate to="/dashboard" />} />
                     </Routes>
                   </Box>
