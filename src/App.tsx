@@ -12,6 +12,8 @@ import Approval from "./Pages/Approval.tsx";
 import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
 import CreateAccountPage from "./Pages/CreateAccount";
+import UserProfileDialog from "./Components/UserProfile";
+import profilePic from "./assests/profile_pic.jpg";
 
 // Create a custom theme
 const theme = createTheme({
@@ -78,6 +80,27 @@ const App: React.FC = () => {
     setIsAuthenticated(true);
   };
 
+  const [userData, setUserData] = useState({
+    title: "Mr",
+    firstName: "John",
+    lastName: "De Silva",
+    role: "Administrator", 
+    email: "johne@gmail.com",
+    phone: "+94771234567",
+  });
+
+  const [profileImage, setProfileImage] = useState(profilePic);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -93,7 +116,15 @@ const App: React.FC = () => {
                 <Box sx={{ display: "flex" }}>
                   <Navbar />
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Header />
+                    <Header userData={userData} profileImage={profileImage} handleClickOpen={handleClickOpen} />
+                    <UserProfileDialog
+                      open={open}
+                      handleClose={handleClose}
+                      userData={userData}
+                      setUserData={setUserData}
+                      profileImage={profileImage}
+                      setProfileImage={setProfileImage}
+                    />
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/employees" element={<Employees />} />
