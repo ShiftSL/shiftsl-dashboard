@@ -3,8 +3,6 @@ import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDe
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Doctor } from '../Interfaces/Doctor';
 import doctorsData from '../jsonfiles/doctors.json';
-import shiftData from '../jsonfiles/shiftdata.json';
-
 
 const Analytics:React.FC= () => {
     const [search, setSearch] = useState(""); //handle search input
@@ -64,6 +62,10 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
+        /*TODO: 1. Make sure to hide the other doctors when searching and only show the searched doctor
+                2. Instead of the Accordions use a Card and Display the data in a bar graph. Malindu will send the design
+        */
+
        {mergedDoctors.length === 0? (
         <Typography>No doctors found</Typography>):(
         mergedDoctors.map((doctor, index) => (
@@ -93,15 +95,5 @@ const Analytics:React.FC= () => {
     </Box>
   );
 };
-               
-              
-
-
-
-                
-        
-            
-            
-
 
 export default Analytics;
