@@ -12,6 +12,8 @@ import Approval from "./Pages/Approval.tsx";
 import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
 import CreateAccountPage from "./Pages/CreateAccount";
+import UserProfileDialog from "./Components/UserProfile";
+import profilePic from "./assests/profile_pic.jpg";
 
 // Create a custom theme
 const theme = createTheme({
@@ -72,10 +74,38 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
+  // Managing the authentication status
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Handling the login and authentication status
   const handleLogin = () => {
     setIsAuthenticated(true);
+  };
+
+  // Managing the user data
+  const [userData, setUserData] = useState({
+    title: "", 
+    firstName: "", 
+    lastName: "", 
+    role: "", 
+    email: "", 
+    phone: "", 
+  });
+
+  // Managing the profile picture
+  const [profileImage, setProfileImage] = useState(profilePic);
+
+  // Managing the user profile open close state
+  const [open, setOpen] = useState(false);
+
+  // Function to open the user profile dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  // Function to close the user profile dialog
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -93,7 +123,15 @@ const App: React.FC = () => {
                 <Box sx={{ display: "flex" }}>
                   <Navbar />
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Header />
+                    <Header userData={userData} profileImage={profileImage} handleClickOpen={handleClickOpen} />
+                    <UserProfileDialog
+                      open={open}
+                      handleClose={handleClose}
+                      userData={userData}
+                      setUserData={setUserData}
+                      profileImage={profileImage}
+                      setProfileImage={setProfileImage}
+                    />
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/employees" element={<Employees />} />

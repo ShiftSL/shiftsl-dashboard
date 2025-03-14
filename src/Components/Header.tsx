@@ -1,5 +1,4 @@
 import { Avatar, Box, Typography, styled } from "@mui/material"
-import profilePic from "../assests/profile_pic.jpg"
 
 const StyledHeader = styled(Box)({
   display: "flex",
@@ -11,25 +10,35 @@ const StyledHeader = styled(Box)({
   height: "50px",
 })
 
-const Header = () => {
+const ProfileAvatar = styled(Avatar)({
+  width: 40,
+  height: 40,
+  backgroundColor: "#e0e0e0",
+  cursor: "pointer",
+})
+
+interface HeaderProps {
+  userData: {
+    firstName: string;
+    lastName: string;
+  };
+  profileImage?: string;
+  handleClickOpen: () => void;
+}
+
+const Header = ({ userData, profileImage, handleClickOpen }: HeaderProps) => {
   return (
     <StyledHeader>
       <Typography variant="h6" sx={{ fontWeight: 600, marginRight: "8px" }}>
-        Hello! <span style={{ color: "#131313" }}>Admin</span>
+        Hello! <span style={{ color: "#131313" }}>{userData.firstName}</span>
       </Typography>
-      <Avatar
-        sx={{
-          width: 40,
-          height: 40,
-          backgroundColor: "#e0e0e0",
-        }}
-      >
+      <ProfileAvatar onClick={handleClickOpen}>
         <img
-          src={profilePic}
-          alt="Admin"
+          src={profileImage || "/assets/placeholder.svg"}
+          alt={`${userData.firstName} ${userData.lastName}`}
           style={{ width: "100%", height: "100%", borderRadius: "50%" }}
         />
-      </Avatar>
+      </ProfileAvatar>
     </StyledHeader>
   )
 }
