@@ -12,8 +12,11 @@ import Approval from "./Pages/Approval.tsx";
 import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
 import CreateAccountPage from "./Pages/CreateAccount";
+
+import Analytics from "./Pages/Analytics.tsx";
 import UserProfileDialog from "./Components/UserProfile";
 import profilePic from "./assests/profile_pic.jpg";
+
 
 // Create a custom theme
 const theme = createTheme({
@@ -81,6 +84,18 @@ const App: React.FC = () => {
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
+ 
+   //fetch actual data from APIs later
+  //  const fetchDoctorsAnalytics = async () => {
+  //   try {
+  //     const response = await fetch("/api/doctors-analytics");
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Error fetching doctors' analytics data: ", error);
+  //     return [];
+  //   }
+  // };
 
   // Managing the user data
   const [userData, setUserData] = useState({
@@ -136,6 +151,7 @@ const App: React.FC = () => {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/employees" element={<Employees />} />
                       <Route path="/approval" element={<Approval />} />
+                      <Route path="/analytics" element={<Analytics />} />
                       <Route path="*" element={<Navigate to="/dashboard" />} />
                     </Routes>
                   </Box>
