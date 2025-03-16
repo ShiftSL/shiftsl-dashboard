@@ -5,7 +5,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Dashboard from "./Pages/Dashboard";
 import Navbar from "./Components/Navbar";
-import AssignDoctorForm from "./Components/AssignDoctorForm";
 import Header from "./Components/Header";
 import Employees from "./Pages/Employees.tsx";
 import Approval from "./Pages/Approval.tsx";
@@ -113,10 +112,10 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/create-account" element={<CreateAccountPage />} />
-          {isAuthenticated ? (
+          {/*<Route path="/login" element={<LoginPage onLogin={handleLogin} />} />*/}
+          {/*<Route path="/forgot-password" element={<ForgotPasswordPage />} />*/}
+          {/*<Route path="/create-account" element={<CreateAccountPage />} />*/}
+          {/*{isAuthenticated ? (*/}
             <Route
               path="*"
               element={
@@ -142,9 +141,9 @@ const App: React.FC = () => {
                 </Box>
               }
             />
-          ) : (
-            <Route path="*" element={<Navigate to="/login" />} />
-          )}
+          {/*) : (*/}
+          {/*  <Route path="*" element={<Navigate to="/login" />} />*/}
+          {/*)}*/}
         </Routes>
       </Router>
     </ThemeProvider>

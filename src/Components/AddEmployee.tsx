@@ -13,18 +13,18 @@ import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): bigint => {
+    const generateNewId = (): number => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
+        return lastDoctor ? lastDoctor.id +1 :1;
     };
 
     const [formData, setFormData] = useState<Doctor>({
         id: generateNewId(), // Generate ID dynamically in BigInt
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
+        phoneNo:"",
         email: "",
-        role: "Permanent",
-        phone_no: "",
+        role: "DOCTOR",
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,27 +32,28 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent<string>) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value }));
+    const handleSelectChange = (e: SelectChangeEvent) => {
+        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR" |"EMPLOYEE"
+            }));
     };
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
             alert("Please fill all fields");
             return;
         } // validation
 
         onDoctorAdded(formData);
         setFormData({
-            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
-            first_name: "",
-            last_name: "",
+            id: generateNewId(),
+            firstName: "",
+            lastName: "",
             email: "",
-            role: "Permanent",
-            phone_no: "",
+            role: "DOCTOR",
+            phoneNo: "",
         });
     };
 
@@ -66,8 +67,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="First Name"
-                    name="first_name"
-                    value={formData.first_name}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -75,8 +76,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Last Name"
-                    name="last_name"
-                    value={formData.last_name}
+                    name="lastName"
+                    value={formData.lastName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -94,9 +95,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Phone Number"
-                    name="phone_no"
+                    name="phoneNo"
                     type="tel"
-                    value={formData.phone_no}
+                    value={formData.phoneNo}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -109,8 +110,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                         value={formData.role}
                         onChange={(e) => handleSelectChange(e as any)}
                     >
-                        <MenuItem value="Permanent">Permanent</MenuItem>
-                        <MenuItem value="Temporary">Temporary</MenuItem>
+                        <MenuItem value="DOCTOR">Permanent</MenuItem>
+                        <MenuItem value="EMPLOYEE">Temporary</MenuItem>  //TODO: Ask Punjitha to update the backend to incorporate Permanent & Temporary Roles of Doctors
                     </Select>
                 </FormControl>
 

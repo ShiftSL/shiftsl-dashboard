@@ -24,6 +24,7 @@ import doctordata from '../jsonfiles/doctors.json'
 // creating a doctor interface to make sure data is updated properly
 import {Doctor} from "../Interfaces/Doctor.tsx"
 import AddEmployee from "../Components/AddEmployee.tsx";
+import axios from "axios";
 const Employees: React.FC = () => {
     const [ward, setWard] = React.useState("");
     // To set the ward
@@ -40,7 +41,7 @@ const Employees: React.FC = () => {
             setDoctors(JSON.parse(savedDoctors).map(doctor => ({
                 ...doctor,
                 id: BigInt(doctor.id)
-            }))); // Setting Doctor Data from the JSON // TODO: Later fetch this from a GET API
+            }))); // Setting Doctor Data from the JSON // TODO: Punjitha GET ALL Doctors API needed
         }
         else {
             setDoctors(doctordata.map(doctor =>({
@@ -52,15 +53,31 @@ const Employees: React.FC = () => {
     }, []);
 
     const [addForm, setAddForm] = React.useState(false)
-    const handleDoctorAdded=(newDoctor: Doctor) =>{
-        const updatedDoctors = [...doctors, newDoctor];
-        setDoctors(updatedDoctors);
-        localStorage.setItem("doctors", JSON.stringify(updatedDoctors.map(doctor =>({
-            ...doctor,
-            id: doctor.id.toString() // Stores in browser storage later will be saved using a push API
-        }) )))
-        setAddForm(false);
-        console.log("New Doc Added: " +newDoctor.id,+" "+newDoctor.first_name, +" "+newDoctor.last_name,+" " +newDoctor.email, +newDoctor.email);
+    const url = "/user/register";
+    console.log("Making POST request to:", url);
+    const handleDoctorAdded= async (newDoctor: Doctor) =>{
+        try{
+            const response = await axios.post("/user/register", {
+                firstName: newDoctor.firstName,
+                lastName: newDoctor.lastName,
+                email: newDoctor.email,
+                phoneNo: newDoctor.phoneNo,
+                role: newDoctor.role
+            });
+            const savedDoctor = response.data;
+            const updatedDoctor = [...doctors, savedDoctor];
+            setDoctors(updatedDoctor);
+            localStorage.setItem("doctors", JSON.stringify(updatedDoctor.map(doctor =>({
+                ...doctor,
+                id: doctor.id.toString()
+            }) )))
+            // Later Can be deleted.
+            setAddForm(false);
+            console.log("New Doc Added:" +newDoctor.firstName, +" "+newDoctor.lastName,+" " +newDoctor.email, +newDoctor.email);
+        }catch (e){
+            console.error("Error Adding Doctor",e);
+        }
+
     }
 
     return (
@@ -163,9 +180,9 @@ const Employees: React.FC = () => {
                             {doctors.map((doctor)=>(
                                 <TableRow sx={{backgroundColor: "#FDFDFD"}} key={doctor.id}>
                                     <TableCell>{doctor.id.toString()}</TableCell>
-                                    <TableCell>{doctor.first_name}</TableCell>
-                                    <TableCell>{doctor.last_name}</TableCell>
-                                    <TableCell>{doctor.phone_no}</TableCell>
+                                    <TableCell>{doctor.firstName}</TableCell>
+                                    <TableCell>{doctor.lastName}</TableCell>
+                                    <TableCell>{doctor.phoneNo}</TableCell>
                                     <TableCell>{doctor.email}</TableCell>
                                     <TableCell>{doctor.role}</TableCell>
                                 </TableRow>
