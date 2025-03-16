@@ -6,7 +6,8 @@ import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 
 const CreateAccountPage: React.FC = () => {
-  const [fullName, setFullName] = useState("")
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -15,7 +16,7 @@ const CreateAccountPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handling the registration logic
-    console.log("Register with:", fullName, email, password)
+    console.log("Register with:", firstName, lastName, email, password)
   }
 
   return (
@@ -164,8 +165,8 @@ const CreateAccountPage: React.FC = () => {
             Join shiftSL to start managing your projects
           </Typography>
 
-          <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-            <Box sx={{ marginBottom: "16px", width: "100%" }}>
+          <form onSubmit={handleSubmit} style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2px" }}>
+            <Box sx={{ width: "100%" }}>
               <Typography
                 sx={{
                   marginBottom: "8px",
@@ -173,13 +174,13 @@ const CreateAccountPage: React.FC = () => {
                   fontWeight: 500,
                 }}
               >
-                Full Name
+                First Name
               </Typography>
               <TextField
                 fullWidth
                 variant="outlined"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 required
                 InputProps={{
                   sx: {
@@ -200,7 +201,42 @@ const CreateAccountPage: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ marginBottom: "16px", width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                sx={{
+                  marginBottom: "8px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                Last Name
+              </Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                InputProps={{
+                  sx: {
+                    backgroundColor: "#ededed",
+                    borderRadius: "8px",
+                    height: "48px",
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "none",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      border: "none",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      border: "1px solid #2b3c56",
+                    },
+                  },
+                }}
+              />
+            </Box>
+
+            <Box sx={{ width: "100%", gridColumn: "span 2" }}>
               <Typography
                 sx={{
                   marginBottom: "8px",
@@ -236,7 +272,7 @@ const CreateAccountPage: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ marginBottom: "16px", width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
               <Typography
                 sx={{
                   marginBottom: "8px",
@@ -272,7 +308,7 @@ const CreateAccountPage: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ marginBottom: "16px", width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
               <Typography
                 sx={{
                   marginBottom: "8px",
@@ -339,7 +375,7 @@ const CreateAccountPage: React.FC = () => {
                   </Link>
                 </Typography>
               }
-              sx={{ marginBottom: "24px" }}
+              sx={{ gridColumn: "span 2", marginBottom: "24px" }}
             />
 
             <Button
@@ -365,6 +401,7 @@ const CreateAccountPage: React.FC = () => {
                   backgroundColor: "#a0a0a0",
                   color: "#ffffff",
                 },
+                gridColumn: "span 2",
               }}
             >
               Create Account
@@ -374,6 +411,7 @@ const CreateAccountPage: React.FC = () => {
               sx={{
                 textAlign: "center",
                 width: "100%",
+                gridColumn: "span 2",
               }}
             >
               <Typography

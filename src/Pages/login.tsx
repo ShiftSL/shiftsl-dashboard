@@ -286,7 +286,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "flex-start", 
                 marginBottom: "24px",
                 width: "100%",
               }}

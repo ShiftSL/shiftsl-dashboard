@@ -204,6 +204,7 @@ const ForgotPasswordPage: React.FC = () => {
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           border: "1px solid #2b3c56",
                         },
+                        width: "200%", 
                       },
                     }}
                   />
