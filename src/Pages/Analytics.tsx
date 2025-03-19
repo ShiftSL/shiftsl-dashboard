@@ -1,8 +1,11 @@
 import React, { useState,useEffect } from 'react';
 import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Box,TextField } from '@mui/material';
+import { BarChart } from '@mui/x-charts/BarChart';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Doctor } from '../Interfaces/Doctor';
 import doctorsData from '../jsonfiles/doctors.json';
+import shiftsData from '../jsonfiles/shifts.json';
+import { Label } from '@mui/icons-material';
 
 const Analytics:React.FC= () => {
     const [search, setSearch] = useState(""); //handle search input
@@ -16,7 +19,10 @@ const Analytics:React.FC= () => {
             id: BigInt(doctor.id),
         }));
         setDoctors(convertedDoctors);
-        setShiftData(shiftData);
+        setShiftData(shiftsData);
+        console.log("Shift Data Loaded:", shiftsData);
+        console.log("Loaded Doctors:", convertedDoctors);
+        
     },[]);
 
 
@@ -38,16 +44,18 @@ const Analytics:React.FC= () => {
 
     //merge doctor data with shift data
     const mergedDoctors=filteredDoctors.map((doctor) => {
-        const doctorShift=shiftData.find((shift) => shift.doctor_id === doctor.id);
+        console.log(`Doctor ID (BigInt): ${doctor.id}`);
+        console.log(`Shift Data IDs:`, shiftData.map((s) => s.doctor_id));
+        const doctorShift=shiftData.find((shift) => BigInt(shift.doctor_id)=== doctor.id);
         
         console.log(`Doctor ID: ${doctor.id}`);
         console.log(`Shift Data: ${JSON.stringify(doctorShift)}`);
 
         const merged={...doctor, ...doctorShift, 
-            coveredShifts: doctorShift?.coveredShifts || 0,
-            coveredHours: doctorShift?.coveredHours || 0,
-            leavesTaken: doctorShift?.leavesTaken || 0,
-            hoursRemaining: doctorShift?.hoursRemaining || 0
+            coveredShifts: doctorShift? Number(doctorShift.coveredShifts) : 0,
+            coveredHours: doctorShift?Number(doctorShift.coveredHours) : 0,
+            leavesTaken: doctorShift?Number(doctorShift.leavesTaken) : 0,
+            hoursRemaining:doctorShift?Number(doctorShift.hoursRemaining) : 0
         };
     
         console.log("Merged Doctor Data:", merged);
@@ -66,9 +74,41 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
+       <Box sx={{ display: "flex", flexWrap: "wrap",gap:2 }}>
+            {mergedDoctors.map((doctor, index) => (
+                <Card key={index}sx={{ width: 1000}}>
+                    <CardContent>
+                        <Typography variant="h6">{doctor.first_name} {doctor.last_name}</Typography>
+                        <BarChart 
+                            width={750}
+                            height={500}
+                            series={[
+                                {
+                                    data:[
+                                        doctor.coveredShifts,
+                                        doctor.coveredHours,
+                                        doctor.leavesTaken,
+                                        doctor.hoursRemaining,
+                                    ],
+                                 
+                                },
+                                        
+                                        
+                            ]}
+                            xAxis={[{scaleType: 'band',data:['Covered Shifts','Covered Hours','Leaves Taken','Remaining Hours'],}]}
+                            />
+
+
+                    </CardContent>
+                    </Card>
+            ))}
+        </Box>
+    </Box>
+    );
+};
        
 
-       {mergedDoctors.length === 0 && search.trim()!==""? (
+       {/* {mergedDoctors.length === 0 && search.trim()!==""? (
         <Typography>No doctors found</Typography>):(
         mergedDoctors.map((doctor, index) => (
             <Accordion key={index}>
@@ -96,6 +136,8 @@ const Analytics:React.FC= () => {
     )}
     </Box>
   );
-};
+}; */}
+
+
 
 export default Analytics;
