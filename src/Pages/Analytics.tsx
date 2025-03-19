@@ -22,10 +22,14 @@ const Analytics:React.FC= () => {
 
     //filter doctors based on search input
     useEffect    (() => {
-    const filtered=doctors.filter((doctor) =>{
-        const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
-        const query=search.toLowerCase().trim();
-        return fullName.includes(query);
+        if (search.trim() === "") {
+            setFilteredDoctors([]);
+            return;
+        }
+        const filtered=doctors.filter((doctor) =>{
+            const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
+            const query=search.toLowerCase().trim();
+            return fullName.includes(query);
     }
     );
     setFilteredDoctors(filtered);
@@ -62,11 +66,9 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
-        /*TODO: 1. Make sure to hide the other doctors when searching and only show the searched doctor
-                2. Instead of the Accordions use a Card and Display the data in a bar graph. Malindu will send the design
-        */
+       
 
-       {mergedDoctors.length === 0? (
+       {mergedDoctors.length === 0 && search.trim()!==""? (
         <Typography>No doctors found</Typography>):(
         mergedDoctors.map((doctor, index) => (
             <Accordion key={index}>
