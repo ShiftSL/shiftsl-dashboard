@@ -22,6 +22,7 @@ import {
   ListAlt,
   Logout,
   Payment,
+  BarChart,
 } from "@mui/icons-material";
 
 const drawerWidth = 240;
@@ -62,6 +63,7 @@ const menuItems = [
       // { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
       // { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
       { text: "Employees", icon: <Groups />, route: "/employees" },
+      { text: "Analytics", icon: <BarChart />, route: "/analytics" },
     ],
   },
   {

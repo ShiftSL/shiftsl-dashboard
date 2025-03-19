@@ -64,11 +64,13 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             const nightShiftPart1 = {
                 start: formattedStart,
                 end: `${date} 23:59`, // Ends just before midnight
+                people: formData.people
             };
 
             const nightShiftPart2 = {
                 start: `${nextDay} 00:00`, // Starts at midnight on the next day
                 end: `${nextDay} 07:00`, // Ends at 7 AM
+                people: formData.people
             };
 
             setFormData((prev) => ({
