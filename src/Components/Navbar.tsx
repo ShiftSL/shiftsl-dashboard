@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import logo from "../assests/logo.png"; // Adjust path as needed
+import logo from "../assests/logo.png";
 
 import {
   Box,
@@ -22,6 +22,7 @@ import {
   ListAlt,
   Logout,
   Payment,
+  BarChart,
 } from "@mui/icons-material";
 
 const drawerWidth = 240;
@@ -59,9 +60,10 @@ const menuItems = [
     section: "Main Menu",
     items: [
       { text: "Dashboard", icon: <Dashboard />, route: "/dashboard" },
-      { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
-      { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
+      // { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
+      // { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
       { text: "Employees", icon: <Groups />, route: "/employees" },
+      { text: "Analytics", icon: <BarChart />, route: "/analytics" },
     ],
   },
   {
@@ -142,7 +144,10 @@ const Navbar: React.FC = () => {
                   backgroundColor: "rgba(239, 68, 68, 0.1)",
                 },
               }}
-              onClick={() => navigate("/")}
+              onClick={() => {
+                // Perform any logout logic
+                navigate("/login");
+              }}
             >
               <ListItemIcon sx={{ minWidth: "40px", color: "inherit" }}>
                 <Logout />

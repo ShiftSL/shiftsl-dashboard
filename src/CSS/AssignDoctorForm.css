@@ -1,41 +1,50 @@
 /* General form styling */
 .form-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 800px; /* Increased max-width */
     margin: 20px auto;
-    padding: 20px;
+    padding: 30px;
     background: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     font-family: Arial, sans-serif;
 }
 
+/* Title Styling */
 .form-container h3 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
+    font-size: 22px;
 }
 
-/* Form input fields styling */
-/*comment to push*/
-form div {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+/* Make form fields display in two columns */
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 20px; /* Space between fields */
 }
 
+/* Full-width fields like title & selected doctors should span both columns */
+form div.full-width {
+    grid-column: span 2;
+}
+
+/* Labels */
 label {
     font-weight: bold;
     margin-bottom: 5px;
     color: #555;
 }
 
+/* Input fields */
 input, select {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     transition: border-color 0.3s ease-in-out;
+    width: 100%; /* Ensures inputs take full width */
 }
 
 input:focus, select:focus {
@@ -62,37 +71,41 @@ select[multiple] {
     gap: 5px;
 }
 
+/* Selected Doctor Style */
 .selected-doctor {
-    /*background: #007bff;*/
     color: black;
     padding: 5px 10px;
     border-radius: 4px;
     font-size: 14px;
 }
 
+/* Buttons Section */
 button {
-    padding: 10px;
-    font-size: 20px;
+    padding: 12px;
+    font-size: 18px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
     transition: background 0.3s;
     background: transparent;
 }
 
+/* Submit Button */
 button[type="submit"] {
     background: #007bff;
     color: white;
+    grid-column: span 2; /* Make button full width */
 }
 
 button[type="submit"]:hover {
     background: #0056b3;
 }
 
+/* Cancel Button */
 button[type="button"] {
     background: #ccc;
     color: black;
+    grid-column: span 2; /* Make button full width */
 }
 
 button[type="button"]:hover {
