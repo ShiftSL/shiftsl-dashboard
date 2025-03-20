@@ -122,7 +122,7 @@ const ForgotPasswordPage: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#ffffff",
-          borderRadius: { xs: "16px", md: "0 16px 16px 0" },
+          borderRadius: "16px", 
           margin: { xs: "16px", md: "16px 16px 16px 0" },
           padding: { xs: "24px", sm: "40px" },
         }}

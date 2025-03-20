@@ -12,6 +12,7 @@ const CreateAccountPage: React.FC = () => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [agreeTerms, setAgreeTerms] = useState(false)
+  const [role, setRole] = useState("Administrator")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -112,19 +113,19 @@ const CreateAccountPage: React.FC = () => {
       </Box>
 
       {/* Right Panel */}
-      <Box
-        sx={{
-          width: { xs: "100%", md: "50%" },
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#ffffff",
-          borderRadius: { xs: "16px", md: "0 16px 16px 0" },
-          margin: { xs: "16px", md: "16px 16px 16px 0" },
-          padding: { xs: "24px", sm: "40px" },
-        }}
-      >
+        <Box
+          sx={{
+            width: { xs: "100%", md: "50%" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#ffffff",
+            borderRadius: "16px", 
+            margin: { xs: "16px", md: "16px 16px 16px 0" },
+            padding: { xs: "24px", sm: "40px" },
+          }}
+        >
         <Container
           sx={{
             width: "100%",
@@ -162,7 +163,7 @@ const CreateAccountPage: React.FC = () => {
               fontSize: "14px",
             }}
           >
-            Join shiftSL to start managing your projects
+            Join shiftSL to start managing your rosters
           </Typography>
 
           <form onSubmit={handleSubmit} style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2px" }}>
@@ -236,40 +237,82 @@ const CreateAccountPage: React.FC = () => {
               />
             </Box>
 
-            <Box sx={{ width: "100%", gridColumn: "span 2" }}>
-              <Typography
-                sx={{
-                  marginBottom: "8px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                }}
-              >
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#ededed",
-                    borderRadius: "8px",
-                    height: "48px",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+            <Box sx={{ width: "100%", display: "flex", gap: "2px", gridColumn: "span 2" }}>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    marginBottom: "8px",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                  }}
+                >
+                  Email
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  InputProps={{
+                    sx: {
+                      backgroundColor: "#ededed",
+                      borderRadius: "8px",
+                      height: "48px",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        border: "1px solid #2b3c56",
+                      },
                     },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      border: "none",
+                  }}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    marginBottom: "8px",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                  }}
+                >
+                  Role
+                </Typography>
+                <TextField
+                  select
+                  fullWidth
+                  variant="outlined"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  SelectProps={{
+                    native: true,
+                  }}
+                  InputProps={{
+                    sx: {
+                      backgroundColor: "#ededed",
+                      borderRadius: "8px",
+                      height: "48px",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        border: "1px solid #2b3c56",
+                      },
                     },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      border: "1px solid #2b3c56",
-                    },
-                  },
-                }}
-              />
+                  }}
+                >
+                  <option value="Administrator">Administrator</option>
+                  <option value="HR Administrator">HR Administrator</option>
+                </TextField>
+              </Box>
             </Box>
 
             <Box sx={{ width: "100%" }}>
