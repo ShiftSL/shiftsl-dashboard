@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css'
 import doctordata from '../jsonfiles/doctors.json'
+import nursedata from '../jsonfiles/nurses.json'
+
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -9,21 +11,30 @@ const shiftOptions = [
     { label: "7 PM - 7 AM", startHour: 19, endHour: 7 },
 ]; // Shift Options to Choose From
 
+export interface AssignDoctorFormProps extends ShiftFormProps {
+        // onSubmit:(FormData:ShiftFormData)=>void;
+        // onCancel:()=>void;
+        employeeType:"doctor"|"nurse";
+        // initialData?: ShiftFormData; 
+}
 
-const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
+const AssignDoctorForm: React.FC<AssignDoctorFormProps> = ({ employeeType,onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
         id: initialData?.id ||0,
         title: initialData?.title || "",
         start: initialData?.start || "",
         end: initialData?.end || "",
         people: initialData?.people ?? [],
+        employeeType: employeeType,
     });
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
 
-    const doctorsMap = new Map(doctordata.map((doctor) => [doctor.id, doctor]));
-    const doctorList = doctordata;
+   
+    const employeeData= employeeType === "doctor" ? doctordata : nursedata;
+    const employeesMap = new Map(employeeData.map((employee) => [employee.id, employee]));
+    console.log("employeeType:", employeeType);
 
     // handle input changes for the title
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +44,8 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     // Handle doctor selection
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedDoctors = Array.from(e.target.selectedOptions, (option) => option.value);
-        setFormData((prev) => ({ ...prev, people: selectedDoctors }));
+        const selectedemployees = Array.from(e.target.selectedOptions, (option) => option.value);
+        setFormData((prev) => ({ ...prev, people: selectedemployees }));
     };
 
     // Handle Date Selection
@@ -103,11 +114,14 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             onSubmit(newShifts[0]);  // First shift (7 PM - 11:59 PM)
             onSubmit(newShifts[1]);  // Second shift (12 AM - 7 AM)
         }else {
+            // console.log("Submitting Shift Form Data:", formData);
+            // onSubmit(formData);
 
         }
         console.log("Submitting Shift Form Data:", formData);
         onSubmit(formData);
     };
+    
 
     return (
         <div className="form-container">
@@ -148,7 +162,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                 </div>
 
                 <div>
-                    <label htmlFor="people">Assigned Doctors</label>
+                    <label htmlFor="people">Assigned {employeeType==="doctor"? "Doctors" :"Nurses"}</label>
                     <select
                         id="people"
                         name="people"
@@ -156,9 +170,10 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                         onChange={handleSelectChange}
                         multiple
                     >
-                        {doctorList.map((doctor) => (
-                            <option key={doctor.id} value={doctor.id}>
-                                Dr. {doctor.first_name} {doctor.last_name}
+                        {employeeData.map((employee) => (
+                            <option key={employee.id} value={employee.id}>
+                                {employeeType==="doctor"?`Dr.${employee.first_name} ${employee.last_name}`:`Nurse ${employee.first_name} ${employee.last_name}`}
+                                
                             </option>
                         ))}
                     </select>
@@ -166,10 +181,10 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
                 <div className="selected-doctors">
                     {formData.people.map((id) => {
-                        const doctor = doctorsMap.get(id);
-                        return doctor ? (
-                            <span key={doctor.id} className="selected-doctor">
-                                {doctor.first_name} {doctor.last_name}
+                        const employee = employeesMap.get(id);
+                        return employee ? (
+                            <span key={employee.id} className="selected-doctor">
+                                {employeeType==="doctor"?`Dr.${employee.first_name} ${employee.last_name}`:`Nurse ${employee.first_name} ${employee.last_name}`}
                             </span>
                         ) : null;
                     })}

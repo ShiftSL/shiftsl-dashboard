@@ -73,6 +73,7 @@ const theme = createTheme({
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [employeeType, setEmployeeType] = useState<"doctor" | "nurse">("doctor");
 
   const handleLogin = () => {
     setIsAuthenticated(true);
@@ -91,14 +92,16 @@ const App: React.FC = () => {
               path="*"
               element={
                 <Box sx={{ display: "flex" }}>
-                  <Navbar />
+                  <Navbar setEmployeeType={setEmployeeType}/>
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <Header />
                     <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/employees" element={<Employees />} />
+                      <Route path="/doctordashboard" element={<Dashboard employeeType="doctor" />} />
+                      <Route path="/nursedashboard" element={<Dashboard employeeType="nurse" />} />
+                      <Route path="/doctors" element={<Employees employeeType="doctor" />} />
+                      <Route path="/nurses" element={<Employees employeeType="nurse" />} />
                       <Route path="/approval" element={<Approval />} />
-                      <Route path="*" element={<Navigate to="/dashboard" />} />
+                      <Route path="*" element={<Navigate to="/doctordashboard" />} />
                     </Routes>
                   </Box>
                 </Box>

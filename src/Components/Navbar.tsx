@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import logo from "../assests/logo.png";
-
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import {
   Box,
   Drawer,
@@ -22,6 +22,7 @@ import {
   ListAlt,
   Logout,
   Payment,
+
 } from "@mui/icons-material";
 
 const drawerWidth = 240;
@@ -58,10 +59,13 @@ const menuItems = [
   {
     section: "Main Menu",
     items: [
-      { text: "Dashboard", icon: <Dashboard />, route: "/dashboard" },
-      // { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
-      // { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
-      { text: "Employees", icon: <Groups />, route: "/employees" },
+     
+      { text: "Dashboard", icon: <Dashboard />, route: "#" },//no route, act as title
+      { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctordashboard",employeeType:"doctor" },
+      { text: "Nurses' Roster", icon: <ListAlt />, route: "/nursedashboard",employeeType:"nurse" },
+      { text: "Employees", icon: <Groups />, route: "#" }, //no route, act as title
+      { text: "Doctors", icon: <MedicalServicesIcon />, route: "/doctors",type:"doctor" },
+      { text: "Nurses", icon: <MedicalServicesIcon />, route: "/nurses",type:"nurse" },
     ],
   },
   {
@@ -73,8 +77,11 @@ const menuItems = [
     ],
   },
 ];
+interface NavbarProps {
+  setEmployeeType:React.Dispatch<React.SetStateAction<"doctor" | "nurse">>;
+}
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<NavbarProps> = ({setEmployeeType}) => {
   const [selectedItem, setSelectedItem] = useState("Employees");
   const navigate = useNavigate();
 
@@ -95,6 +102,12 @@ const Navbar: React.FC = () => {
                     selected={selectedItem === item.text}
                     onClick={() => {
                       setSelectedItem(item.text);
+                      // 
+                      if (item.type === "doctor" || item.type === "nurse") {
+                        setEmployeeType(item.type);
+                      }
+                   
+                    //   setSelectedItem(item.text);
                       navigate(item.route);
                     }}
                     sx={{

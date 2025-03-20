@@ -1,0 +1,6 @@
+[
+    { "id": "1", "first_name": "Natalie", "last_name": "Thorn", "email": "nat.thorn@example.com", "role": "Permanent", "phone_no": "0771234567" ,"ward":"ward1"},
+    { "id": "2", "first_name": "Tara", "last_name": "Black", "email": "tara.black@example.com", "role": "Permanent", "phone_no": "0771234578"  ,"ward":"ward2"},
+    { "id": "3", "first_name": "Jerry", "last_name": "brown", "email": "jerry.brown@example.com", "role": "Permanent", "phone_no": "07712345663" ,"ward":"ward3"}
+   
+]

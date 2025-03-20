@@ -6,11 +6,15 @@
 import React from "react";
 import Calendar from "../Components/Calendar"; // Corrected import statement
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+    employeeType: "doctor" | "nurse";
+}
+
+const Dashboard: React.FC<DashboardProps> = ({employeeType}) => {
     return (
         <>
-            <h1>Dashboard</h1>
-            <Calendar/>
+            <h1>{employeeType==="doctor"? "Doctor Dashboard":"Nurse Dashboard"}</h1>
+            <Calendar employeeType={employeeType}/>
         </>
     );
 };
