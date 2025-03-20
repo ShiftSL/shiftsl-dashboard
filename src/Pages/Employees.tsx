@@ -24,40 +24,34 @@ import doctordata from '../jsonfiles/doctors.json'
 // creating a doctor interface to make sure data is updated properly
 import {Doctor} from "../Interfaces/Doctor.tsx"
 import AddEmployee from "../Components/AddEmployee.tsx";
-import axios from "axios";
+import axios, {Axios} from "axios";
 const Employees: React.FC = () => {
     const [ward, setWard] = React.useState("");
-    // To set the ward
 
     const handleWardChange = (event: SelectChangeEvent) => {
         setWard(event.target.value);
     };
 
-    // Fetching Employee Data. For now from a JSON
     const [doctors, setDoctors] = React.useState<Doctor[]>([]); // initial state set to an empty list of doctors
     useEffect(() => {
-        const savedDoctors = localStorage.getItem("doctors") // fetches doctors json
-        if(savedDoctors){
-            setDoctors(JSON.parse(savedDoctors).map(doctor => ({
-                ...doctor,
-                id: BigInt(doctor.id)
-            }))); // Setting Doctor Data from the JSON // TODO: Punjitha GET ALL Doctors API needed
-        }
-        else {
-            setDoctors(doctordata.map(doctor =>({
-                ...doctor,
-                id:BigInt((doctor.id))
-            })))
-        }
+        const fetchDoctors = async()=>{
+            try{
+                const response = await axios.get("/api/user/get-all");
 
+                setDoctors(response.data);
+                console.log(response.data)
+            }catch (error){
+                console.error("Error Fetching Doctors", error);
+            }
+        }
+        fetchDoctors();
     }, []);
 
     const [addForm, setAddForm] = React.useState(false)
-    const url = "/user/register";
-    console.log("Making POST request to:", url);
+
     const handleDoctorAdded= async (newDoctor: Doctor) =>{
         try{
-            const response = await axios.post("/user/register", {
+            const response = await axios.post("/api/user/register", {
                 firstName: newDoctor.firstName,
                 lastName: newDoctor.lastName,
                 email: newDoctor.email,
@@ -71,7 +65,7 @@ const Employees: React.FC = () => {
                 ...doctor,
                 id: doctor.id.toString()
             }) )))
-            // Later Can be deleted.
+
             setAddForm(false);
             console.log("New Doc Added:" +newDoctor.firstName, +" "+newDoctor.lastName,+" " +newDoctor.email, +newDoctor.email);
         }catch (e){

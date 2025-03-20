@@ -46,9 +46,6 @@ function Calendar() {
                 console.log("All events after adding:", events);
             });
 
-            // // Update local state
-            // setnewEvent((prev) => [...prev, formData]);
-            // setShifts((prev) => [...prev, formData]);
         setshowForm(false);
         console.log("Shift Created:", formData);
     };
@@ -81,7 +78,7 @@ function Calendar() {
                         const assignedDoctors = event.people
                             .map(doctorId => doctors.get(doctorId))
                             .filter(doctor => doctor !== undefined)
-                            .map(doctor => `\n  [id: ${doctor.id}] ${doctor.first_name}`);
+                            .map(doctor => `\n  [id: ${doctor.id}] ${doctor.firstName}`);
 
                         console.log(" Assigned Doctors:", assignedDoctors.join(", "));
                     } else {

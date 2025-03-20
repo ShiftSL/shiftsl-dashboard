@@ -24,7 +24,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         lastName: "",
         phoneNo:"",
         email: "",
-        role: "DOCTOR",
+        role: "DOCTOR_PERM",
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +33,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
     };
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR" |"EMPLOYEE"
+        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
             }));
     };
 
@@ -52,9 +52,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
             firstName: "",
             lastName: "",
             email: "",
-            role: "DOCTOR",
+            role: "DOCTOR_PERM",
             phoneNo: "",
         });
+        console.log(formData);
     };
 
     return (
@@ -108,10 +109,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange(e as any)}
+                        onChange={(e) => handleSelectChange}
                     >
-                        <MenuItem value="DOCTOR">Permanent</MenuItem>
-                        <MenuItem value="EMPLOYEE">Temporary</MenuItem>  //TODO: Ask Punjitha to update the backend to incorporate Permanent & Temporary Roles of Doctors
+                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
+                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
                     </Select>
                 </FormControl>
 

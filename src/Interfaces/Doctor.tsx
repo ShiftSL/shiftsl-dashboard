@@ -4,5 +4,5 @@ export interface Doctor {
     lastName: string;
     phoneNo: string;
     email: string;
-    role: "DOCTOR" | "HR_ADMIN" | "EMPLOYEE";
+    role: "DOCTOR_PERM" | "DOCTOR_TEMP"|"HR_ADMIN" | "EMPLOYEE";
 }

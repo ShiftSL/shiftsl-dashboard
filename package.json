@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "https://spring-app-284647065201.us-central1.run.app",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
