@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import logo from "../assests/logo.png";
 
@@ -79,7 +79,7 @@ const menuItems = [
 const Navbar: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState("Employees");
   const navigate = useNavigate();
-
+  const location = useLocation(); 
   return (
     <StyledDrawer variant="permanent" anchor="left">
       <Toolbar>
@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
               {section.items.map((item) => (
                 <ListItem key={item.text} disablePadding>
                   <ListItemButton
-                    selected={selectedItem === item.text}
+                    selected={location.pathname === item.route}
                     onClick={() => {
                       setSelectedItem(item.text);
                       navigate(item.route);
@@ -103,10 +103,10 @@ const Navbar: React.FC = () => {
                       margin: "4px 8px",
                       borderRadius: "8px",
                       "&.Mui-selected": {
-                        backgroundColor: "rgba(42, 237, 141, 0.1)",
+                        backgroundColor: "rgba(42, 237, 141, 0.1)", 
                         color: "#131313",
                         "&:hover": {
-                          backgroundColor: "rgba(42, 237, 141, 0.2)",
+                          backgroundColor: "rgba(42, 237, 141, 0.2)", 
                         },
                       },
                     }}
@@ -145,7 +145,6 @@ const Navbar: React.FC = () => {
                 },
               }}
               onClick={() => {
-                // Perform any logout logic
                 navigate("/login");
               }}
             >
