@@ -23,7 +23,7 @@ const Analytics:React.FC= () => {
     //filter doctors based on search input
     useEffect    (() => {
     const filtered=doctors.filter((doctor) =>{
-        const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
+        const fullName= `${doctor.firstName} ${doctor.lastName}`.toLowerCase().trim();
         const query=search.toLowerCase().trim();
         return fullName.includes(query);
     }
