@@ -24,10 +24,11 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         last_name: "",
         email: "",
         role: "Permanent",
-        phone_no: "",
+        phone_no: "+94",
     });
 
     const [emailError, setEmailError] = useState<string>("");
+    const [phoneError, setPhoneError] = useState<string>("");
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -35,6 +36,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         //email validation
         if (name === "email") {
             validateEmail(value);
+        }
+        //phone number validation
+        if (name === "phone_no") {
+            validatePhone(value);
         }
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
@@ -47,20 +52,31 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         setEmailError(emailRegex.test(email) ? "" : "Invalid email address");
     };
+    const validatePhone = (phone: string) => {
+        const phoneRegex = /^\+94\d{9}$/;
+        setPhoneError(phoneRegex.test(phone) ? "" : "Invalid phone number");
+    };
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+      
 
         if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
             alert("Please fill all fields");
             return;
         } // validation
 
-        if (emailError) {
-            alert("Please enter a valid email address");
+        if (emailError ) {
+            alert("Invalid email address");
             return;
-        } 
+        }
+        if (phoneError) {
+            alert("Invalid phone number");
+            return;
+        }
+          
 
         onDoctorAdded(formData);
         setFormData({
@@ -69,7 +85,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
             last_name: "",
             email: "",
             role: "Permanent",
-            phone_no: "",
+            phone_no: "+94",
         });
     };
 
@@ -114,11 +130,13 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="Phone Number"
                     name="phone_no"
-                    type="tel"
+                    // type="tel"
                     value={formData.phone_no}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!phoneError}
+                    helperText={phoneError}
                 />
 
                 <FormControl fullWidth margin="normal">
