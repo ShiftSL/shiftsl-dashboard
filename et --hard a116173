@@ -1,0 +1,117 @@
+[33mc1a26b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mapi[m[33m, [m[1;31morigin/api[m[33m)[m HEAD@{0}: pull: Fast-forward
+[33ma116173[m HEAD@{1}: commit (merge): resolved
+[33ma8b997f[m HEAD@{2}: checkout: moving from main to api
+[33m4fb0ef5[m[33m ([m[1;32mmain[m[33m)[m HEAD@{3}: pull: Fast-forward
+[33m3d718e0[m[33m ([m[1;31morigin/dev/punjitha[m[33m, [m[1;32mdev/punjitha[m[33m)[m HEAD@{4}: checkout: moving from feature/login to main
+[33m2798c74[m[33m ([m[1;31morigin/feature/login[m[33m, [m[1;32mfeature/login[m[33m)[m HEAD@{5}: commit (merge): Merge Conflicts resolved
+[33ma988afe[m HEAD@{6}: pull: Fast-forward
+[33m49cd33a[m HEAD@{7}: checkout: moving from dev/punjitha to feature/login
+[33m3d718e0[m[33m ([m[1;31morigin/dev/punjitha[m[33m, [m[1;32mdev/punjitha[m[33m)[m HEAD@{8}: checkout: moving from main to dev/punjitha
+[33m3d718e0[m[33m ([m[1;31morigin/dev/punjitha[m[33m, [m[1;32mdev/punjitha[m[33m)[m HEAD@{9}: pull: Fast-forward
+[33mecec1e1[m HEAD@{10}: checkout: moving from api to main
+[33ma8b997f[m HEAD@{11}: checkout: moving from main to api
+[33mecec1e1[m HEAD@{12}: commit: fixed some stuff
+[33m18d41bf[m HEAD@{13}: pull: Fast-forward
+[33m2e046ec[m HEAD@{14}: checkout: moving from api to main
+[33ma8b997f[m HEAD@{15}: commit (merge): Merge remote-tracking branch 'origin/main' into api
+[33m2998d57[m HEAD@{16}: commit: Fetches Shifts from the Backend and Adds Shifts correctly
+[33m4fb1594[m HEAD@{17}: commit: get api and post api Employees fetch done
+[33m19168ed[m HEAD@{18}: checkout: moving from main to api
+[33m2e046ec[m HEAD@{19}: reset: moving to HEAD
+[33m2e046ec[m HEAD@{20}: pull: Fast-forward
+[33mf1f07ea[m HEAD@{21}: checkout: moving from api to main
+[33m19168ed[m HEAD@{22}: reset: moving to HEAD
+[33m19168ed[m HEAD@{23}: commit: Sucessfully Connected, User/Register POST api implemneted
+[33mf1f07ea[m HEAD@{24}: checkout: moving from main to api
+[33mf1f07ea[m HEAD@{25}: checkout: moving from feature/analytics to main
+[33mf493250[m[33m ([m[1;32mfeature/analytics[m[33m)[m HEAD@{26}: commit (merge): conflicts resolved
+[33md9390c7[m HEAD@{27}: checkout: moving from main to feature/analytics
+[33mf1f07ea[m HEAD@{28}: pull: Fast-forward
+[33m054543b[m HEAD@{29}: pull: Fast-forward
+[33m330a373[m HEAD@{30}: checkout: moving from feature/login to main
+[33m49cd33a[m HEAD@{31}: pull origin main: Merge made by the 'ort' strategy.
+[33m0171bdf[m HEAD@{32}: checkout: moving from feature/login to feature/login
+[33m0171bdf[m HEAD@{33}: branch: Reset to origin/feature/login
+[33m330a373[m HEAD@{34}: checkout: moving from main to feature/login
+[33m330a373[m HEAD@{35}: checkout: moving from feature/login to main
+[33m330a373[m HEAD@{36}: checkout: moving from main to feature/login
+[33m330a373[m HEAD@{37}: checkout: moving from feature/login to main
+[33m330a373[m HEAD@{38}: checkout: moving from main to feature/login
+[33m330a373[m HEAD@{39}: commit: Dynamically adjusted how events are positioned in the calendar
+[33m14d5b64[m HEAD@{40}: pull origin main: Fast-forward
+[33m9c06281[m HEAD@{41}: checkout: moving from createshifts to main
+[33mac34639[m[33m ([m[1;31morigin/createshifts[m[33m, [m[1;32mcreateshifts[m[33m)[m HEAD@{42}: commit: Shifts are Adding properly to the calendar
+[33m9c06281[m HEAD@{43}: checkout: moving from main to createshifts
+[33m9c06281[m HEAD@{44}: checkout: moving from createshifts to main
+[33m9c06281[m HEAD@{45}: pull origin main: Fast-forward
+[33maef8222[m HEAD@{46}: checkout: moving from main to createshifts
+[33m9c06281[m HEAD@{47}: pull: Fast-forward
+[33meb9515f[m HEAD@{48}: checkout: moving from style/calendar to main
+[33me8b03da[m[33m ([m[1;31morigin/style/calendar[m[33m, [m[1;32mstyle/calendar[m[33m)[m HEAD@{49}: commit (merge): Resolved Package.json
+[33m6e479dc[m HEAD@{50}: checkout: moving from main to style/calendar
+[33meb9515f[m HEAD@{51}: checkout: moving from feature/nurse-roster to main
+[33m09b0835[m[33m ([m[1;32mfeature/nurse-roster[m[33m)[m HEAD@{52}: reset: moving to HEAD
+[33m09b0835[m[33m ([m[1;32mfeature/nurse-roster[m[33m)[m HEAD@{53}: pull: Fast-forward
+[33m29dd4e0[m HEAD@{54}: checkout: moving from main to feature/nurse-roster
+[33meb9515f[m HEAD@{55}: pull: Fast-forward
+[33m6788807[m HEAD@{56}: checkout: moving from feature/nurse-roster to main
+[33m29dd4e0[m HEAD@{57}: checkout: moving from approval to feature/nurse-roster
+[33mfab98f0[m[33m ([m[1;31morigin/approval[m[33m, [m[1;32mapproval[m[33m)[m HEAD@{58}: reset: moving to HEAD
+[33mfab98f0[m[33m ([m[1;31morigin/approval[m[33m, [m[1;32mapproval[m[33m)[m HEAD@{59}: checkout: moving from feature/nurse-roster to approval
+[33m29dd4e0[m HEAD@{60}: checkout: moving from style/calendar to feature/nurse-roster
+[33m6e479dc[m HEAD@{61}: checkout: moving from feature/Login-Page-New to style/calendar
+[33m766f4c2[m[33m ([m[1;32mfeature/Login-Page-New[m[33m)[m HEAD@{62}: rebase (finish): returning to refs/heads/feature/Login-Page-New
+[33m766f4c2[m[33m ([m[1;32mfeature/Login-Page-New[m[33m)[m HEAD@{63}: rebase (continue): Package.json updated
+[33m3cc4783[m HEAD@{64}: pull origin feature/Login-Page-New --rebase (start): checkout 3cc47835ce5ce15e93dbf66da64e8d469a059ad9
+[33m71e278c[m HEAD@{65}: reset: moving to HEAD
+[33m71e278c[m HEAD@{66}: checkout: moving from main to feature/Login-Page-New
+[33m6788807[m HEAD@{67}: pull: Fast-forward
+[33m3ba4be8[m HEAD@{68}: checkout: moving from approval to main
+[33mfab98f0[m[33m ([m[1;31morigin/approval[m[33m, [m[1;32mapproval[m[33m)[m HEAD@{69}: reset: moving to HEAD
+[33mfab98f0[m[33m ([m[1;31morigin/approval[m[33m, [m[1;32mapproval[m[33m)[m HEAD@{70}: commit: approval user interface is completed
+[33m81652a1[m[33m ([m[1;31morigin/doctorlist[m[33m, [m[1;32mdoctorlist[m[33m)[m HEAD@{71}: checkout: moving from doctorlist to approval
+[33m81652a1[m[33m ([m[1;31morigin/doctorlist[m[33m, [m[1;32mdoctorlist[m[33m)[m HEAD@{72}: commit: Doctor List Completed. Adding Doctors Done
+[33m3ba4be8[m HEAD@{73}: checkout: moving from feature/Login-Page-New to doctorlist
+[33m71e278c[m HEAD@{74}: pull: Merge made by the 'ort' strategy.
+[33m576b0ea[m HEAD@{75}: checkout: moving from main to feature/Login-Page-New
+[33m3ba4be8[m HEAD@{76}: reset: moving to doctorlist
+[33m47c61a6[m HEAD@{77}: pull origin main: Fast-forward
+[33m3ba4be8[m HEAD@{78}: reset: moving to doctorlist
+[33m47c61a6[m HEAD@{79}: checkout: moving from doctorlist to main
+[33m3ba4be8[m HEAD@{80}: checkout: moving from main to doctorlist
+[33m47c61a6[m HEAD@{81}: checkout: moving from doctorlist to main
+[33m3ba4be8[m HEAD@{82}: checkout: moving from main to doctorlist
+[33m47c61a6[m HEAD@{83}: commit: Revoked the Last Merge
+[33mb865aaf[m HEAD@{84}: commit: Revert "Merge pull request #14 from ShiftSL/feature/Login-Page-New"
+[33mcb93567[m HEAD@{85}: pull origin main: Fast-forward
+[33m483dc11[m HEAD@{86}: checkout: moving from doctorlist to main
+[33m3ba4be8[m HEAD@{87}: commit: Dynamic Data Fetching and Displaying is Correctly updated. Have to correctly integrate the Add Doctor Form
+[33m483dc11[m HEAD@{88}: checkout: moving from main to doctorlist
+[33m483dc11[m HEAD@{89}: checkout: moving from feature/Login-Page-new to main
+[33m576b0ea[m HEAD@{90}: checkout: moving from createshifts to feature/Login-Page-new
+[33maef8222[m HEAD@{91}: reset: moving to HEAD
+[33maef8222[m HEAD@{92}: reset: moving to HEAD~1
+[33mee5ab36[m HEAD@{93}: checkout: moving from createshifts to createshifts
+[33mee5ab36[m HEAD@{94}: checkout: moving from main to createshifts
+[33m483dc11[m HEAD@{95}: checkout: moving from feature/Login-Page-New to main
+[33m576b0ea[m HEAD@{96}: commit: Package.json updated
+[33m5fbade9[m HEAD@{97}: commit: checkout
+[33m05f4b76[m HEAD@{98}: checkout: moving from feature/Dashboard to feature/Login-Page-New
+[33m1717ad5[m[33m ([m[1;32mfeature/Dashboard[m[33m)[m HEAD@{99}: checkout: moving from main to feature/Dashboard
+[33m483dc11[m HEAD@{100}: pull: Fast-forward
+[33m3723077[m HEAD@{101}: checkout: moving from createshifts to main
+[33mee5ab36[m HEAD@{102}: commit: Header was Added
+[33maef8222[m HEAD@{103}: commit: Updating up to date
+[33m3a70346[m HEAD@{104}: checkout: moving from main to createshifts
+[33m3723077[m HEAD@{105}: checkout: moving from createshifts to main
+[33m3a70346[m HEAD@{106}: checkout: moving from main to createshifts
+[33m3723077[m HEAD@{107}: checkout: moving from createshifts to main
+[33m3a70346[m HEAD@{108}: reset: moving to HEAD
+[33m3a70346[m HEAD@{109}: commit: Assign Doctor Form is Correctly working.Left to implement it to every Shift Slot
+[33m6fe4463[m HEAD@{110}: commit: Assign Doctor Form is partially done.Needs improvement
+[33m0374fe4[m HEAD@{111}: commit: custom time slots were updated
+[33m3723077[m HEAD@{112}: checkout: moving from main to createshifts
+[33m3723077[m HEAD@{113}: pull --rebase origin main (finish): returning to refs/heads/main
+[33m3723077[m HEAD@{114}: pull --rebase origin main (pick): Initialized Calendar. Navbar Done
+[33m161c3d3[m HEAD@{115}: pull --rebase origin main (start): checkout 161c3d35ecd2f38904fd99fe04823c676efd7d26
+[33m32e854b[m HEAD@{116}: commit (initial): Initialized Calendar. Navbar Done
