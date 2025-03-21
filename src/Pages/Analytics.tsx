@@ -62,8 +62,7 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
-        {/*TODO: 1. Make sure to hide the other doctors when searching and only show the searched doctor*/}
-        {/*        2. Instead of the Accordions use a Card and Display the data in a bar graph. Malindu will send the design*/}
+
 
        {mergedDoctors.length === 0? (
         <Typography>No doctors found</Typography>):(
