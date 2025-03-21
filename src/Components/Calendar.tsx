@@ -9,7 +9,7 @@ import {
 } from '@schedule-x/calendar'
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
-import AssignDoctorForm from "./AssignDoctorForm"; // Corrected import statement
+import "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
 import {ShiftFormData} from "../Interfaces/Types.tsx"
