@@ -28,6 +28,8 @@
     "@schedule-x/react": "^2.19.0",
     "@schedule-x/shared": "^2.19.0",
     "@schedule-x/theme-default": "^2.21.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "axios": "^1.8.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.3.0"
