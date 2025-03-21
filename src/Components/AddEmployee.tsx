@@ -27,13 +27,25 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         phone_no: "",
     });
 
+    const [emailError, setEmailError] = useState<string>("");
+
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
+        //email validation
+        if (name === "email") {
+            validateEmail(value);
+        }
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSelectChange = (e: SelectChangeEvent<string>) => {
         setFormData((prev) => ({ ...prev, role: e.target.value }));
+    };
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        setEmailError(emailRegex.test(email) ? "" : "Invalid email address");
     };
 
 
@@ -44,6 +56,11 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
             alert("Please fill all fields");
             return;
         } // validation
+
+        if (emailError) {
+            alert("Please enter a valid email address");
+            return;
+        } 
 
         onDoctorAdded(formData);
         setFormData({
@@ -85,11 +102,13 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="Email"
                     name="email"
-                    type="email"
+                    // type="email"
                     value={formData.email}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!emailError}
+                    helperText={emailError}
                 />
                 <TextField
                     fullWidth
