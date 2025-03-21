@@ -15,7 +15,7 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    TableContainer, Paper, TableHead, TableRow, TableCell, Table, TableBody, Modal
+    TableContainer, Paper, TableHead, TableRow, TableCell, Table, TableBody, Modal,TextField
 } from "@mui/material";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -31,6 +31,10 @@ const Employees: React.FC = () => {
     const handleWardChange = (event: SelectChangeEvent) => {
         setWard(event.target.value);
     };
+    //state for search in filtering
+    const [search, setSearch] = React.useState("");
+     //state to show search bar
+    const [showSearch, setShowSearch] = React.useState(false);
 
     // Fetching Employee Data. For now from a JSON
     const [doctors, setDoctors] = React.useState<Doctor[]>([]); // initial state set to an empty list of doctors
@@ -50,6 +54,21 @@ const Employees: React.FC = () => {
         }
 
     }, []);
+    // Search Functionality in filtering
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value.toLowerCase());
+    }
+    const toggleSearch = () => {
+        setShowSearch((prev) => !prev); //show search bar according to previous state
+    };
+
+    //filter doctors
+    const filteredDoctors = doctors.filter(
+        (doctor) => 
+         doctor.first_name.toLowerCase().includes(search) ||
+         doctor.last_name.toLowerCase().includes(search) || 
+         doctor.email.toLowerCase().includes(search) 
+        );
 
     const [addForm, setAddForm] = React.useState(false)
     const handleDoctorAdded=(newDoctor: Doctor) =>{
@@ -135,7 +154,7 @@ const Employees: React.FC = () => {
                         </Box>
                     </Modal>
 
-                    <Button variant="outlined" startIcon={<FilterListIcon />} className="panel-btn"  sx={{
+                    <Button variant="outlined" startIcon={<FilterListIcon />} onClick={toggleSearch} className="panel-btn"  sx={{
                         color: "#2AED8D",
                         borderColor: "#2AED8D",
                         backgroundColor: "#2AED8D !important",
@@ -144,6 +163,17 @@ const Employees: React.FC = () => {
 
                         },
                     }}>Filter</Button>
+                    {showSearch && (
+                        <TextField
+                            variant="outlined"
+                            placeholder="Search by name or email"
+                            value={search}
+                            onChange={handleSearch}
+                            size="small"
+                            sx={{width: "200"}}
+                            />
+                    )
+                    }
                 </Box>
             </Box>
             <Box className="List" sx={{ padding: "20px", width: "100%"} }>
@@ -160,7 +190,8 @@ const Employees: React.FC = () => {
                         </TableRow>
                     </TableHead>
                         <TableBody>
-                            {doctors.map((doctor)=>(
+                            {/* {doctors.map((doctor)=>( */}
+                            {filteredDoctors.map((doctor) => (
                                 <TableRow sx={{backgroundColor: "#FDFDFD"}} key={doctor.id}>
                                     <TableCell>{doctor.id.toString()}</TableCell>
                                     <TableCell>{doctor.first_name}</TableCell>
