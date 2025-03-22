@@ -29,23 +29,24 @@ const Analytics:React.FC= () => {
     //filter doctors based on search input
     useEffect    (() => {
         if (search.trim() === "") {
-            setFilteredDoctors([]);
+            setFilteredDoctors([]); //reset to empty array if search is empty
             return;
         }
         const filtered=doctors.filter((doctor) =>{
             const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
             const query=search.toLowerCase().trim();
-            return fullName.includes(query);
+            return fullName.includes(query); //check if name is in search query
     }
     );
     setFilteredDoctors(filtered);
-    },[search,doctors]);
+    },[search,doctors]); //run when search(user types on search) or doctor is removed or added
 
 
     //merge doctor data with shift data
     const mergedDoctors=filteredDoctors.map((doctor) => {
         console.log(`Doctor ID (BigInt): ${doctor.id}`);
         console.log(`Shift Data IDs:`, shiftData.map((s) => s.doctor_id));
+        //match shift data to doctor 
         const doctorShift=shiftData.find((shift) => BigInt(shift.doctor_id)=== doctor.id);
         
         console.log(`Doctor ID: ${doctor.id}`);
@@ -79,6 +80,7 @@ const Analytics:React.FC= () => {
                 <Card key={index}sx={{ width: 1000}}>
                     <CardContent>
                         <Typography variant="h6">{doctor.first_name} {doctor.last_name}</Typography>
+                        {/* create bar chart with shift data */}
                         <BarChart 
                             width={750}
                             height={500}
@@ -107,37 +109,6 @@ const Analytics:React.FC= () => {
     );
 };
        
-
-       {/* {mergedDoctors.length === 0 && search.trim()!==""? (
-        <Typography>No doctors found</Typography>):(
-        mergedDoctors.map((doctor, index) => (
-            <Accordion key={index}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`panel${index}-content`}
-                    id={`panel${index}-header`}
-                    sx={{backgroundColor: "rgba(42, 237, 141, 0.1)",
-                        "&:hover": { 
-                            backgroundColor: "rgba(42, 237, 141, 0.2)",},
-                        "&.Mui-expanded": {
-                            backgroundColor: "rgba(42, 237, 141, 0.3)",},
-                        }}
-                >
-                    <Typography>{doctor.first_name} {doctor.last_name} - View Analytics </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography variant="body2">Covered Shifts: {doctor.coveredShifts}</Typography>
-                <Typography variant="body2">Covered Hours: {doctor.coveredHours}</Typography>
-                <Typography variant="body2">Leaves Taken: {doctor.leavesTaken}</Typography>
-                <Typography variant="body2">Hours Remaining: {doctor.hoursRemaining} </Typography>
-                </AccordionDetails> 
-                </Accordion>
-        ))
-    )}
-    </Box>
-  );
-}; */}
-
 
 
 export default Analytics;
