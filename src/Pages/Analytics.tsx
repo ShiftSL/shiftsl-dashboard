@@ -76,34 +76,43 @@ const Analytics:React.FC= () => {
             sx={{ marginBottom: "3" }}
        />
        <Box sx={{ display: "flex", flexWrap: "wrap",gap:2 }}>
-            {mergedDoctors.map((doctor, index) => (
-                <Card key={index}sx={{ width: 1000}}>
-                    <CardContent>
-                        <Typography variant="h6">{doctor.first_name} {doctor.last_name}</Typography>
-                        {/* create bar chart with shift data */}
-                        <BarChart 
-                            width={750}
-                            height={500}
-                            series={[
-                                {
-                                    data:[
-                                        doctor.coveredShifts,
-                                        doctor.coveredHours,
-                                        doctor.leavesTaken,
-                                        doctor.hoursRemaining,
-                                    ],
-                                 
-                                },
-                                        
-                                        
-                            ]}
-                            xAxis={[{scaleType: 'band',data:['Covered Shifts','Covered Hours','Leaves Taken','Remaining Hours'],}]}
-                            />
+            {search.trim()!=="" && mergedDoctors.length===0?(
+                 <Typography variant='h6' sx={{marginTop:2}}>
+                 No Doctor Found.
+             </Typography>
+            ):(
 
-
-                    </CardContent>
-                    </Card>
-            ))}
+                mergedDoctors.map((doctor, index) => (
+                    <Card key={index}sx={{ width: 1000}}>
+                        <CardContent>
+                            <Typography variant="h6">{doctor.first_name} {doctor.last_name}</Typography>
+                            {/* create bar chart with shift data */}
+                            <BarChart 
+                                width={750}
+                                height={500}
+                                series={[
+                                    {
+                                        data:[
+                                            doctor.coveredShifts,
+                                            doctor.coveredHours,
+                                            doctor.leavesTaken,
+                                            doctor.hoursRemaining,
+                                        ],
+                                     
+                                    },
+                                            
+                                            
+                                ]}
+                                xAxis={[{scaleType: 'band',data:['Covered Shifts','Covered Hours','Leaves Taken','Remaining Hours'],}]}
+                                />
+    
+    
+                        </CardContent>
+                        </Card>
+                ))
+               
+            )}
+            
         </Box>
     </Box>
     );
