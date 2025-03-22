@@ -1,13 +1,15 @@
 export interface Doctor {
-    id: bigint;
-    first_name: string;
-    last_name: string;
+    id: number;
+    firstName: string;
+    lastName: string;
+    phoneNo: string;
     email: string;
-    role: string; // check the role cause the backend is designed to understand whether it's a doctor, or an admin
-    phone_no: string;
+
+    role: "DOCTOR_PERM" | "DOCTOR_TEMP"|"HR_ADMIN" | "EMPLOYEE";
     //optional data for analytics
     coveredShifts?: number;
     coveredHours?: number;
     leavesTaken?: number;
     hoursRemaining?: number;
+
 }
