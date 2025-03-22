@@ -1,7 +1,8 @@
 import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { TextField, Button, Box, Typography, Container, Checkbox, FormControlLabel } from "@mui/material"
+import { TextField, Button, Box, Typography, Container, Checkbox, FormControlLabel, IconButton, InputAdornment } from "@mui/material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 
@@ -13,6 +14,7 @@ const CreateAccountPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [role, setRole] = useState("Administrator")
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -328,7 +330,7 @@ const CreateAccountPage: React.FC = () => {
               <TextField
                 fullWidth
                 variant="outlined"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -347,6 +349,16 @@ const CreateAccountPage: React.FC = () => {
                       border: "1px solid #2b3c56",
                     },
                   },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
             </Box>
@@ -364,7 +376,7 @@ const CreateAccountPage: React.FC = () => {
               <TextField
                 fullWidth
                 variant="outlined"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -383,6 +395,16 @@ const CreateAccountPage: React.FC = () => {
                       border: "1px solid #2b3c56",
                     },
                   },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
             </Box>
