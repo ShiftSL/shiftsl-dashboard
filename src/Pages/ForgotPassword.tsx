@@ -249,7 +249,7 @@ const ForgotPasswordPage: React.FC = () => {
                     <Link
                       to="/login"
                       style={{
-                        color: "#2b3c56",
+                        color: "#0000ff", 
                         fontWeight: 500,
                         textDecoration: "underline",
                         fontSize: "14px",
@@ -314,7 +314,7 @@ const ForgotPasswordPage: React.FC = () => {
                 <Link
                   to="/login"
                   style={{
-                    color: "#2b3c56",
+                    color: "#0000ff", 
                     fontWeight: 500,
                     textDecoration: "underline",
                     fontSize: "14px",

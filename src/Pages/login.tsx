@@ -55,11 +55,6 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     }
   }
 
-  // Handling the Google login
-  const handleGoogleLogin = () => {
-    console.log("Login with Google")
-  }
-
   return (
     <Box
       sx={{
@@ -324,30 +319,6 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
               }}
             >
               Sign In
-            </Button>
-
-            <Button
-              onClick={handleGoogleLogin}
-              fullWidth
-              variant="outlined"
-              sx={{
-                color: "#4285F4",
-                height: "48px",
-                borderRadius: "8px",
-                textTransform: "none",
-                fontWeight: 500,
-                fontSize: "16px",
-                boxShadow: "none",
-                borderColor: "#4285F4",
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  boxShadow: "none",
-                },
-                marginBottom: "24px",
-              }}
-            >
-              <img src={GoogleLogo} alt="Google logo" style={{ marginRight: "8px", height: "24px" }} />
-              Sign In with Google
             </Button>
 
             <Box

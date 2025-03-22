@@ -467,7 +467,7 @@ const CreateAccountPage: React.FC = () => {
                 <Link
                   to="/login"
                   style={{
-                    color: "#2b3c56",
+                    color: "#0000ff", 
                     fontWeight: 500,
                     textDecoration: "underline",
                   }}
