@@ -13,18 +13,18 @@ import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): number => {
+    const generateNewId = (): bigint => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? lastDoctor.id +1 :1;
+        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
     };
 
     const [formData, setFormData] = useState<Doctor>({
         id: generateNewId(), // Generate ID dynamically in BigInt
-        firstName: "",
-        lastName: "",
-        phoneNo:"",
+        first_name: "",
+        last_name: "",
         email: "",
-        role: "DOCTOR_PERM",
+        role: "Permanent",
+        phone_no: "",
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,30 +32,28 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
-            }));
+    const handleSelectChange = (e: SelectChangeEvent<string>) => {
+        setFormData((prev) => ({ ...prev, role: e.target.value }));
     };
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
+        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
             alert("Please fill all fields");
             return;
         } // validation
 
         onDoctorAdded(formData);
         setFormData({
-            id: generateNewId(),
-            firstName: "",
-            lastName: "",
+            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
+            first_name: "",
+            last_name: "",
             email: "",
-            role: "DOCTOR_PERM",
-            phoneNo: "",
+            role: "Permanent",
+            phone_no: "",
         });
-        console.log(formData);
     };
 
     return (
@@ -68,8 +66,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="First Name"
-                    name="firstName"
-                    value={formData.firstName}
+                    name="first_name"
+                    value={formData.first_name}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -77,8 +75,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Last Name"
-                    name="lastName"
-                    value={formData.lastName}
+                    name="last_name"
+                    value={formData.last_name}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -96,9 +94,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Phone Number"
-                    name="phoneNo"
+                    name="phone_no"
                     type="tel"
-                    value={formData.phoneNo}
+                    value={formData.phone_no}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -109,10 +107,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange}
+                        onChange={(e) => handleSelectChange(e as any)}
                     >
-                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
-                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
+                        <MenuItem value="Permanent">Permanent</MenuItem>
+                        <MenuItem value="Temporary">Temporary</MenuItem>
                     </Select>
                 </FormControl>
 
