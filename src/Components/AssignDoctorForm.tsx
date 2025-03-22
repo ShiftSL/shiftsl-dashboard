@@ -21,6 +21,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
+    const [validationErrors, setValidationErrors] = useState<{[key:string]:string}>({}); //state to store and manage validation errors
 
     const doctorsMap = new Map(doctordata.map((doctor) => [doctor.id, doctor]));
     const doctorList = doctordata;
@@ -95,9 +96,20 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         return d.toISOString().split("T")[0];
     };
 
+    const validateForm = () => {
+        let errors:{[key:string]:string} = {};
+        if(!formData.title.trim())errors.title = "Please enter a ward";
+        if(!selectedDate)errors.date = "Please select a date";
+        if(!selectedShift)errors.shift = "Please select a shift";
+        if(formData.people.length === 0)errors.people = "Atleast one doctors must be  assigned";
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0; //returns true if there are no errors
+    };
+
     // Handle Form Submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if(!validateForm())return; //prevents form submission if there are validation errors
         const newShifts = updateShiftTiming(selectedDate, selectedShift);
 
         if (Array.isArray(newShifts)) {
@@ -123,7 +135,9 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                    />
+                        />
+                        {validationErrors.title && <span className="error">{validationErrors.title}</span>}
+                   
                 </div>
 
                 <div>
@@ -135,6 +149,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                         value={selectedDate}
                         onChange={handleDateChange}
                     />
+                    {validationErrors.date && <span className="error">{validationErrors.date}</span>}
                 </div>
 
                 <div>
@@ -147,6 +162,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                             </option>
                         ))}
                     </select>
+                    {validationErrors.shift && <span className="error">{validationErrors.shift}</span>}
                 </div>
 
                 <div>
@@ -164,6 +180,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                             </option>
                         ))}
                     </select>
+                    {validationErrors.people && <span className="error">{validationErrors.people}</span>}
                 </div>
 
                 <div className="selected-doctors">
