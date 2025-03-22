@@ -39,7 +39,17 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         }
         //phone number validation
         if (name === "phone_no") {
-            validatePhone(value);
+            if(!value.startsWith("+94")){ //make sure +94 is not deleted
+                setFormData((prev) => ({ ...prev, phone_no: "+94" }));
+                return;
+            }
+            //move cursor after +94
+           const cursorPosition = e.target.selectionStart || 0; //get cursor position or deafult to 0
+           if(cursorPosition<3){
+            e.target.setSelectionRange(3,3);
+           }
+           validatePhone(value);
+    
         }
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
