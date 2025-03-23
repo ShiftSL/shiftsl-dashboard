@@ -28,14 +28,17 @@ const Analytics:React.FC= () => {
 
     //filter doctors based on search input
     useEffect    (() => {
+
         if (search.trim() === "") {
             setFilteredDoctors([]); //reset to empty array if search is empty
             return;
         }
+        
         const filtered=doctors.filter((doctor) =>{
-            const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
-            const query=search.toLowerCase().trim();
-            return fullName.includes(query); //check if name is in search query
+        const fullName= `${doctor.firstName} ${doctor.lastName}`.toLowerCase().trim();
+        const query=search.toLowerCase().trim();
+        return fullName.includes(query);
+
     }
     );
     setFilteredDoctors(filtered);
@@ -75,12 +78,14 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
+
        <Box sx={{ display: "flex", flexWrap: "wrap",gap:2 }}>
             {search.trim()!=="" && mergedDoctors.length===0?(
                  <Typography variant='h6' sx={{marginTop:2}}>
                  No Doctor Found.
              </Typography>
             ):(
+
 
                 mergedDoctors.map((doctor, index) => (
                     <Card key={index}sx={{ width: 1000}}>
