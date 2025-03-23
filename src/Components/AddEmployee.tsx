@@ -20,15 +20,38 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
 
     const [formData, setFormData] = useState<Doctor>({
         id: generateNewId(), // Generate ID dynamically in BigInt
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
+        phoneNo:"+94",
         email: "",
-        role: "Permanent",
-        phone_no: "",
+        role: "DOCTOR_PERM",
+
     });
+
+    const [emailError, setEmailError] = useState<string>("");
+    const [phoneError, setPhoneError] = useState<string>("");
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
+        //email validation
+        if (name === "email") {
+            validateEmail(value);
+        }
+        //phone number validation
+        if (name === "phoneNo") {
+            if(!value.startsWith("+94")){ //make sure +94 is not deleted
+                setFormData((prev) => ({ ...prev, phoneNo: "+94" }));
+                return;
+            }
+            //move cursor after +94
+           const cursorPosition = e.target.selectionStart || 0; //get cursor position or deafult to 0
+           if(cursorPosition<3){
+            e.target.setSelectionRange(3,3);
+           }
+           validatePhone(value);
+    
+        }
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -36,23 +59,44 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, role: e.target.value }));
     };
 
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        setEmailError(emailRegex.test(email) ? "" : "Invalid email address");
+    };
+    const validatePhone = (phone: string) => {
+        const phoneRegex = /^\+94\d{9}$/;
+        setPhoneError(phoneRegex.test(phone) ? "" : "Invalid phone number");
+    };
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
+
             alert("Please fill all fields");
             return;
         } // validation
 
+        if (emailError ) {
+            alert("Invalid email address");
+            return;
+        }
+        if (phoneError) {
+            alert("Invalid phone number");
+            return;
+        }
+          
+
         onDoctorAdded(formData);
         setFormData({
             id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
-            first_name: "",
-            last_name: "",
+            firstName: "",
+            lastName: "",
             email: "",
-            role: "Permanent",
-            phone_no: "",
+            role: "DOCTOR_PERM",
+            phoneNo: "+94",
+
         });
     };
 
@@ -67,7 +111,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="First Name"
                     name="first_name"
-                    value={formData.first_name}
+                    value={formData.firstName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -76,7 +120,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="Last Name"
                     name="last_name"
-                    value={formData.last_name}
+                    value={formData.lastName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -85,21 +129,24 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="Email"
                     name="email"
-                    type="email"
+                    // type="email"
                     value={formData.email}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!emailError}
+                    helperText={emailError}
                 />
                 <TextField
                     fullWidth
                     label="Phone Number"
-                    name="phone_no"
-                    type="tel"
-                    value={formData.phone_no}
+                    name="phoneNo"    
+                    value={formData.phoneNo}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!phoneError}
+                    helperText={phoneError}
                 />
 
                 <FormControl fullWidth margin="normal">

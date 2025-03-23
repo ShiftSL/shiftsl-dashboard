@@ -1,8 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Box,TextField } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { BarChart } from '@mui/x-charts/BarChart';
 import { Doctor } from '../Interfaces/Doctor';
 import doctorsData from '../jsonfiles/doctors.json';
+import shiftsData from '../jsonfiles/shifts.json';
+
 
 const Analytics:React.FC= () => {
     const [search, setSearch] = useState(""); //handle search input
@@ -16,34 +18,48 @@ const Analytics:React.FC= () => {
             id: BigInt(doctor.id),
         }));
         setDoctors(convertedDoctors);
-        setShiftData(shiftData);
+        setShiftData(shiftsData);
+        console.log("Shift Data Loaded:", shiftsData);
+        console.log("Loaded Doctors:", convertedDoctors);
+        
     },[]);
 
 
     //filter doctors based on search input
     useEffect    (() => {
-    const filtered=doctors.filter((doctor) =>{
-        const fullName= `${doctor.first_name} ${doctor.last_name}`.toLowerCase().trim();
+
+        if (search.trim() === "") {
+            setFilteredDoctors([]); //reset to empty array if search is empty
+            return;
+        }
+        
+        const filtered=doctors.filter((doctor) =>{
+        const fullName= `${doctor.firstName} ${doctor.lastName}`.toLowerCase().trim();
+
         const query=search.toLowerCase().trim();
         return fullName.includes(query);
+
     }
     );
     setFilteredDoctors(filtered);
-    },[search,doctors]);
+    },[search,doctors]); //run when search(user types on search) or doctor is removed or added
 
 
     //merge doctor data with shift data
     const mergedDoctors=filteredDoctors.map((doctor) => {
-        const doctorShift=shiftData.find((shift) => shift.doctor_id === doctor.id);
+        console.log(`Doctor ID (BigInt): ${doctor.id}`);
+        console.log(`Shift Data IDs:`, shiftData.map((s) => s.doctor_id));
+        //match shift data to doctor 
+        const doctorShift=shiftData.find((shift) => BigInt(shift.doctor_id)=== doctor.id);
         
         console.log(`Doctor ID: ${doctor.id}`);
         console.log(`Shift Data: ${JSON.stringify(doctorShift)}`);
 
         const merged={...doctor, ...doctorShift, 
-            coveredShifts: doctorShift?.coveredShifts || 0,
-            coveredHours: doctorShift?.coveredHours || 0,
-            leavesTaken: doctorShift?.leavesTaken || 0,
-            hoursRemaining: doctorShift?.hoursRemaining || 0
+            coveredShifts: doctorShift? Number(doctorShift.coveredShifts) : 0,
+            coveredHours: doctorShift?Number(doctorShift.coveredHours) : 0,
+            leavesTaken: doctorShift?Number(doctorShift.leavesTaken) : 0,
+            hoursRemaining:doctorShift?Number(doctorShift.hoursRemaining) : 0
         };
     
         console.log("Merged Doctor Data:", merged);
@@ -62,38 +78,52 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
-        /*TODO: 1. Make sure to hide the other doctors when searching and only show the searched doctor
-                2. Instead of the Accordions use a Card and Display the data in a bar graph. Malindu will send the design
-        */
 
-       {mergedDoctors.length === 0? (
-        <Typography>No doctors found</Typography>):(
-        mergedDoctors.map((doctor, index) => (
-            <Accordion key={index}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`panel${index}-content`}
-                    id={`panel${index}-header`}
-                    sx={{backgroundColor: "rgba(42, 237, 141, 0.1)",
-                        "&:hover": { 
-                            backgroundColor: "rgba(42, 237, 141, 0.2)",},
-                        "&.Mui-expanded": {
-                            backgroundColor: "rgba(42, 237, 141, 0.3)",},
-                        }}
-                >
-                    <Typography>{doctor.first_name} {doctor.last_name} - View Analytics </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography variant="body2">Covered Shifts: {doctor.coveredShifts}</Typography>
-                <Typography variant="body2">Covered Hours: {doctor.coveredHours}</Typography>
-                <Typography variant="body2">Leaves Taken: {doctor.leavesTaken}</Typography>
-                <Typography variant="body2">Hours Remaining: {doctor.hoursRemaining} </Typography>
-                </AccordionDetails> 
-                </Accordion>
-        ))
-    )}
+
+       <Box sx={{ display: "flex", flexWrap: "wrap",gap:2 }}>
+            {search.trim()!=="" && mergedDoctors.length===0?(
+                 <Typography variant='h6' sx={{marginTop:2}}>
+                 No Doctor Found.
+             </Typography>
+            ):(
+
+
+                mergedDoctors.map((doctor, index) => (
+                    <Card key={index}sx={{ width: 1000}}>
+                        <CardContent>
+                            <Typography variant="h6">{doctor.first_name} {doctor.last_name}</Typography>
+                            {/* create bar chart with shift data */}
+                            <BarChart 
+                                width={750}
+                                height={500}
+                                series={[
+                                    {
+                                        data:[
+                                            doctor.coveredShifts,
+                                            doctor.coveredHours,
+                                            doctor.leavesTaken,
+                                            doctor.hoursRemaining,
+                                        ],
+                                     
+                                    },
+                                            
+                                            
+                                ]}
+                                xAxis={[{scaleType: 'band',data:['Covered Shifts','Covered Hours','Leaves Taken','Remaining Hours'],}]}
+                                />
+    
+    
+                        </CardContent>
+                        </Card>
+                ))
+               
+            )}
+            
+        </Box>
     </Box>
-  );
+    );
 };
+       
+
 
 export default Analytics;
