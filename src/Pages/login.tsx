@@ -4,16 +4,19 @@ import { Link, useNavigate } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
-import GoogleLogo from "../assests/Google.png" 
+
+import { useAuth } from '../context/AuthContext';
 
 // Defining the Login Page with onLogin
-const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+const Login: React.FC = () => {
   // Variables for email, password and their error messages
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   // Validating the email format
   const validateEmail = (email: string) => {
@@ -27,7 +30,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   }
 
   // Handling the form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     let valid = true
 
@@ -49,15 +52,10 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 
     // If email and password valid handling the login logic
     if (valid) {
-      console.log("Login with:", email, password)
-      onLogin()
+      setLoading(true);
+      await login(email, password);
       navigate("/dashboard")
     }
-  }
-
-  // Handling the Google login
-  const handleGoogleLogin = () => {
-    console.log("Login with Google")
   }
 
   return (
@@ -325,56 +323,6 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
             >
               Sign In
             </Button>
-
-            <Button
-              onClick={handleGoogleLogin}
-              fullWidth
-              variant="outlined"
-              sx={{
-                color: "#4285F4",
-                height: "48px",
-                borderRadius: "8px",
-                textTransform: "none",
-                fontWeight: 500,
-                fontSize: "16px",
-                boxShadow: "none",
-                borderColor: "#4285F4",
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  boxShadow: "none",
-                },
-                marginBottom: "24px",
-              }}
-            >
-              <img src={GoogleLogo} alt="Google logo" style={{ marginRight: "8px", height: "24px" }} />
-              Sign In with Google
-            </Button>
-
-            <Box
-              sx={{
-                textAlign: "center",
-                width: "100%",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#666666",
-                  fontSize: "14px",
-                }}
-              >
-                Don't have an account?{" "}
-                <Link
-                  to="/create-account"
-                  style={{
-                    color: "blue",
-                    fontWeight: 500,
-                    textDecoration: "underline",
-                  }}
-                >
-                  Create new one
-                </Link>
-              </Typography>
-            </Box>
           </form>
         </Container>
       </Box>
@@ -382,5 +330,4 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   )
 }
 
-export default LoginPage
-
+export default Login;
