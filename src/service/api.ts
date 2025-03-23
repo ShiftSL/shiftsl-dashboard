@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { User, UserDTO } from '../types/user';
 import {Shift, shiftDTO} from "../types/shift.ts";
+import {LeaveRequest} from "../Interfaces/LeaveRequest.tsx";
+import {leave} from "../types/leave.ts";
 
 // Create axios instance with base URL and default headers
 const api = axios.create({
@@ -43,3 +45,6 @@ export const shiftApi = {
     // Get All Shifts
    getAllShifts: () => api.get(`/api/shift`)
 };
+export const leaveApi={
+    getAllLeaves:() => api.get<leave>(`/api/leave`),
+}

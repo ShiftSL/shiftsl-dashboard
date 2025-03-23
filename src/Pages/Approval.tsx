@@ -3,7 +3,7 @@ The Page to accept Approvals to exchange Shifts.
  */
 import React, {useEffect, useState} from "react";
 import {
-    Box,
+    Box, Button,
     Grid,
     Paper,
     Tab,
@@ -18,21 +18,53 @@ import {
 import '@schedule-x/theme-default/dist/index.css'
 import {ScheduleXCalendar, useCalendarApp} from "@schedule-x/react";
 import {createViewMonthGrid} from "@schedule-x/calendar";
-import {LeaveRequest} from "../Interfaces/LeaveRequest.tsx";
-import {ShiftExchange} from "../Interfaces/ShiftExchange.tsx";
+import dayjs from "dayjs";
+import {leaveApi} from "../service/api.ts";
+import axios from "axios";
 
 const Approval: React.FC = ()=> {
+    const [leaveRequests, setLeaveRequests] = useState([]);
 
-     // Fetching LeaveRequests TODO: Start From Here Fetch JSON of leave request and Shift Exchanges
-    const [leaveReqs, setLeaveReqs] = React.useState<LeaveRequest[]> ([]);
     useEffect(() => {
+        const fetchLeaveRequests = async () => {
+            try { // API TO GET LEAVE REQUESTS
+                const response = await leaveApi.getAllLeaves();
+                console.log(response)
+                setLeaveRequests(response.data);
+            } catch (error) {
+                console.error("Failed to fetch leave requests:", error);
+            }
+        };
 
+        fetchLeaveRequests();
     }, []);
     // Calendar
     const calendar = useCalendarApp({views: [createViewMonthGrid()]})
     // MUI Stuff
     const [activeTab, setActiveTab] = useState(0); // 0 for Leave requests, 1 for Shift Exchanges
     const handleTabChange = (event: React.SyntheticEvent, newValue: number)=>{setActiveTab(newValue)}
+    // const handleDecision = async (leaveId: number, action: "APPROVE" | "REJECT") => {
+    //     try {
+    //         const endpoint =
+    //             action === "APPROVE"
+    //                 ? `/api/leave/approve/${leaveId}`
+    //                 : `/api/leave/reject/${leaveId}`;
+    //
+    //         await axios.put(endpoint);
+    //
+    //         // Update the local state
+    //         setLeaveRequests(prev =>
+    //             prev.map(req =>
+    //                 req.id === leaveId
+    //                     ? { ...req, status: action === "APPROVE" ? "APPROVED" : "REJECTED" }
+    //                     : req
+    //             )
+    //         );
+    //     } catch (error) {
+    //         console.error(`Failed to ${action.toLowerCase()} leave request:`, error);
+    //     }
+    // };
+
     return(
 
         <Box sx={{width: "100%", padding: "20px"}}>
@@ -68,18 +100,38 @@ const Approval: React.FC = ()=> {
                                         <TableRow>
                                             <TableCell>Shift Of Request</TableCell>
                                             <TableCell>Request Type</TableCell>
-                                            <TableCell>Time Left</TableCell>
+                                            <TableCell>Doctor</TableCell>
                                             <TableCell>Status</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {/* TODO: Should Map Leave requests Here. For now use JSON. Then with a GET API*/}
-                                        <TableRow sx={{backgroundColor: "#ffffff"}}>
-                                            <TableCell>03/02/202 - 7pm to 7am</TableCell>
-                                            <TableCell>Casual Leave</TableCell>
-                                            <TableCell>2 Days</TableCell>
-                                            <TableCell>Pending</TableCell>
-                                        </TableRow>
+                                        {leaveRequests.map((req, index) => (
+                                            <TableRow key={index} sx={{ backgroundColor: "#ffffff" }}>
+                                                <TableCell>{dayjs(req.shift.startTime).format("MMMM D, YYYY [at] h:mm A")}</TableCell>
+                                                <TableCell>{req.type}</TableCell>
+                                                <TableCell>{req.doctor.firstName.charAt(0)}  {req.doctor.lastName}</TableCell>
+                                                <TableCell> {req.status === "PENDING" ? (
+                                                    <>
+                                                        <Button className="panel-btn" sx={{
+                                                            backgroundColor: "#2AED8D !important",
+                                                            "&:hover": {
+                                                                backgroundColor: "#28C77F!important",
+                                                            },
+                                                        }}> Approve </Button>
+
+                                                        <Button className="panel-btn" sx={{
+                                                            backgroundColor: "#f11717 !important",
+                                                            color: "#ffffff !important",
+                                                            "&:hover": {
+                                                                backgroundColor: "#f11717!important",
+                                                            },
+                                                        }}> Reject </Button>
+                                                    </>
+                                                ) : (
+                                                    req.status
+                                                )}</TableCell>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                     </Table>
                                 </TableContainer>
