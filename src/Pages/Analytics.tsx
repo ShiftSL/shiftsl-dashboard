@@ -25,25 +25,16 @@ const Analytics:React.FC= () => {
     },[]);
 
 
-    //filter doctors based on search input
+     //filter doctors based on search input
     useEffect    (() => {
-
-        if (search.trim() === "") {
-            setFilteredDoctors([]); //reset to empty array if search is empty
-            return;
-        }
-        
-        const filtered=doctors.filter((doctor) =>{
+    const filtered=doctors.filter((doctor) =>{
         const fullName= `${doctor.firstName} ${doctor.lastName}`.toLowerCase().trim();
-
         const query=search.toLowerCase().trim();
         return fullName.includes(query);
-
     }
     );
     setFilteredDoctors(filtered);
-    },[search,doctors]); //run when search(user types on search) or doctor is removed or added
-
+    },[search,doctors]);
 
     //merge doctor data with shift data
     const mergedDoctors=filteredDoctors.map((doctor) => {
