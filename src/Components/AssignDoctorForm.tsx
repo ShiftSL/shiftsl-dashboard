@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css'
-
 import {Doctor} from "../Interfaces/Doctor.tsx";
-import axios from "axios";
 import {userApi} from "../service/api.ts";
 
 const shiftOptions = [
@@ -24,13 +22,6 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
-
-
-    // handle input changes for the title
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
     const [doctors, setDoctors] = useState<Doctor[]>([]);
 
     const fetchDoctors = async () => {
@@ -75,8 +66,6 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         if (!shiftDetails) return;
         const formattedStart = `${date} ${shiftDetails.startHour.toString().padStart(2, '0')}:00`;
 
-        // const formattedEnd = `${shiftDetails.startHour > shiftDetails.endHour ? addOneDay(date) : date}
-        // ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
         if (shiftDetails.label === "7 PM - 7 AM") {
             const nextDay = addOneDay(date);
 
@@ -121,7 +110,6 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const newShifts = updateShiftTiming(selectedDate, selectedShift);
-
         if (Array.isArray(newShifts)) {
             // If the shift was split, submit only the first part
             console.log("Submitting split night shift:", newShifts[0]);
@@ -131,23 +119,16 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             console.log("Submitting regular shift:", formData);
             onSubmit(formData);
         }
+        onCancel();
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
     };
 
     return (
         <div className="form-container">
-            <h3>{initialData ? "Edit Shift" : "Create New Shift"}</h3>
+            <h3>{"Create New Shift"}</h3>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="title">Ward</label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                    />
-                </div>
-
                 <div>
                     <label htmlFor="date">Select Date</label>
                     <input
@@ -199,7 +180,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                     })}
                 </div>
 
-                <button type="submit">{initialData ? "Update Shift" : "Create Shift"}</button>
+                <button type="submit">{"Create Shift"}</button>
                 <button type="button" onClick={onCancel}>Cancel</button>
             </form>
         </div>

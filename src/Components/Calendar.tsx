@@ -16,7 +16,7 @@ import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
 
 import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
-import axios from "axios";
+
 import AssignDoctorForm from "./AssignDoctorForm";
 import {shiftApi} from "../service/api.ts";
 
