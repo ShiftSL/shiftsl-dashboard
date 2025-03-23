@@ -122,7 +122,7 @@ const ForgotPasswordPage: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#ffffff",
-          borderRadius: { xs: "16px", md: "0 16px 16px 0" },
+          borderRadius: "16px", 
           margin: { xs: "16px", md: "16px 16px 16px 0" },
           padding: { xs: "24px", sm: "40px" },
         }}
@@ -204,6 +204,7 @@ const ForgotPasswordPage: React.FC = () => {
                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           border: "1px solid #2b3c56",
                         },
+                        width: "200%", 
                       },
                     }}
                   />
@@ -248,7 +249,7 @@ const ForgotPasswordPage: React.FC = () => {
                     <Link
                       to="/login"
                       style={{
-                        color: "#2b3c56",
+                        color: "#0000ff", 
                         fontWeight: 500,
                         textDecoration: "underline",
                         fontSize: "14px",
@@ -313,7 +314,7 @@ const ForgotPasswordPage: React.FC = () => {
                 <Link
                   to="/login"
                   style={{
-                    color: "#2b3c56",
+                    color: "#0000ff", 
                     fontWeight: 500,
                     textDecoration: "underline",
                     fontSize: "14px",

@@ -13,28 +13,59 @@ import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): number => {
+    const generateNewId = (): bigint => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? lastDoctor.id +1 :1;
+        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
     };
 
     const [formData, setFormData] = useState<Doctor>({
         id: generateNewId(), // Generate ID dynamically in BigInt
         firstName: "",
         lastName: "",
-        phoneNo:"",
+        phoneNo:"+94",
         email: "",
         role: "DOCTOR_PERM",
+
     });
+
+    const [emailError, setEmailError] = useState<string>("");
+    const [phoneError, setPhoneError] = useState<string>("");
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
+        //email validation
+        if (name === "email") {
+            validateEmail(value);
+        }
+        //phone number validation
+        if (name === "phoneNo") {
+            if(!value.startsWith("+94")){ //make sure +94 is not deleted
+                setFormData((prev) => ({ ...prev, phoneNo: "+94" }));
+                return;
+            }
+            //move cursor after +94
+           const cursorPosition = e.target.selectionStart || 0; //get cursor position or deafult to 0
+           if(cursorPosition<3){
+            e.target.setSelectionRange(3,3);
+           }
+           validatePhone(value);
+    
+        }
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
-            }));
+    const handleSelectChange = (e: SelectChangeEvent<string>) => {
+        setFormData((prev) => ({ ...prev, role: e.target.value }));
+    };
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        setEmailError(emailRegex.test(email) ? "" : "Invalid email address");
+    };
+    const validatePhone = (phone: string) => {
+        const phoneRegex = /^\+94\d{9}$/;
+        setPhoneError(phoneRegex.test(phone) ? "" : "Invalid phone number");
     };
 
 
@@ -42,20 +73,31 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         e.preventDefault();
 
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
+
             alert("Please fill all fields");
             return;
         } // validation
 
+        if (emailError ) {
+            alert("Invalid email address");
+            return;
+        }
+        if (phoneError) {
+            alert("Invalid phone number");
+            return;
+        }
+          
+
         onDoctorAdded(formData);
         setFormData({
-            id: generateNewId(),
+            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
             firstName: "",
             lastName: "",
             email: "",
             role: "DOCTOR_PERM",
-            phoneNo: "",
+            phoneNo: "+94",
+
         });
-        console.log(formData);
     };
 
     return (
@@ -68,7 +110,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="First Name"
-                    name="firstName"
+                    name="first_name"
                     value={formData.firstName}
                     onChange={handleTextChange}
                     margin="normal"
@@ -77,7 +119,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Last Name"
-                    name="lastName"
+                    name="last_name"
                     value={formData.lastName}
                     onChange={handleTextChange}
                     margin="normal"
@@ -87,21 +129,24 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     fullWidth
                     label="Email"
                     name="email"
-                    type="email"
+                    // type="email"
                     value={formData.email}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!emailError}
+                    helperText={emailError}
                 />
                 <TextField
                     fullWidth
                     label="Phone Number"
-                    name="phoneNo"
-                    type="tel"
+                    name="phoneNo"    
                     value={formData.phoneNo}
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!phoneError}
+                    helperText={phoneError}
                 />
 
                 <FormControl fullWidth margin="normal">
@@ -109,10 +154,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange}
+                        onChange={(e) => handleSelectChange(e as any)}
                     >
-                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
-                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
+                        <MenuItem value="Permanent">Permanent</MenuItem>
+                        <MenuItem value="Temporary">Temporary</MenuItem>
                     </Select>
                 </FormControl>
 

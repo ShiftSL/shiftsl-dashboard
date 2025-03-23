@@ -1,6 +1,7 @@
-import {useState, useEffect, useRef} from "react";
+import {useState,useEffect} from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import add from "../assests/add_circle.png"
+import AdjustEventPositions from "../Hooks/AdjustEventPositions.tsx";
 import {
     createViewDay,
     createViewMonthAgenda,
@@ -12,96 +13,95 @@ import { createEventsServicePlugin } from '@schedule-x/events-service'
 import "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
-import {ShiftFormData} from "../Interfaces/Types.tsx"
+import {ShiftFormProps, ShiftFormData} from "../Interfaces/Types.tsx"
 import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
-
+import Shift from "./Shift.tsx";
+import {Doctor} from "../Interfaces/Doctor.tsx";
+import {Box} from "@mui/material";
 import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
 import adjustEventPositions from "../Hooks/AdjustEventPositions.tsx";
-import axios from "axios";
 
 function Calendar() {
     useEventPositionAdjustment()
-    const hasLoadedEvents = useRef(false);
     const eventsService = useState(() => createEventsServicePlugin())[0]
     const [showForm, setshowForm] = useState(false);
-    const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [shifts, setShifts] = useState<ShiftFormData[]>([])
+    const [doctors, setDoctors] = useState<Map<string, Doctor>>(new Map());
 
-    const handleCreateEvent = async (formData: ShiftFormData) => {
-        try{
-            const convertToISO = (dateTime: string) => {
-                const [date, time] = dateTime.split(" ");
-                return new Date(`${date}T${time}:00Z`).toISOString();
-            };
-            const formattedStart = convertToISO(formData.start);
-            let formattedEnd = convertToISO(formData.end);
-            if (formData.start.includes("19:00")){
-                const addOneDay = (date: string) => { // Function to add one day to a date
-                    const [year, month, day] = date.split("-");
-                    const nextDate = new Date(Number(year), Number(month) - 1, Number(day) + 1);
-                    return nextDate.toISOString().split("T")[0];
-                }
-                const [date] = formData.start.split(" "); // Extract the date
-                const nextDay = addOneDay(date);
-                formattedEnd=nextDay+"T07:00:00Z";
+    const handleCreateEvent = (formData: ShiftFormData) => {
+        eventsService.add({
+            id: 1,
+            title: formData.title,
+            start: formData.start,
+            end: formData.end,
+            people: formData.people,
+            config: {
+                className: "custom-multi-day-event",
             }
-            const response = await axios.post("/api/shift/create/2", { //TODO: Update url with Doctor param
-                totalDoctors: formData.people.length, // should be between 3 or 6
-                startTime: formattedStart,
-                endTime: formattedEnd,
-                doctorIds: formData.people
+        });
+        adjustEventPositions();
+            // Verify event was added
+            createEventsServicePlugin().getAll().map(events => {
+                console.log("All events after adding:", events);
             });
-            console.log("Shift successfully created in backend:", response.data);
-            setRefreshTrigger(prev => prev + 1);
-        } catch (e){console.error("error sending to data Backend: "+e)}
 
+            // // Update local state
+            // setnewEvent((prev) => [...prev, formData]);
+            // setShifts((prev) => [...prev, formData]);
         setshowForm(false);
-
+        console.log("Shift Created:", formData);
     };
 
 
+
     useEffect(() => {
-        if (hasLoadedEvents.current) return;
         const fetchEvents = async () => {
             try {
-                const currentEvents = eventsService.getAll();
-                if (currentEvents && currentEvents.length > 0) {
-                    console.log("Clearing existing events:", currentEvents.length);
-                    currentEvents.forEach(event => {
-                        eventsService.remove(event.id);
-                    });
-                }
-                const response = await axios.get("/api/shift");
-                const shifts = response.data;
-                console.log("Shifts from backend:", shifts);
-                // Passing the fetched data to the front end library
+                const allEvents = await eventsService.getAll();
+                const formattedShifts: ShiftFormData[] = allEvents.map((event: any) => ({
+                    id: event.id,
+                    title: event.title,
+                    start: event.start,
+                    end: event.end,
+                    people: event.people ?? [], // Ensure it's an array
+                }));
 
+                setShifts(formattedShifts);
 
-                shifts.forEach((shift: any) => {
-                    const doctorNames = shift.doctors
-                        .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
-                        .join(", ");
+                console.log(shifts);
 
-                    eventsService.add({
-                        id: shift.id,
-                        title: `${doctorNames}`, // 👈 Set the doctor names here
-                        start: shift.startTime.replace("T", " ").slice(0, 16),
-                        end: shift.endTime.replace("T", " ").slice(0, 16),
-                    });
+                console.log("\n Shifts and Assigned Doctors");
+
+                allEvents.forEach((event) => {
+                    console.log(`\nEvent: ${event.title}`);
+                    console.log(` Start: ${event.start}`);
+                    console.log(` End: ${event.end}`);
+                    if (event.people && event.people.length > 0) {
+                        const assignedDoctors = event.people
+                            .map(doctorId => doctors.get(doctorId))
+                            .filter(doctor => doctor !== undefined)
+                            .map(doctor => `\n  [id: ${doctor.id}] ${doctor.first_name}`);
+
+                        console.log(" Assigned Doctors:", assignedDoctors.join(", "));
+                    } else {
+                        console.log("No doctors assigned");
+                    }
                 });
-
             } catch (error) {
                 console.error("Error fetching events:", error);
             }
         };
 
         // Only run fetchEvents when doctors Map is populated
-       fetchEvents();
-        hasLoadedEvents.current = true;
+        if (doctors.size > 0) {
+            fetchEvents();
+        }
+        // fetchEvents();
 
-    }, [eventsService, refreshTrigger]);
-
+    }, [eventsService, doctors]);
     const calendar = useCalendarApp({
+
         views: [ createViewWeek(),
             createViewMonthGrid(), createViewMonthAgenda(),
         ],
@@ -114,11 +114,16 @@ function Calendar() {
             {showForm && (
                 <AssignDoctorForm
                     onSubmit={handleCreateEvent}
-
                     onCancel={() => setshowForm(false)}
                 />
             )}
             <ScheduleXCalendar  calendarApp={calendar}/>
+            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
+                <>
+                {shifts.map((s,index)=>(<Shift key={index} shift={s}/>))}
+                </>
+            </Box>
+
         </div>
 
     )
