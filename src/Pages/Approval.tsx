@@ -22,9 +22,6 @@ import {LeaveRequest} from "../Interfaces/LeaveRequest.tsx";
 import {ShiftExchange} from "../Interfaces/ShiftExchange.tsx";
 
 const Approval: React.FC = ()=> {
-
-     // Fetching LeaveRequests TODO: Start From Here Fetch JSON of leave request and Shift Exchanges
-    const [leaveReqs, setLeaveReqs] = React.useState<LeaveRequest[]> ([]);
     useEffect(() => {
 
     }, []);
@@ -32,6 +29,20 @@ const Approval: React.FC = ()=> {
     const calendar = useCalendarApp({views: [createViewMonthGrid()]})
     // MUI Stuff
     const [activeTab, setActiveTab] = useState(0); // 0 for Leave requests, 1 for Shift Exchanges
+    const leaveRequests = [
+        {
+            dateRange: "03/02/2025 - 7pm to 7am",
+            type: "Casual Leave",
+            duration: "2 Days",
+            status: "Pending",
+        },
+        {
+            dateRange: "05/02/2025 - 7am to 1pm",
+            type: "Medical Leave",
+            duration: "1 Day",
+            status: "Approved",
+        },
+    ];
     const handleTabChange = (event: React.SyntheticEvent, newValue: number)=>{setActiveTab(newValue)}
     return(
 
@@ -73,13 +84,14 @@ const Approval: React.FC = ()=> {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {/* TODO: Should Map Leave requests Here. For now use JSON. Then with a GET API*/}
-                                        <TableRow sx={{backgroundColor: "#ffffff"}}>
-                                            <TableCell>03/02/202 - 7pm to 7am</TableCell>
-                                            <TableCell>Casual Leave</TableCell>
-                                            <TableCell>2 Days</TableCell>
-                                            <TableCell>Pending</TableCell>
-                                        </TableRow>
+                                        {leaveRequests.map((leave, index) => (
+                                            <TableRow key={index} sx={{ backgroundColor: "#ffffff" }}>
+                                                <TableCell>{leave.dateRange}</TableCell>
+                                                <TableCell>{leave.type}</TableCell>
+                                                <TableCell>{leave.duration}</TableCell>
+                                                <TableCell>{leave.status}</TableCell>
+                                            </TableRow>
+                                        ))}
                                     </TableBody>
                                     </Table>
                                 </TableContainer>

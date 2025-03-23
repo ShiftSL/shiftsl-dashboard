@@ -1,11 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Box,TextField } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Doctor } from '../Interfaces/Doctor';
 import doctorsData from '../jsonfiles/doctors.json';
 import shiftsData from '../jsonfiles/shifts.json';
-import { Label } from '@mui/icons-material';
+
 
 const Analytics:React.FC= () => {
     const [search, setSearch] = useState(""); //handle search input
@@ -36,6 +35,7 @@ const Analytics:React.FC= () => {
         
         const filtered=doctors.filter((doctor) =>{
         const fullName= `${doctor.firstName} ${doctor.lastName}`.toLowerCase().trim();
+
         const query=search.toLowerCase().trim();
         return fullName.includes(query);
 
@@ -78,6 +78,7 @@ const Analytics:React.FC= () => {
             onChange={(e) => setSearch(e.target.value)}
             sx={{ marginBottom: "3" }}
        />
+
 
        <Box sx={{ display: "flex", flexWrap: "wrap",gap:2 }}>
             {search.trim()!=="" && mergedDoctors.length===0?(

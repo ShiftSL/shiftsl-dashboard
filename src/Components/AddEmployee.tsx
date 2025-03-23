@@ -13,9 +13,9 @@ import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): number => {
+    const generateNewId = (): bigint => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? lastDoctor.id +1 :1;
+        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
     };
 
     const [formData, setFormData] = useState<Doctor>({
@@ -55,9 +55,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
-            }));
+    const handleSelectChange = (e: SelectChangeEvent<string>) => {
+        setFormData((prev) => ({ ...prev, role: e.target.value }));
     };
 
     const validateEmail = (email: string) => {
@@ -72,7 +71,6 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
 
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
 
@@ -92,7 +90,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
 
         onDoctorAdded(formData);
         setFormData({
-            id: generateNewId(),
+            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
             firstName: "",
             lastName: "",
             email: "",
@@ -100,7 +98,6 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
             phoneNo: "+94",
 
         });
-        console.log(formData);
     };
 
     return (
@@ -113,7 +110,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="First Name"
-                    name="firstName"
+                    name="first_name"
                     value={formData.firstName}
                     onChange={handleTextChange}
                     margin="normal"
@@ -122,7 +119,7 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Last Name"
-                    name="lastName"
+                    name="last_name"
                     value={formData.lastName}
                     onChange={handleTextChange}
                     margin="normal"
@@ -145,7 +142,6 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     label="Phone Number"
                     name="phoneNo"    
                     value={formData.phoneNo}
-
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -158,10 +154,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange}
+                        onChange={(e) => handleSelectChange(e as any)}
                     >
-                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
-                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
+                        <MenuItem value="Permanent">Permanent</MenuItem>
+                        <MenuItem value="Temporary">Temporary</MenuItem>
                     </Select>
                 </FormControl>
 

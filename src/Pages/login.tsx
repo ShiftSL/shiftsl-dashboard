@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
-import GoogleLogo from "../assests/Google.png" 
+import GoogleLogo from "../assests/Google.png"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 // Defining the Login Page with onLogin
 const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
@@ -13,6 +14,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   // Validating the email format
@@ -55,9 +57,8 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     }
   }
 
-  // Handling the Google login
-  const handleGoogleLogin = () => {
-    console.log("Login with Google")
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev)
   }
 
   return (
@@ -161,7 +162,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#ffffff",
-          borderRadius: { xs: "16px", md: "0 16px 16px 0" },
+          borderRadius: "16px",
           margin: { xs: "16px", md: "16px 16px 16px 0" },
           padding: { xs: "24px", sm: "40px" },
         }}
@@ -258,7 +259,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
               <TextField
                 fullWidth
                 variant="outlined"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -279,6 +280,19 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
                       border: "1px solid #2b3c56",
                     },
                   },
+                  endAdornment: (
+                    <Button
+                      onClick={togglePasswordVisibility}
+                      sx={{
+                        minWidth: "auto",
+                        padding: 0,
+                        marginLeft: "8px",
+                        color: "#666",
+                      }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </Button>
+                  ),
                 }}
               />
             </Box>
@@ -286,7 +300,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "flex-start",
                 marginBottom: "24px",
                 width: "100%",
               }}
@@ -324,30 +338,6 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
               }}
             >
               Sign In
-            </Button>
-
-            <Button
-              onClick={handleGoogleLogin}
-              fullWidth
-              variant="outlined"
-              sx={{
-                color: "#4285F4",
-                height: "48px",
-                borderRadius: "8px",
-                textTransform: "none",
-                fontWeight: 500,
-                fontSize: "16px",
-                boxShadow: "none",
-                borderColor: "#4285F4",
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  boxShadow: "none",
-                },
-                marginBottom: "24px",
-              }}
-            >
-              <img src={GoogleLogo} alt="Google logo" style={{ marginRight: "8px", height: "24px" }} />
-              Sign In with Google
             </Button>
 
             <Box
