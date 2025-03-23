@@ -13,18 +13,19 @@ import doctorsData from "../jsonfiles/doctors.json";
 import {Doctor} from "../Interfaces/Doctor.tsx"
 
 const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): bigint => {
+    const generateNewId = (): number => {
         const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? BigInt(lastDoctor.id) + BigInt(1) : BigInt(1);
+        return lastDoctor ? lastDoctor.id +1 :1;
     };
 
     const [formData, setFormData] = useState<Doctor>({
         id: generateNewId(), // Generate ID dynamically in BigInt
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
+        phoneNo:"+94",
         email: "",
-        role: "Permanent",
-        phone_no: "+94",
+        role: "DOCTOR_PERM",
+
     });
 
     const [emailError, setEmailError] = useState<string>("");
@@ -38,9 +39,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
             validateEmail(value);
         }
         //phone number validation
-        if (name === "phone_no") {
+        if (name === "phoneNo") {
             if(!value.startsWith("+94")){ //make sure +94 is not deleted
-                setFormData((prev) => ({ ...prev, phone_no: "+94" }));
+                setFormData((prev) => ({ ...prev, phoneNo: "+94" }));
                 return;
             }
             //move cursor after +94
@@ -54,8 +55,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSelectChange = (e: SelectChangeEvent<string>) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value }));
+    const handleSelectChange = (e: SelectChangeEvent) => {
+        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
+            }));
     };
 
     const validateEmail = (email: string) => {
@@ -71,9 +73,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-      
 
-        if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone_no) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
+
             alert("Please fill all fields");
             return;
         } // validation
@@ -90,13 +92,15 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
 
         onDoctorAdded(formData);
         setFormData({
-            id: formData + (BigInt(1)), // making sure a BigInt is added to avoid type errors
-            first_name: "",
-            last_name: "",
+            id: generateNewId(),
+            firstName: "",
+            lastName: "",
             email: "",
-            role: "Permanent",
-            phone_no: "+94",
+            role: "DOCTOR_PERM",
+            phoneNo: "+94",
+
         });
+        console.log(formData);
     };
 
     return (
@@ -109,8 +113,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="First Name"
-                    name="first_name"
-                    value={formData.first_name}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -118,8 +122,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Last Name"
-                    name="last_name"
-                    value={formData.last_name}
+                    name="lastName"
+                    value={formData.lastName}
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -139,9 +143,9 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                 <TextField
                     fullWidth
                     label="Phone Number"
-                    name="phone_no"
-                    // type="tel"
-                    value={formData.phone_no}
+                    name="phoneNo"    
+                    value={formData.phoneNo}
+
                     onChange={handleTextChange}
                     margin="normal"
                     required
@@ -154,10 +158,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange(e as any)}
+                        onChange={(e) => handleSelectChange}
                     >
-                        <MenuItem value="Permanent">Permanent</MenuItem>
-                        <MenuItem value="Temporary">Temporary</MenuItem>
+                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
+                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
                     </Select>
                 </FormControl>
 

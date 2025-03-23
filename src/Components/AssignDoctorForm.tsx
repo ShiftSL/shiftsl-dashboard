@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css'
-import doctordata from '../jsonfiles/doctors.json'
+
+import {Doctor} from "../Interfaces/Doctor.tsx";
+import axios from "axios";
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -23,14 +25,30 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     const [selectedShift, setSelectedShift] = useState<string>("");
     const [validationErrors, setValidationErrors] = useState<{[key:string]:string}>({}); //state to store and manage validation errors
 
-    const doctorsMap = new Map(doctordata.map((doctor) => [doctor.id, doctor]));
-    const doctorList = doctordata;
 
     // handle input changes for the title
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+    const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+    const fetchDoctors = async () => {
+        try {
+            const response = await axios.get("/api/user/get-all");
+            if (Array.isArray(response.data)) {
+                setDoctors(response.data);
+            } else {
+                console.error("Unexpected API response:", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching doctors:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDoctors();
+    }, []);
 
     // Handle doctor selection
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -63,12 +81,14 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             const nextDay = addOneDay(date);
 
             const nightShiftPart1 = {
+                title: formData.title,
                 start: formattedStart,
                 end: `${date} 23:59`, // Ends just before midnight
                 people: formData.people
             };
 
             const nightShiftPart2 = {
+                title: formData.title,
                 start: `${nextDay} 00:00`, // Starts at midnight on the next day
                 end: `${nextDay} 07:00`, // Ends at 7 AM
                 people: formData.people
@@ -76,17 +96,18 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
             setFormData((prev) => ({
                 ...prev,
+                title: formData.title,
                 start: nightShiftPart1.start,
                 end: nightShiftPart1.end, // Sets the first shift
+                people: formData.people
             }));
 
             console.log("Night Shift Split:", nightShiftPart1, nightShiftPart2);
 
-            // ✅ Return both shift parts so you can save them
             return [nightShiftPart1, nightShiftPart2];
         }
         const formattedEnd = `${date} ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
-        setFormData((prev) => ({ ...prev, start: formattedStart, end: formattedEnd }));
+        setFormData((prev) => ({ ...prev, start: formattedStart, end: formattedEnd, people: formData.people}));
     };
 
     // If shift goes past midnight, add 1 day to the date
@@ -113,14 +134,14 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         const newShifts = updateShiftTiming(selectedDate, selectedShift);
 
         if (Array.isArray(newShifts)) {
-            // If the shift was split, submit both parts
+            // If the shift was split, submit only the first part
+            console.log("Submitting split night shift:", newShifts[0]);
             onSubmit(newShifts[0]);  // First shift (7 PM - 11:59 PM)
-            onSubmit(newShifts[1]);  // Second shift (12 AM - 7 AM)
-        }else {
-
+        } else {
+            // For regular shifts, submit the formData
+            console.log("Submitting regular shift:", formData);
+            onSubmit(formData);
         }
-        console.log("Submitting Shift Form Data:", formData);
-        onSubmit(formData);
     };
 
     return (
@@ -163,9 +184,9 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                         onChange={handleSelectChange}
                         multiple
                     >
-                        {doctorList.map((doctor) => (
+                        {doctors.map((doctor) => (
                             <option key={doctor.id} value={doctor.id}>
-                                Dr. {doctor.first_name} {doctor.last_name}
+                                Dr. {doctor.firstName} {doctor.lastName}
                             </option>
                         ))}
                     </select>
@@ -174,11 +195,11 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
                 <div className="selected-doctors">
                     {formData.people.map((id) => {
-                        const doctor = doctorsMap.get(id);
+                        const doctor = doctors.find((doctor) => doctor.id.toString() === id); // 🔍 Find doctor by ID
                         return doctor ? (
                             <span key={doctor.id} className="selected-doctor">
-                                {doctor.first_name} {doctor.last_name}
-                            </span>
+                Dr. {doctor.firstName} {doctor.lastName}
+            </span>
                         ) : null;
                     })}
                 </div>
