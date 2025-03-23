@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { User, UserDTO } from '../types/user';
+import {Shift, shiftDTO} from "../types/shift.ts";
 
 // Create axios instance with base URL and default headers
 const api = axios.create({
@@ -34,4 +35,11 @@ export const userApi = {
 
     // Get all users (admin only)
     getAllUsers: () => api.get<User[]>('/api/user/get-all')
+};
+export const shiftApi = {
+    // Create a New shift
+    createShift: (wardID: number, shift:shiftDTO) => api.post<Shift>(`/api/shift/create/${wardID}`, shift),
+
+    // Get All Shifts
+   getAllShifts: () => api.get(`/api/shift`)
 };

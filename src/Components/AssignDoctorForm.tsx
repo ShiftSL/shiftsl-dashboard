@@ -4,6 +4,7 @@ import '../CSS/AssignDoctorForm.css'
 
 import {Doctor} from "../Interfaces/Doctor.tsx";
 import axios from "axios";
+import {userApi} from "../service/api.ts";
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -34,7 +35,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const fetchDoctors = async () => {
         try {
-            const response = await axios.get("/api/user/get-all"); // TODO: Punjitha
+            const response = await userApi.getAllUsers();
             if (Array.isArray(response.data)) {
                 setDoctors(response.data);
             } else {

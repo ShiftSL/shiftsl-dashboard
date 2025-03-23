@@ -18,6 +18,7 @@ import '../CSS/Calendar.css'
 import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
 import axios from "axios";
 import AssignDoctorForm from "./AssignDoctorForm";
+import {shiftApi} from "../service/api.ts";
 
 function Calendar() {
     useEventPositionAdjustment()
@@ -44,11 +45,12 @@ function Calendar() {
                 const nextDay = addOneDay(date);
                 formattedEnd = nextDay + "T07:00:00Z";
             }
-            const response = await axios.post("/api/shift/create/2", { //TODO: PUNjitha
+
+            const response = await shiftApi.createShift(1, {
                 totalDoctors: formData.people.length, // should be between 3 or 6
-                startTime: formattedStart,
-                endTime: formattedEnd,
-                doctorIds: formData.people
+                                startTime: formattedStart,
+                                endTime: formattedEnd,
+                                doctorIds: formData.people
             });
             console.log("Shift successfully created in backend:", response.data);
             setRefreshTrigger(prev => prev + 1);
@@ -63,14 +65,14 @@ function Calendar() {
         if (hasLoadedEvents.current) return;
         const fetchEvents = async () => {
             try {
-                const currentEvents = eventsService.getAll();
-                if (currentEvents && currentEvents.length > 0) {
-                    console.log("Clearing existing events:", currentEvents.length);
-                    currentEvents.forEach(event => {
-                        eventsService.remove(event.id);
-                    });
-                }
-                const response = await axios.get("/api/shift");
+                // const currentEvents = eventsService.getAll();
+                // if (currentEvents && currentEvents.length > 0) {
+                //     console.log("Clearing existing events:", currentEvents.length);
+                //     currentEvents.forEach(event => {
+                //         eventsService.remove(event.id);
+                //     });
+                // }
+                const response = await shiftApi.getAllShifts();
                 const shifts = response.data;
                 console.log("Shifts from backend:", shifts);
                 // Passing the fetched data to the front end library
