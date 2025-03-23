@@ -36,7 +36,7 @@ const Employees: React.FC = () => {
     useEffect(() => {
         const fetchDoctors = async()=>{
             try{
-                const response = await axios.get("/api/user/get-all");
+                const response = await axios.get("/api/user/get-all"); //TODO: Punjitha
 
                 setDoctors(response.data);
                 console.log(response.data)
@@ -51,7 +51,7 @@ const Employees: React.FC = () => {
 
     const handleDoctorAdded= async (newDoctor: Doctor) =>{
         try{
-            const response = await axios.post("/api/user/register", {
+            const response = await axios.post("/api/user/register", { // TODO: Punjitha
                 firstName: newDoctor.firstName,
                 lastName: newDoctor.lastName,
                 email: newDoctor.email,

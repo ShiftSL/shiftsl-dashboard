@@ -4,7 +4,7 @@ export interface Doctor {
     lastName: string;
     phoneNo: string;
     email: string;
-    role: "DOCTOR_PERM" | "DOCTOR_TEMP"|"HR_ADMIN" | "EMPLOYEE";
+    role: "DOCTOR_PERM" | "DOCTOR_TEMP"|"HR_ADMIN" | "EMPLOYEE"; // update
     //optional data for analytics
     coveredShifts?: number;
     coveredHours?: number;
@@ -12,3 +12,4 @@ export interface Doctor {
     hoursRemaining?: number;
 
 }
+// Firebase Userrole
