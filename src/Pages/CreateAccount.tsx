@@ -1,12 +1,15 @@
 import type React from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container, Checkbox, FormControlLabel, IconButton, InputAdornment } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { app } from "../firebase";
 
 const CreateAccountPage: React.FC = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -16,11 +19,32 @@ const CreateAccountPage: React.FC = () => {
   const [role, setRole] = useState("Administrator")
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handling the registration logic
-    console.log("Register with:", firstName, lastName, email, password)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Check if the password and confirm password fields are same
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    const auth = getAuth(app);
+    try {
+
+      // Creating new user with the provided email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Account created successfully:", userCredential.user);
+
+      // Send email verification
+      await sendEmailVerification(userCredential.user);
+      alert("Account created successfully! Please verify your email before logging in.");
+
+      // Redirect to the login page
+      navigate("/login");
+    } catch (error) {
+      console.error("Error creating account:", error);
+      alert(error.message);
+    }
+  };
 
   return (
     <Box

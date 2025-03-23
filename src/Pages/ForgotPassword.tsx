@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
+import { getAuth, sendPasswordResetEmail } from "firebase/auth"
 
 // Defining the Forgot Password Page
 const ForgotPasswordPage: React.FC = () => {
@@ -12,12 +13,21 @@ const ForgotPasswordPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false)
 
   // Handling the form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handling the password reset logic
-    console.log("Reset password for:", email)
-    setSubmitted(true)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Initializing the Firebase Authentication
+    const auth = getAuth();
+    try {
+      // Sends password resetting email for provided email account
+      await sendPasswordResetEmail(auth, email);
+      console.log("Password reset email sent to:", email);
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error sending password reset email:", error);
+      alert("Failed to send reset email. Please try again.");
+    }
+  };
 
   return (
     <Box

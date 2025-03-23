@@ -6,6 +6,8 @@ import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 import GoogleLogo from "../assests/Google.png"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { app } from "../firebase"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
 // Defining the Login Page with onLogin
 const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
@@ -29,7 +31,7 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   }
 
   // Handling the form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     let valid = true
 
@@ -49,14 +51,26 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
       setPasswordError("")
     }
 
-    // If email and password valid handling the login logic
+    // If email and password are valid handling the Firebase login
     if (valid) {
-      console.log("Login with:", email, password)
-      onLogin()
-      navigate("/dashboard")
+      const auth = getAuth(app)
+      try {
+        await signInWithEmailAndPassword(auth, email, password)
+        console.log("Login successful:", email)
+        onLogin()
+        navigate("/dashboard")
+      } catch (error) {
+        console.error("Login failed:", error)
+        if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+          setPasswordError("Invalid email or password")
+        } else {
+          setPasswordError("An error occurred. Please try again.")
+        }
+      }
     }
   }
 
+  // Toggling the password visibility
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev)
   }
