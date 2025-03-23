@@ -1,24 +1,23 @@
-import {useState, useEffect, useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 import add from "../assests/add_circle.png"
 import {
-    createViewDay,
     createViewMonthAgenda,
     createViewMonthGrid,
     createViewWeek,
 } from '@schedule-x/calendar'
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
-import "./AssignDoctorForm"; // Corrected import statement
+// import "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
-import {ShiftFormData} from "../Interfaces/Types.tsx"
+import { ShiftFormData } from "../Interfaces/Types.tsx"
 import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
 
 import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
-import adjustEventPositions from "../Hooks/AdjustEventPositions.tsx";
 import axios from "axios";
+import AssignDoctorForm from "./AssignDoctorForm";
 
 function Calendar() {
     useEventPositionAdjustment()
@@ -28,14 +27,14 @@ function Calendar() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handleCreateEvent = async (formData: ShiftFormData) => {
-        try{
+        try {
             const convertToISO = (dateTime: string) => {
                 const [date, time] = dateTime.split(" ");
                 return new Date(`${date}T${time}:00Z`).toISOString();
             };
             const formattedStart = convertToISO(formData.start);
             let formattedEnd = convertToISO(formData.end);
-            if (formData.start.includes("19:00")){
+            if (formData.start.includes("19:00")) {
                 const addOneDay = (date: string) => { // Function to add one day to a date
                     const [year, month, day] = date.split("-");
                     const nextDate = new Date(Number(year), Number(month) - 1, Number(day) + 1);
@@ -43,7 +42,7 @@ function Calendar() {
                 }
                 const [date] = formData.start.split(" "); // Extract the date
                 const nextDay = addOneDay(date);
-                formattedEnd=nextDay+"T07:00:00Z";
+                formattedEnd = nextDay + "T07:00:00Z";
             }
             const response = await axios.post("/api/shift/create/2", { //TODO: Update url with Doctor param
                 totalDoctors: formData.people.length, // should be between 3 or 6
@@ -53,7 +52,7 @@ function Calendar() {
             });
             console.log("Shift successfully created in backend:", response.data);
             setRefreshTrigger(prev => prev + 1);
-        } catch (e){console.error("error sending to data Backend: "+e)}
+        } catch (e) { console.error("error sending to data Backend: " + e) }
 
         setshowForm(false);
 
@@ -96,29 +95,27 @@ function Calendar() {
         };
 
         // Only run fetchEvents when doctors Map is populated
-       fetchEvents();
+        fetchEvents();
         hasLoadedEvents.current = true;
 
     }, [eventsService, refreshTrigger]);
 
     const calendar = useCalendarApp({
-        views: [ createViewWeek(),
-            createViewMonthGrid(), createViewMonthAgenda(),
+        views: [createViewWeek(),
+        createViewMonthGrid(), createViewMonthAgenda(),
         ],
-        events:[],
+        events: [],
         plugins: [eventsService]
-      })
+    })
     return (
         <div>
-            <button onClick={() => setshowForm(true)}><img src={add}/></button>
+            <button onClick={() => setshowForm(true)}><img src={add} /></button>
             {showForm && (
-                <AssignDoctorForm
-                    onSubmit={handleCreateEvent}
+                <AssignDoctorForm onSubmit={handleCreateEvent}
 
-                    onCancel={() => setshowForm(false)}
-                />
+                    onCancel={() => setshowForm(false)} />
             )}
-            <ScheduleXCalendar  calendarApp={calendar}/>
+            <ScheduleXCalendar calendarApp={calendar} />
         </div>
 
     )
