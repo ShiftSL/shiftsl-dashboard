@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
     Button,
     TextField,
@@ -7,24 +7,18 @@ import {
     InputLabel,
     FormControl,
     Typography,
-    Paper, SelectChangeEvent
+    Paper,
+    SelectChangeEvent
 } from "@mui/material";
-import doctorsData from "../jsonfiles/doctors.json";
-import {Doctor} from "../Interfaces/Doctor.tsx"
+import { UserRole, UserDTO } from "../Interfaces/User";
 
-const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): number => {
-        const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? lastDoctor.id +1 :1;
-    };
-
-    const [formData, setFormData] = useState<Doctor>({
-        id: generateNewId(), // Generate ID dynamically in BigInt
+const AddEmployee: React.FC<{ onUserAdded: (newUserr: UserDTO) => void }> = ({ onUserAdded }) => {
+    const [formData, setFormData] = useState<UserDTO>({
         firstName: "",
         lastName: "",
-        phoneNo:"",
+        phoneNo: "",
         email: "",
-        role: "DOCTOR_PERM",
+        role: UserRole.DOCTOR_PERM,  // Default role
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,10 +27,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
     };
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
-            }));
+        setFormData((prev) => ({ ...prev, role: e.target.value as UserRole }));
     };
-
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,18 +36,16 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
             alert("Please fill all fields");
             return;
-        } // validation
+        }
 
-        onDoctorAdded(formData);
+        onUserAdded(formData); // Pass the new doctor to the parent
         setFormData({
-            id: generateNewId(),
             firstName: "",
             lastName: "",
-            email: "",
-            role: "DOCTOR_PERM",
             phoneNo: "",
+            email: "",
+            role: UserRole.DOCTOR_PERM, // Reset to default role after form submission
         });
-        console.log(formData);
     };
 
     return (
@@ -109,10 +99,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange}
+                        onChange={handleSelectChange}
                     >
-                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
-                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
+                        <MenuItem value={UserRole.DOCTOR_PERM}>Permanent</MenuItem>
+                        <MenuItem value={UserRole.DOCTOR_TEMP}>Temporary</MenuItem> {/* Fixed value here */}
                     </Select>
                 </FormControl>
 

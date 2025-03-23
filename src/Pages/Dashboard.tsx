@@ -4,13 +4,13 @@
     Form: To Assign Doctors to Shifts
  */
 import React from "react";
-import Calendar from "../Components/Calendar"; // Corrected import statement
+import Calendar from "../components/Calendar"; // Corrected import statement
 
 const Dashboard: React.FC = () => {
     return (
         <>
             <h1>Dashboard</h1>
-            <Calendar/>
+            <Calendar />
         </>
     );
 };

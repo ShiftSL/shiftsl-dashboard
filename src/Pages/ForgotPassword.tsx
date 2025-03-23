@@ -2,8 +2,8 @@ import type React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { TextField, Button, Box, Typography, Container } from "@mui/material"
-import Logo from "../Components/logo"
-import TeamIllustration from "../Components/Group"
+import Logo from "../components/logo"
+import TeamIllustration from "../components/Group"
 
 // Defining the Forgot Password Page
 const ForgotPasswordPage: React.FC = () => {
