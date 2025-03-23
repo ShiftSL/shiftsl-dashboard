@@ -98,7 +98,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const validateForm = () => {
         let errors:{[key:string]:string} = {};
-        if(!formData.title.trim())errors.title = "Please enter a ward";
+        
         if(!selectedDate)errors.date = "Please select a date";
         if(!selectedShift)errors.shift = "Please select a shift";
         if(formData.people.length === 0)errors.people = "Atleast one doctors must be  assigned";
@@ -127,18 +127,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         <div className="form-container">
             <h3>{initialData ? "Edit Shift" : "Create New Shift"}</h3>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="title">Ward</label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        />
-                        {validationErrors.title && <span className="error">{validationErrors.title}</span>}
-                   
-                </div>
+                
 
                 <div>
                     <label htmlFor="date">Select Date</label>
