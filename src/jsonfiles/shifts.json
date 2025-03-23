@@ -5,6 +5,10 @@
     {"doctor_id":"4","coveredShifts": "11","coveredHours": "100",  "leavesTaken": "4", "hoursRemaining": "20"},
     {"doctor_id":"5","coveredShifts": "12","coveredHours": "120",  "leavesTaken": "0", "hoursRemaining": "20"},
     {"doctor_id":"6","coveredShifts": "14","coveredHours": "80",  "leavesTaken": "2", "hoursRemaining": "60"},
-    {"doctor_id":"7","coveredShifts": "15","coveredHours": "100",  "leavesTaken": "5", "hoursRemaining": "40"}
+    {"doctor_id":"7","coveredShifts": "15","coveredHours": "100",  "leavesTaken": "5", "hoursRemaining": "40"},
+    {"doctor_id":"8","coveredShifts": "14","coveredHours": "80",  "leavesTaken": "2", "hoursRemaining": "60"},
+    {"doctor_id":"9","coveredShifts": "15","coveredHours": "100",  "leavesTaken": "5", "hoursRemaining": "40"},
+    {"doctor_id":"10","coveredShifts": "15","coveredHours": "100",  "leavesTaken": "5", "hoursRemaining": "40"}
+
     
 ]
