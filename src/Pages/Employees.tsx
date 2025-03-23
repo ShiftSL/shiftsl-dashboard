@@ -24,9 +24,9 @@ import doctordata from '../jsonfiles/doctors.json'
 // creating a doctor interface to make sure data is updated properly
 import {Doctor} from "../Interfaces/Doctor.tsx"
 import AddEmployee from "../Components/AddEmployee.tsx";
+import axios, {Axios} from "axios";
 const Employees: React.FC = () => {
     const [ward, setWard] = React.useState("");
-    // To set the ward
 
     const handleWardChange = (event: SelectChangeEvent) => {
         setWard(event.target.value);
@@ -36,23 +36,19 @@ const Employees: React.FC = () => {
      //state to show search bar
     const [showSearch, setShowSearch] = React.useState(false);
 
-    // Fetching Employee Data. For now from a JSON
     const [doctors, setDoctors] = React.useState<Doctor[]>([]); // initial state set to an empty list of doctors
     useEffect(() => {
-        const savedDoctors = localStorage.getItem("doctors") // fetches doctors json
-        if(savedDoctors){
-            setDoctors(JSON.parse(savedDoctors).map(doctor => ({
-                ...doctor,
-                id: BigInt(doctor.id)
-            }))); // Setting Doctor Data from the JSON // TODO: Later fetch this from a GET API
-        }
-        else {
-            setDoctors(doctordata.map(doctor =>({
-                ...doctor,
-                id:BigInt((doctor.id))
-            })))
-        }
+        const fetchDoctors = async()=>{
+            try{
+                const response = await axios.get("/api/user/get-all");
 
+                setDoctors(response.data);
+                console.log(response.data)
+            }catch (error){
+                console.error("Error Fetching Doctors", error);
+            }
+        }
+        fetchDoctors();
     }, []);
     // Search Functionality in filtering
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,15 +67,30 @@ const Employees: React.FC = () => {
         );
 
     const [addForm, setAddForm] = React.useState(false)
-    const handleDoctorAdded=(newDoctor: Doctor) =>{
-        const updatedDoctors = [...doctors, newDoctor];
-        setDoctors(updatedDoctors);
-        localStorage.setItem("doctors", JSON.stringify(updatedDoctors.map(doctor =>({
-            ...doctor,
-            id: doctor.id.toString() // Stores in browser storage later will be saved using a push API
-        }) )))
-        setAddForm(false);
-        console.log("New Doc Added: " +newDoctor.id,+" "+newDoctor.first_name, +" "+newDoctor.last_name,+" " +newDoctor.email, +newDoctor.email);
+
+    const handleDoctorAdded= async (newDoctor: Doctor) =>{
+        try{
+            const response = await axios.post("/api/user/register", {
+                firstName: newDoctor.firstName,
+                lastName: newDoctor.lastName,
+                email: newDoctor.email,
+                phoneNo: newDoctor.phoneNo,
+                role: newDoctor.role
+            });
+            const savedDoctor = response.data;
+            const updatedDoctor = [...doctors, savedDoctor];
+            setDoctors(updatedDoctor);
+            localStorage.setItem("doctors", JSON.stringify(updatedDoctor.map(doctor =>({
+                ...doctor,
+                id: doctor.id.toString()
+            }) )))
+
+            setAddForm(false);
+            console.log("New Doc Added:" +newDoctor.firstName, +" "+newDoctor.lastName,+" " +newDoctor.email, +newDoctor.email);
+        }catch (e){
+            console.error("Error Adding Doctor",e);
+        }
+
     }
 
     return (
@@ -194,9 +205,9 @@ const Employees: React.FC = () => {
                             {filteredDoctors.map((doctor) => (
                                 <TableRow sx={{backgroundColor: "#FDFDFD"}} key={doctor.id}>
                                     <TableCell>{doctor.id.toString()}</TableCell>
-                                    <TableCell>{doctor.first_name}</TableCell>
-                                    <TableCell>{doctor.last_name}</TableCell>
-                                    <TableCell>{doctor.phone_no}</TableCell>
+                                    <TableCell>{doctor.firstName}</TableCell>
+                                    <TableCell>{doctor.lastName}</TableCell>
+                                    <TableCell>{doctor.phoneNo}</TableCell>
                                     <TableCell>{doctor.email}</TableCell>
                                     <TableCell>{doctor.role}</TableCell>
                                 </TableRow>
