@@ -45,7 +45,7 @@ function Calendar() {
                 const nextDay = addOneDay(date);
                 formattedEnd=nextDay+"T07:00:00Z";
             }
-            const response = await axios.post("/api/shift/create/2", { //TODO: Update url with Doctor param
+            const response = await axios.post("/api/shift/create/2", { //TODO: PUNjitha
                 totalDoctors: formData.people.length, // should be between 3 or 6
                 startTime: formattedStart,
                 endTime: formattedEnd,
