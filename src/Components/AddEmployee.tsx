@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
     Button,
     TextField,
@@ -7,24 +7,30 @@ import {
     InputLabel,
     FormControl,
     Typography,
-    Paper, SelectChangeEvent
+    Paper,
 } from "@mui/material";
-import doctorsData from "../jsonfiles/doctors.json";
-import {Doctor} from "../Interfaces/Doctor.tsx"
+import { UserDTO, UserRole } from "../types/user.ts";
+import { SelectChangeEvent } from "@mui/material"; // Import SelectChangeEvent
 
-const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: Doctor) => void }) => {
-    const generateNewId = (): number => {
-        const lastDoctor = doctorsData[doctorsData.length - 1];
-        return lastDoctor ? lastDoctor.id +1 :1;
-    };
+// Define props interface
+interface AddEmployeeProps {
+    onDoctorAdded: (newDoctor: UserDTO) => void;
+}
 
-    const [formData, setFormData] = useState<Doctor>({
-        id: generateNewId(), // Generate ID dynamically in BigInt
+const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
+    const [formData, setFormData] = useState<UserDTO>({
         firstName: "",
         lastName: "",
-        phoneNo:"",
+        phoneNo: "",
         email: "",
-        role: "DOCTOR_PERM",
+        role: UserRole.DOCTOR_PERM,
+    });
+
+    const [errors, setErrors] = useState({
+        firstName: "",
+        lastName: "",
+        phoneNo: "",
+        email: "",
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,29 +39,52 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
     };
 
     const handleSelectChange = (e: SelectChangeEvent) => {
-        setFormData((prev) => ({ ...prev, role: e.target.value as "DOCTOR_PERM" |"DOCTOR_TEMP"
-            }));
+        setFormData((prev) => ({
+            ...prev,
+            role: e.target.value as UserRole.DOCTOR_PERM | UserRole.DOCTOR_TEMP,
+        }));
     };
-
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNo) {
-            alert("Please fill all fields");
-            return;
-        } // validation
+        // Validate form fields
+        let formErrors = { ...errors };
+        let isValid = true;
 
-        onDoctorAdded(formData);
-        setFormData({
-            id: generateNewId(),
-            firstName: "",
-            lastName: "",
-            email: "",
-            role: "DOCTOR_PERM",
-            phoneNo: "",
-        });
-        console.log(formData);
+        if (!formData.firstName) {
+            formErrors.firstName = "First Name is required";
+            isValid = false;
+        }
+
+        if (!formData.lastName) {
+            formErrors.lastName = "Last Name is required";
+            isValid = false;
+        }
+
+        if (!formData.email) {
+            formErrors.email = "Email is required";
+            isValid = false;
+        }
+
+        if (!formData.phoneNo) {
+            formErrors.phoneNo = "Phone Number is required";
+            isValid = false;
+        }
+
+        setErrors(formErrors);
+
+        if (isValid) {
+            onDoctorAdded(formData);
+            setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                role: UserRole.DOCTOR_PERM,
+                phoneNo: "",
+            });
+            console.log(formData);
+        }
     };
 
     return (
@@ -73,6 +102,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!errors.firstName}
+                    helperText={errors.firstName}
                 />
                 <TextField
                     fullWidth
@@ -82,6 +113,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!errors.lastName}
+                    helperText={errors.lastName}
                 />
                 <TextField
                     fullWidth
@@ -92,6 +125,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!errors.email}
+                    helperText={errors.email}
                 />
                 <TextField
                     fullWidth
@@ -102,6 +137,8 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     onChange={handleTextChange}
                     margin="normal"
                     required
+                    error={!!errors.phoneNo}
+                    helperText={errors.phoneNo}
                 />
 
                 <FormControl fullWidth margin="normal">
@@ -109,10 +146,10 @@ const AddEmployee: React.FC = ({ onDoctorAdded }: { onDoctorAdded: (newDoctor: D
                     <Select
                         name="role"
                         value={formData.role}
-                        onChange={(e) => handleSelectChange}
+                        onChange={handleSelectChange}
                     >
-                        <MenuItem value="DOCTOR_PERM">Permanent</MenuItem>
-                        <MenuItem value="DOCTOR_TEMP">Temporary</MenuItem>  /
+                        <MenuItem value={UserRole.DOCTOR_PERM}>Permanent</MenuItem>
+                        <MenuItem value={UserRole.DOCTOR_TEMP}>Temporary</MenuItem>
                     </Select>
                 </FormControl>
 

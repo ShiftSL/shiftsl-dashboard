@@ -1,37 +1,29 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Dashboard from "./Pages/Dashboard";
 import Navbar from "./Components/Navbar";
 import Header from "./Components/Header";
-import Employees from "./Pages/Employees.tsx";
-import Approval from "./Pages/Approval.tsx";
+import Employees from "./Pages/Employees";
+import Approval from "./Pages/Approval";
 import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
-import CreateAccountPage from "./Pages/CreateAccount";
-
-import Analytics from "./Pages/Analytics.tsx";
 import UserProfileDialog from "./Components/UserProfile";
 import profilePic from "./assests/profile_pic.jpg";
+import { AuthProvider } from "./context/AuthContext";
+import Analytics from "./Pages/Analytics";
 
-
-// Create a custom theme
+// Custom Theme
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#2b3c56",
-    },
-    secondary: {
-      main: "#459257",
-    },
+    primary: { main: "#2b3c56" },
+    secondary: { main: "#459257" },
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    button: {
-      textTransform: "none",
-    },
+    button: { textTransform: "none" },
   },
   components: {
     MuiButton: {
@@ -40,35 +32,27 @@ const theme = createTheme({
           textTransform: "none",
           borderRadius: "8px",
           boxShadow: "none",
-          "&:hover": {
-            boxShadow: "none",
-          },
+          "&:hover": { boxShadow: "none" },
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
-          },
+          "& .MuiOutlinedInput-root": { borderRadius: "8px" },
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
-          borderRadius: "8px",
-        },
+        root: { borderRadius: "8px" },
       },
     },
     MuiCheckbox: {
       styleOverrides: {
         root: {
           color: "#2b3c56",
-          "&.Mui-checked": {
-            color: "#2b3c56",
-          },
+          "&.Mui-checked": { color: "#2b3c56" },
         },
       },
     },
@@ -76,71 +60,50 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
-  // Managing the authentication status
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Fetch authentication status from AuthContext
 
-  // Handling the login and authentication status
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
- 
-   //fetch actual data from APIs later
-  //  const fetchDoctorsAnalytics = async () => {
-  //   try {
-  //     const response = await fetch("/api/doctors-analytics");
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Error fetching doctors' analytics data: ", error);
-  //     return [];
-  //   }
-  // };
-
-  // Managing the user data
+  // Managing user data
   const [userData, setUserData] = useState({
-    title: "", 
-    firstName: "", 
-    lastName: "", 
-    role: "", 
-    email: "", 
-    phone: "", 
+    title: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+    email: "",
+    phone: "",
   });
 
-  // Managing the profile picture
+  // Managing profile picture
   const [profileImage, setProfileImage] = useState(profilePic);
 
-  // Managing the user profile open close state
+  // Managing the user profile modal state
   const [open, setOpen] = useState(false);
-
-  // Function to open the user profile dialog
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  // Function to close the user profile dialog
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Routes>
-          {/*<Route path="/login" element={<LoginPage onLogin={handleLogin} />} />*/}
-          {/*<Route path="/forgot-password" element={<ForgotPasswordPage />} />*/}
-          {/*<Route path="/create-account" element={<CreateAccountPage />} />*/}
-          {/*{isAuthenticated ? (*/}
+        <AuthProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+            {/* Protected Routes */}
+
             <Route
               path="*"
               element={
                 <Box sx={{ display: "flex" }}>
                   <Navbar />
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Header userData={userData} profileImage={profileImage} handleClickOpen={handleClickOpen} />
+                    <Header
+                      userData={userData}
+                      profileImage={profileImage}
+                      handleClickOpen={() => setOpen(true)}
+                    />
                     <UserProfileDialog
                       open={open}
-                      handleClose={handleClose}
+                      handleClose={() => setOpen(false)}
                       userData={userData}
                       setUserData={setUserData}
                       profileImage={profileImage}
@@ -148,19 +111,16 @@ const App: React.FC = () => {
                     />
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/employees" element={<Employees />} />
                       <Route path="/approval" element={<Approval />} />
-                      <Route path="/analytics" element={<Analytics />} />
-                      <Route path="*" element={<Navigate to="/dashboard" />} />
+                      <Route path="/employees" element={<Employees />} />
+                      <Route path="/anlytics" element={<Analytics />} />
                     </Routes>
                   </Box>
                 </Box>
               }
             />
-          {/*) : (*/}
-          {/*  <Route path="*" element={<Navigate to="/login" />} />*/}
-          {/*)}*/}
-        </Routes>
+          </Routes>
+        </AuthProvider>
       </Router>
     </ThemeProvider>
   );
