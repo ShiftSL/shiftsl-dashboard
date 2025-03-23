@@ -1,13 +1,14 @@
 import type React from "react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { TextField, Button, Box, Typography, Container, Checkbox, FormControlLabel, IconButton, InputAdornment } from "@mui/material"
+import { TextField, Button, Box, Typography, Container, Checkbox, FormControlLabel, IconButton, InputAdornment, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import Logo from "../Components/logo"
 import TeamIllustration from "../Components/Group"
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { app } from "../firebase";
 
+// Handles the form submission for creating new account
 const CreateAccountPage: React.FC = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("")
@@ -18,7 +19,18 @@ const CreateAccountPage: React.FC = () => {
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [role, setRole] = useState("Administrator")
   const [showPassword, setShowPassword] = useState(false)
+  const [openTerms, setOpenTerms] = useState(false);
+  const [openPrivacy, setOpenPrivacy] = useState(false);
 
+  // Handles the Terms of Services dialog
+  const handleOpenTerms = () => setOpenTerms(true);
+  const handleCloseTerms = () => setOpenTerms(false);
+
+  // Handles the Privacy Policy dialog
+  const handleOpenPrivacy = () => setOpenPrivacy(true);
+  const handleClosePrivacy = () => setOpenPrivacy(false);
+
+  // Handling the form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -455,13 +467,19 @@ const CreateAccountPage: React.FC = () => {
                   }}
                 >
                   I agree to the{" "}
-                  <Link to="/terms" style={{ color: "#2b3c56", fontWeight: 500, textDecoration: "none" }}>
+                  <span
+                    onClick={handleOpenTerms}
+                    style={{ color: "#2b3c56", fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
+                  >
                     Terms of Service
-                  </Link>{" "}
+                  </span>{" "}
                   and{" "}
-                  <Link to="/privacy" style={{ color: "#2b3c56", fontWeight: 500, textDecoration: "none" }}>
+                  <span
+                    onClick={handleOpenPrivacy}
+                    style={{ color: "#2b3c56", fontWeight: 500, textDecoration: "underline", cursor: "pointer" }}
+                  >
                     Privacy Policy
-                  </Link>
+                  </span>
                 </Typography>
               }
               sx={{ gridColumn: "span 2", marginBottom: "24px" }}
@@ -525,6 +543,72 @@ const CreateAccountPage: React.FC = () => {
           </form>
         </Container>
       </Box>
+
+      {/* Terms of Service Dialog */}
+      <Dialog open={openTerms} onClose={handleCloseTerms} maxWidth="sm" fullWidth>
+        <DialogTitle>Terms of Service</DialogTitle>
+        <DialogContent>
+          <Typography>
+            1. <strong>Account Registration</strong> – Users must provide accurate information and maintain account security.
+          </Typography>
+          <Typography>
+            2. <strong>Use of Services</strong> – ShiftSL is a scheduling platform for healthcare professionals, misuse is prohibited.
+          </Typography>
+          <Typography>
+            3. <strong>User Responsibilities</strong> – Keep account details updated and do not share credentials.
+          </Typography>
+          <Typography>
+            4. <strong>Termination</strong> – ShiftSL may suspend accounts for violations.
+          </Typography>
+          <Typography>
+            5. <strong>Limitation of Liability</strong> – We are not liable for service disruptions.
+          </Typography>
+          <Typography>
+            6. <strong>Modifications</strong> – Terms may be updated periodically.
+          </Typography>
+          <Typography>
+            <strong>Contact for inquiries</strong> – <a href="mailto:info@shiftsl.com" style={{ color: "#2b3c56" }}>info@shiftsl.com</a>
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseTerms} sx={{ color: "#2b3c56" }}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Privacy Policy Dialog */}
+      <Dialog open={openPrivacy} onClose={handleClosePrivacy} maxWidth="sm" fullWidth>
+        <DialogTitle>Privacy Policy</DialogTitle>
+        <DialogContent>
+          <Typography>
+            1. <strong>Data Collection</strong> – We collect personal details, usage data, and device information.
+          </Typography>
+          <Typography>
+            2. <strong>Data Use</strong> – Information is used for scheduling, communication, and service improvement.
+          </Typography>
+          <Typography>
+            3. <strong>Data Sharing & Security</strong> – We do not sell data, security measures are in place.
+          </Typography>
+          <Typography>
+            4. <strong>User Rights</strong> – Users can access, update, or delete their data.
+          </Typography>
+          <Typography>
+            5. <strong>Data Retention</strong> – Data is stored as necessary and deleted upon account removal.
+          </Typography>
+          <Typography>
+            6. <strong>Policy Changes</strong> – Updates will be posted periodically.
+          </Typography>
+          <Typography>
+            <strong>Contact for inquiries</strong> – <a href="mailto:info@shiftsl.com" style={{ color: "#2b3c56" }}>info@shiftsl.com</a>
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePrivacy} sx={{ color: "#2b3c56" }}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
