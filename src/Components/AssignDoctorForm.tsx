@@ -126,7 +126,9 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     };
 
     return (
-        <div className="form-container">
+        <div className="modal-overlay">
+            <div className="modal-content">
+
             <h3>{"Create New Shift"}</h3>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -183,6 +185,8 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
                 <button type="submit">{"Create Shift"}</button>
                 <button type="button" onClick={onCancel}>Cancel</button>
             </form>
+
+            </div>
         </div>
     );
 };

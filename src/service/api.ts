@@ -43,7 +43,13 @@ export const shiftApi = {
     createShift: (wardID: number, shift:shiftDTO) => api.post<Shift>(`/api/shift/create/${wardID}`, shift),
 
     // Get All Shifts
-   getAllShifts: () => api.get(`/api/shift`)
+   getAllShifts: () => api.get(`/api/shift`),
+
+    // Delete All Shifts
+    deleteShift: (shiftId: number) => api.delete(`/api/shift/${shiftId}`),
+
+    // Update Shifts
+    updateShift: (shift: Shift)=> api.put<Shift>(`/api/shift/` , shift)
 };
 export const leaveApi={
     getAllLeaves:() => api.get<leave>(`/api/leave`),

@@ -8,7 +8,6 @@ import {
 } from '@schedule-x/calendar'
 
 import { createEventsServicePlugin } from '@schedule-x/events-service'
-// import "./AssignDoctorForm"; // Corrected import statement
 
 // Comment to update
 import { ShiftFormData } from "../Interfaces/Types.tsx"
@@ -19,6 +18,7 @@ import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
 
 import AssignDoctorForm from "./AssignDoctorForm";
 import {shiftApi} from "../service/api.ts";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog.tsx";
 
 function Calendar() {
     useEventPositionAdjustment()
@@ -26,6 +26,9 @@ function Calendar() {
     const eventsService = useState(() => createEventsServicePlugin())[0]
     const [showForm, setshowForm] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedShiftId, setSelectedShiftId] = useState<number | null>(null);
 
     const handleCreateEvent = async (formData: ShiftFormData) => {
         try {
@@ -60,24 +63,14 @@ function Calendar() {
 
     };
 
-
     useEffect(() => {
         if (hasLoadedEvents.current) return;
         const fetchEvents = async () => {
             try {
-                // const currentEvents = eventsService.getAll();
-                // if (currentEvents && currentEvents.length > 0) {
-                //     console.log("Clearing existing events:", currentEvents.length);
-                //     currentEvents.forEach(event => {
-                //         eventsService.remove(event.id);
-                //     });
-                // }
                 const response = await shiftApi.getAllShifts();
                 const shifts = response.data;
                 console.log("Shifts from backend:", shifts);
                 // Passing the fetched data to the front end library
-
-
                 shifts.forEach((shift: any) => {
                     const doctorNames = shift.doctors
                         .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
@@ -85,7 +78,7 @@ function Calendar() {
 
                     eventsService.add({
                         id: shift.id,
-                        title: `${doctorNames}`, // 👈 Set the doctor names here
+                        title: `${doctorNames}` + '\n'+shift.id, // 👈 Set the doctor names here
                         start: shift.startTime.replace("T", " ").slice(0, 16),
                         end: shift.endTime.replace("T", " ").slice(0, 16),
                     });
@@ -94,30 +87,61 @@ function Calendar() {
             } catch (error) {
                 console.error("Error fetching events:", error);
             }
-        };
 
+        };
         // Only run fetchEvents when doctors Map is populated
         fetchEvents();
         hasLoadedEvents.current = true;
 
     }, [eventsService, refreshTrigger]);
 
+    const handleDeleteConfirm = async () => {
+        if (selectedShiftId !== null) {
+            try {
+                await shiftApi.deleteShift(selectedShiftId);
+                eventsService.remove(selectedShiftId);
+                console.log("Shift deleted");
+            } catch (err) {
+                console.error("Error deleting shift:", err);
+            } finally {
+                setDialogOpen(false);
+                setSelectedShiftId(null);
+            }
+        }
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setSelectedShiftId(null);
+    };
+
+
     const calendar = useCalendarApp({
         views: [createViewWeek(),
-        createViewMonthGrid(), createViewMonthAgenda(),
+            createViewMonthGrid(), createViewMonthAgenda(),
         ],
         events: [],
-        plugins: [eventsService]
+        plugins: [eventsService],
+        callbacks: {
+            onEventClick:async (event) => {
+                console.log("Shift clicked", event);
+                setSelectedShiftId(Number(event.id));
+                setDialogOpen(true);
+            },
+            onClickDateTime:(clickedDateTime) => {
+                console.log("Date time clicked: ", clickedDateTime);
+                setshowForm(true);
+
+            }
+        }
     })
+
     return (
         <div>
-            <button onClick={() => setshowForm(true)}><img src={add} /></button>
-            {showForm && (
-                <AssignDoctorForm onSubmit={handleCreateEvent}
-
-                    onCancel={() => setshowForm(false)} />
-            )}
-            <ScheduleXCalendar calendarApp={calendar} />
+            {showForm &&
+                (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setshowForm(false)} />)}
+                <ScheduleXCalendar calendarApp={calendar} />
+                <ConfirmDeleteDialog open={dialogOpen} shiftId={selectedShiftId} onClose={handleDialogClose} onConfirm={handleDeleteConfirm}/>
         </div>
 
     )

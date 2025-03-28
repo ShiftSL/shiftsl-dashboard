@@ -96,11 +96,6 @@ const App: React.FC = () => {
                 <Box sx={{ display: "flex" }}>
                   <Navbar />
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Header
-                      userData={userData}
-                      profileImage={profileImage}
-                      handleClickOpen={() => setOpen(true)}
-                    />
                     <UserProfileDialog
                       open={open}
                       handleClose={() => setOpen(false)}
