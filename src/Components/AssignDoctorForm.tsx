@@ -120,9 +120,9 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             onSubmit(formData);
         }
         onCancel();
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 500);
     };
 
     return (

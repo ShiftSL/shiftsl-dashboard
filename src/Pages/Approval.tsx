@@ -29,6 +29,7 @@ const Approval: React.FC = ()=> {
         const fetchLeaveRequests = async () => {
             try { // API TO GET LEAVE REQUESTS
                 const response = await leaveApi.getAllLeaves();
+                console.log("Leave Requests Fetched: ")
                 console.log(response)
                 setLeaveRequests(response.data);
             } catch (error) {

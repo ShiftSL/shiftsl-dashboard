@@ -48,10 +48,10 @@ const Employees: React.FC = () => {
             const savedDoctor = response.data;
             const updatedDoctor = [...doctors, savedDoctor];
             setDoctors(updatedDoctor);
-            // localStorage.setItem("doctors", JSON.stringify(updatedDoctor.map(doctor => ({
-            //     ...doctor,
-            //     id: doctor.id.toString()
-            // }))))
+            localStorage.setItem("doctors", JSON.stringify(updatedDoctor.map(doctor => ({
+                ...doctor,
+                id: doctor.id.toString()
+            }))))
 
             setAddForm(false);
             console.log("New Doc Added:" + newDoctor.firstName, +" " + newDoctor.lastName, +" " + newDoctor.email, +newDoctor.email);

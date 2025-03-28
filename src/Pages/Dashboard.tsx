@@ -9,7 +9,6 @@ import Calendar from "../Components/Calendar"; // Corrected import statement
 const Dashboard: React.FC = () => {
     return (
         <>
-            <h1>Dashboard</h1>
             <Calendar/>
         </>
     );
