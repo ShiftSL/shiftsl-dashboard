@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
-import '../CSS/AssignDoctorForm.css'
-
-import {Doctor} from "../Interfaces/Doctor.tsx";
-import axios from "axios";
+import '../CSS/AssignDoctorForm.css';
+import { Doctor } from "../Interfaces/Doctor.tsx";
+import { userApi } from "../service/api.ts";
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -11,10 +10,9 @@ const shiftOptions = [
     { label: "7 PM - 7 AM", startHour: 19, endHour: 7 },
 ]; // Shift Options to Choose From
 
-
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
-        id: initialData?.id ||0,
+        id: initialData?.id || 0,
         title: initialData?.title || "",
         start: initialData?.start || "",
         end: initialData?.end || "",
@@ -23,18 +21,12 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
-
-
-    // handle input changes for the title
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
     const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
 
     const fetchDoctors = async () => {
         try {
-            const response = await axios.get("/api/user/get-all");
+            const response = await userApi.getAllUsers();
             if (Array.isArray(response.data)) {
                 setDoctors(response.data);
             } else {
@@ -74,8 +66,6 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
         if (!shiftDetails) return;
         const formattedStart = `${date} ${shiftDetails.startHour.toString().padStart(2, '0')}:00`;
 
-        // const formattedEnd = `${shiftDetails.startHour > shiftDetails.endHour ? addOneDay(date) : date}
-        // ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
         if (shiftDetails.label === "7 PM - 7 AM") {
             const nextDay = addOneDay(date);
 
@@ -106,7 +96,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             return [nightShiftPart1, nightShiftPart2];
         }
         const formattedEnd = `${date} ${shiftDetails.endHour.toString().padStart(2, '0')}:00`;
-        setFormData((prev) => ({ ...prev, start: formattedStart, end: formattedEnd, people: formData.people}));
+        setFormData((prev) => ({ ...prev, start: formattedStart, end: formattedEnd, people: formData.people }));
     };
 
     // If shift goes past midnight, add 1 day to the date
@@ -120,7 +110,6 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const newShifts = updateShiftTiming(selectedDate, selectedShift);
-
         if (Array.isArray(newShifts)) {
             // If the shift was split, submit only the first part
             console.log("Submitting split night shift:", newShifts[0]);
@@ -130,80 +119,86 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
             console.log("Submitting regular shift:", formData);
             onSubmit(formData);
         }
+        onCancel();
     };
 
+    // Filter doctors based on search query
+    const filteredDoctors = doctors.filter((doctor) =>
+        `${doctor.firstName} ${doctor.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div className="form-container">
-            <h3>{initialData ? "Edit Shift" : "Create New Shift"}</h3>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="title">Ward</label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                    />
-                </div>
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <h3>{"Create New Shift"}</h3>
+                <hr />
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="date">Select Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                        />
+                    </div>
 
-                <div>
-                    <label htmlFor="date">Select Date</label>
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                    />
-                </div>
+                    <div>
+                        <label htmlFor="shift">Select Shift</label>
+                        <select id="shift" name="shift" value={selectedShift} onChange={handleShiftChange}>
+                            <option value="" disabled>Select a shift</option>
+                            {shiftOptions.map((shift) => (
+                                <option key={shift.label} value={shift.label}>
+                                    {shift.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <div>
-                    <label htmlFor="shift">Select Shift</label>
-                    <select id="shift" name="shift" value={selectedShift} onChange={handleShiftChange}>
-                        <option value="" disabled>Select a shift</option>
-                        {shiftOptions.map((shift) => (
-                            <option key={shift.label} value={shift.label}>
-                                {shift.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                    <div>
+                        <label htmlFor="search">Assigned Doctors</label>
+                        <input
+                            type="text"
+                            id="search"
+                            placeholder="Search by name"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <select
+                            id="people"
+                            name="people"
+                            value={Array.isArray(formData.people) ? formData.people : []}
+                            onChange={handleSelectChange}
+                            multiple
+                        >
+                            {filteredDoctors.map((doctor) => (
+                                <option key={doctor.id} value={doctor.id}>
+                                    Dr. {doctor.firstName} {doctor.lastName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <div>
-                    <label htmlFor="people">Assigned Doctors</label>
-                    <select
-                        id="people"
-                        name="people"
-                        value={Array.isArray(formData.people) ? formData.people : []}
-                        onChange={handleSelectChange}
-                        multiple
-                    >
-                        {doctors.map((doctor) => (
-                            <option key={doctor.id} value={doctor.id}>
-                                Dr. {doctor.firstName} {doctor.lastName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                    <div className="selected-doctors">
+                        {formData.people.map((id) => {
+                            const doctor = doctors.find((doctor) => doctor.id.toString() === id); // 🔍 Find doctor by ID
+                            return doctor ? (
+                                <span key={doctor.id} className="selected-doctor">
+                                    Dr. {doctor.firstName} {doctor.lastName}
+                                </span>
+                            ) : null;
+                        })}
+                    </div>
 
-                <div className="selected-doctors">
-                    {formData.people.map((id) => {
-                        const doctor = doctors.find((doctor) => doctor.id.toString() === id); // 🔍 Find doctor by ID
-                        return doctor ? (
-                            <span key={doctor.id} className="selected-doctor">
-                Dr. {doctor.firstName} {doctor.lastName}
-            </span>
-                        ) : null;
-                    })}
-                </div>
-
-                <button type="submit">{initialData ? "Update Shift" : "Create Shift"}</button>
-                <button type="button" onClick={onCancel}>Cancel</button>
-            </form>
+                    <button type="submit">{"Create Shift"}</button>
+                    <button type="button" onClick={onCancel}>Cancel</button>
+                </form>
+            </div>
         </div>
     );
 };
 
 export default AssignDoctorForm;
-

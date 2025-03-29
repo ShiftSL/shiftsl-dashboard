@@ -30,6 +30,8 @@
     "@schedule-x/theme-default": "^2.21.0",
     "@vitejs/plugin-react": "^4.3.4",
     "axios": "^1.8.3",
+    "dayjs": "^1.11.13",
+    "firebase": "^11.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.3.0"

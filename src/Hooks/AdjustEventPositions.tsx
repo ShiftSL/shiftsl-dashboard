@@ -27,7 +27,7 @@ const calculateCustomTop = (startTime: string): string => {
     const timeMappings: Record<string, string> = {
         "7:00 AM": "0%",  // Example new positions
         "1:00 PM": "33.5%",
-        "7:00 PM": "69%"
+        "7:00 PM": "67%"
     };
 
     return timeMappings[startTime] || "0%"; // Default if time is not mapped

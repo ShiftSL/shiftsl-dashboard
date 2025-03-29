@@ -1,3 +1,16 @@
+:root {
+    --main-color: #2B3C56;
+    --secondary-color: #2AED8D;
+    --background-color: #F4F7FA;
+}
+
+hr{
+    border: 0;
+    height: 1px;
+    background: var(--main-color);
+    margin: 20px 0;
+    opacity: 0.1;
+}
 /* General form styling */
 .form-container {
     width: 100%;
@@ -20,8 +33,8 @@
 
 /* Make form fields display in two columns */
 form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    display: flex;
+    flex-direction: column;
     gap: 20px; /* Space between fields */
 }
 
@@ -49,7 +62,7 @@ input, select {
 
 input:focus, select:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: var(--primary-color);
 }
 
 /* Multi-select styling */
@@ -61,7 +74,7 @@ select[multiple] {
 /* Selected Doctors Display Box */
 .selected-doctors {
     padding: 10px;
-    border: 1px solid #007bff;
+    border: 1px solid --primary-color;
     background: #f8f9fa;
     border-radius: 4px;
     min-height: 40px;
@@ -92,22 +105,43 @@ button {
 
 /* Submit Button */
 button[type="submit"] {
-    background: #007bff;
+    background: var(--main-color);
     color: white;
     grid-column: span 2; /* Make button full width */
 }
 
 button[type="submit"]:hover {
-    background: #0056b3;
+    background: var(--secondary-color);
 }
 
 /* Cancel Button */
-button[type="button"] {
-    background: #ccc;
+button[type="button"] {    
     color: black;
     grid-column: span 2; /* Make button full width */
 }
 
 button[type="button"]:hover {
-    background: #999;
+    background: rgb(206, 206, 206);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
