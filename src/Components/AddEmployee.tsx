@@ -142,7 +142,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
                 />
 
                 <FormControl fullWidth margin="normal">
-                    <InputLabel>Role</InputLabel>
+
                     <Select
                         name="role"
                         value={formData.role}

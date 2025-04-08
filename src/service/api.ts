@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, UserDTO } from '../types/user';
+import {User, UserDTO, UserRole} from '../types/user';
 import {Shift, shiftDTO} from "../types/shift.ts";
 import {LeaveRequest} from "../Interfaces/LeaveRequest.tsx";
 import {leave} from "../types/leave.ts";
@@ -36,7 +36,10 @@ export const userApi = {
     saveUser: (user: UserDTO) => api.post<User>('/api/user', user),
 
     // Get all users (admin only)
-    getAllUsers: () => api.get<User[]>('/api/user/get-all')
+    getAllUsers: () => api.get<User[]>('/api/user/get-all'),
+
+    // Get Users by Role
+    getUsersByRole:(role: string) => api.get<User[]>(`api/user/role/${UserRole}`)
 };
 export const shiftApi = {
     // Create a New shift
@@ -49,8 +52,13 @@ export const shiftApi = {
     deleteShift: (shiftId: number) => api.delete(`/api/shift/${shiftId}`),
 
     // Update Shifts
-    updateShift: (shift: Shift)=> api.put<Shift>(`/api/shift/` , shift)
+    updateShift: (shift: Shift)=> api.put<Shift>(`/api/shift/` , shift),
+
+    // get Roster for the month
+    getRoster:(month:number)=>api.get(`/api/shift/roster/${month}`),
 };
 export const leaveApi={
     getAllLeaves:() => api.get<leave>(`/api/leave`),
+    approveLeave:(leaveId:number)=>api.put(`/api/leave/approve/${leaveId}`),
+    rejectLeave:(leaveId:number)=>api.put(`/api/leave/reject/${leaveId}`),
 }

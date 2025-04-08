@@ -20,7 +20,7 @@ import {ScheduleXCalendar, useCalendarApp} from "@schedule-x/react";
 import {createViewMonthGrid} from "@schedule-x/calendar";
 import dayjs from "dayjs";
 import {leaveApi} from "../service/api.ts";
-import axios from "axios";
+
 
 const Approval: React.FC = ()=> {
     const [leaveRequests, setLeaveRequests] = useState([]);
@@ -44,27 +44,10 @@ const Approval: React.FC = ()=> {
     // MUI Stuff
     const [activeTab, setActiveTab] = useState(0); // 0 for Leave requests, 1 for Shift Exchanges
     const handleTabChange = (event: React.SyntheticEvent, newValue: number)=>{setActiveTab(newValue)}
-    // const handleDecision = async (leaveId: number, action: "APPROVE" | "REJECT") => {
-    //     try {
-    //         const endpoint =
-    //             action === "APPROVE"
-    //                 ? `/api/leave/approve/${leaveId}`
-    //                 : `/api/leave/reject/${leaveId}`;
-    //
-    //         await axios.put(endpoint);
-    //
-    //         // Update the local state
-    //         setLeaveRequests(prev =>
-    //             prev.map(req =>
-    //                 req.id === leaveId
-    //                     ? { ...req, status: action === "APPROVE" ? "APPROVED" : "REJECTED" }
-    //                     : req
-    //             )
-    //         );
-    //     } catch (error) {
-    //         console.error(`Failed to ${action.toLowerCase()} leave request:`, error);
-    //     }
-    // };
+
+    // Filter for display purposes - only show pending requests in the UI
+    const pendingLeaveRequests = leaveRequests.filter(req => req.status === "PENDING");
+
 
     return(
 
@@ -94,49 +77,103 @@ const Approval: React.FC = ()=> {
                             }}/>
                         </Tabs>
                         {activeTab==0 && (
-                            <Box className="leaveReqs" sx={{ marginTop: 2 , marginRight: 3}}>
-                                <TableContainer>
-                                    <Table sx={{ width: "100%" }}>
-                                    <TableHead sx={{backgroundColor: "rgba(109,147,204,0.27)"}}>
+                            <Box className="leaveReqs" sx={{ marginTop: 2, marginRight: 3 }}>
+                            <TableContainer>
+                                <Table sx={{ width: "100%" }}>
+                                   <TableHead sx={{ backgroundColor: "rgba(109,147,204,0.27)" }}>
                                         <TableRow>
                                             <TableCell>Shift Of Request</TableCell>
                                             <TableCell>Request Type</TableCell>
                                             <TableCell>Doctor</TableCell>
                                             <TableCell>Status</TableCell>
                                         </TableRow>
-                                    </TableHead>
+                                   </TableHead>
                                     <TableBody>
-                                        {leaveRequests.map((req, index) => (
-                                            <TableRow key={index} sx={{ backgroundColor: "#ffffff" }}>
-                                                <TableCell>{dayjs(req.shift.startTime).format("MMMM D, YYYY [at] h:mm A")}</TableCell>
-                                                <TableCell>{req.type}</TableCell>
-                                                <TableCell>{req.doctor.firstName.charAt(0)}  {req.doctor.lastName}</TableCell>
-                                                <TableCell> {req.status === "PENDING" ? (
-                                                    <>
-                                                        <Button className="panel-btn" sx={{
+                                        {pendingLeaveRequests.length > 0 ? (
+                                            pendingLeaveRequests.map((req, index) => (
+                                                <TableRow key={index} sx={{ backgroundColor: "#ffffff" }}>
+                                                    <TableCell>
+                                                            {dayjs(req.shift.startTime).format("MMMM D, YYYY [at] h:mm A")}
+                                                    </TableCell>
+                                                    <TableCell>{req.type}</TableCell>
+                                                    <TableCell>
+                                                            {req.doctor.firstName.charAt(0)} {req.doctor.lastName}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <><Button className="panel-btn" sx={{
                                                             backgroundColor: "#2AED8D !important",
-                                                            "&:hover": {
-                                                                backgroundColor: "#28C77F!important",
-                                                            },
-                                                        }}> Approve </Button>
+                                                            "&:hover": {backgroundColor: "#28C77F!important",},
+                                                            }} onClick={async () => {
+                                                                try {
+                                                                    setLeaveRequests((prev) => prev.map((lr) => lr.id === req.id
+                                                                                        ? { ...lr, status: "APPROVED" } : lr));
+                                                                            const respone = await leaveApi.approveLeave(req.id);
+                                                                            console.log("Approved: ", respone.data);
+                                                                            setTimeout(() => {
+                                                                                setLeaveRequests((prev) =>
+                                                                                    prev.filter((lr) => lr.id !== req.id)
+                                                                                );
+                                                                            }, 1500);
+                                                                        } catch (e) {
+                                                                            console.error("Failed to approve leave request:", e);
+                                                                            setLeaveRequests((prev) =>
+                                                                                prev.map((lr) => lr.id === req.id ? { ...lr, status: "PENDING" } : lr));}
+                                                                    }}>Approve</Button>
 
-                                                        <Button className="panel-btn" sx={{
-                                                            backgroundColor: "#f11717 !important",
-                                                            color: "#ffffff !important",
-                                                            "&:hover": {
-                                                                backgroundColor: "#f11717!important",
-                                                            },
-                                                        }}> Reject </Button>
-                                                    </>
-                                                ) : (
-                                                    req.status
-                                                )}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
+                                                                <Button className="panel-btn" sx={{backgroundColor: "#f11717 !important",
+                                                                    color: "#ffffff !important",
+                                                                    "&:hover": {
+                                                                    backgroundColor: "#f11717!important", },
+                                                                }}
+                                                                    onClick={async () => {
+                                                                        try {
+                                                                            setLeaveRequests((prev) => prev.map((lr) => lr.id === req.id ? { ...lr, status: "REJECTED" } : lr)
+                                                                            );
+                                                                            const respone = await leaveApi.rejectLeave(req.id);
+                                                                            console.log("Rejected", respone.data);
+                                                                            setTimeout(() => {
+                                                                                setLeaveRequests((prev) =>
+                                                                                    prev.filter((lr) => lr.id !== req.id)
+                                                                                );
+                                                                            }, 1500);
+                                                                        } catch (e) {
+                                                                            console.error("Failed to reject leave request:", e);
+                                                                            setLeaveRequests((prev) =>
+                                                                                prev.map((lr) =>
+                                                                                    lr.id === req.id
+                                                                                        ? { ...lr, status: "PENDING" }
+                                                                                        : lr
+                                                                                )
+                                                                            );
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    Reject
+                                                                </Button>
+                                                            </>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} align="center">
+                                                        <Box sx={{ padding: 4, textAlign: "center", color: "#888" }}>
+                                                            <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                                                No Pending Leave Requests
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                Pending Requests Will Show Here
+                                                            </Typography>
+                                                        </Box>
+
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                        </TableBody>
                                     </Table>
                                 </TableContainer>
                             </Box>
+
                         )}
                         {activeTab==1 && (
                             <Box className="shiftExchanges" sx={{ marginTop: 2 , marginRight: 3}}>
@@ -162,25 +199,6 @@ const Approval: React.FC = ()=> {
                                 </TableContainer>
                             </Box>
                         )}
-                        {/*Indicator Box*/}
-                        <Box sx={{display: "flex", alignItems: "center", justifyContent: "flex-begin", marginTop: 2, gap: 3,}}>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                <Box sx={{ width: 12, height: 12, backgroundColor: "#2E86C1" }} />
-                                <Typography fontSize="14px">Approved</Typography>
-                            </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                <Box sx={{ width: 12, height: 12, backgroundColor: "#E74C3C" }} />
-                                <Typography fontSize="14px">Rejected</Typography>
-                            </Box>
-
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                <Box sx={{ width: 12, height: 12, backgroundColor: "#F1C40F" }} />
-                                <Typography fontSize="14px">Pending</Typography>
-                            </Box>
-                        </Box>
-
-
-
                     </Paper>
                 </Grid>
                 <Grid item  xs={3} md={4}>

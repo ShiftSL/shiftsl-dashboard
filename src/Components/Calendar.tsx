@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
-import add from "../assests/add_circle.png"
+
 import {
     createViewMonthAgenda,
     createViewMonthGrid,
@@ -29,6 +29,7 @@ function Calendar() {
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedShiftId, setSelectedShiftId] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleCreateEvent = async (formData: ShiftFormData) => {
         try {
@@ -67,7 +68,9 @@ function Calendar() {
         if (hasLoadedEvents.current) return;
         const fetchEvents = async () => {
             try {
+                setIsLoading(true);
                 const response = await shiftApi.getAllShifts();
+
                 const shifts = response.data;
                 console.log("Shifts from backend:", shifts);
                 // Passing the fetched data to the front end library
@@ -76,20 +79,27 @@ function Calendar() {
                         .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
                         .join(", ");
 
+                    const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
+                    const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
+
+                    console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
+
                     eventsService.add({
                         id: shift.id,
-                        title: `${doctorNames}` + '\n'+shift.id, // 👈 Set the doctor names here
-                        start: shift.startTime.replace("T", " ").slice(0, 16),
-                        end: shift.endTime.replace("T", " ").slice(0, 16),
+                        title: `${doctorNames}` + '\n'+shift.id,
+                        start: formattedStart,
+                        end: formattedEnd,
                     });
                 });
 
             } catch (error) {
                 console.error("Error fetching events:", error);
+            } finally {
+                setIsLoading(false);
             }
 
         };
-        // Only run fetchEvents when doctors Map is populated
+
         fetchEvents();
         hasLoadedEvents.current = true;
 
@@ -138,6 +148,13 @@ function Calendar() {
 
     return (
         <div>
+            {isLoading && (
+                <div className="loading-overlay">
+                    <div className="loading-spinner"></div>
+                    <p>Loading shifts...</p>
+                </div>
+            )}
+
             {showForm &&
                 (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setshowForm(false)} />)}
                 <ScheduleXCalendar calendarApp={calendar} />
