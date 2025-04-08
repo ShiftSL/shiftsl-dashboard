@@ -14,6 +14,7 @@ import UserProfileDialog from "./Components/UserProfile";
 import profilePic from "./assests/profile_pic.jpg";
 import { AuthProvider } from "./context/AuthContext";
 import Analytics from "./Pages/Analytics";
+import Future from "./Pages/future.tsx";
 
 // Custom Theme
 const theme = createTheme({
@@ -109,6 +110,10 @@ const App: React.FC = () => {
                       <Route path="/approval" element={<Approval />} />
                       <Route path="/employees" element={<Employees />} />
                       <Route path="/anlytics" element={<Analytics />} />
+                      <Route path="/schedules" element={<Future/>}/>
+                      <Route path="/analytics" element={<Future/>}/>
+                      <Route path="/payroll" element={<Future/>}/>
+
                     </Routes>
                   </Box>
                 </Box>

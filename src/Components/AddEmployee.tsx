@@ -150,6 +150,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
                     >
                         <MenuItem value={UserRole.DOCTOR_PERM}>Permanent</MenuItem>
                         <MenuItem value={UserRole.DOCTOR_TEMP}>Temporary</MenuItem>
+                        <MenuItem value={UserRole.WARD_ADMIN}>Ward-Admin</MenuItem>
+                        <MenuItem value={UserRole.HR_ADMIN}>HR-Admin</MenuItem>
                     </Select>
                 </FormControl>
 

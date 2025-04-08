@@ -3,6 +3,7 @@ import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css';
 import { Doctor } from "../Interfaces/Doctor.tsx";
 import { userApi } from "../service/api.ts";
+import {User} from "../types/user.ts";
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -27,11 +28,11 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     const fetchDoctors = async () => {
         try {
             const response = await userApi.getAllUsers();
-            if (Array.isArray(response.data)) {
-                setDoctors(response.data);
-            } else {
-                console.error("Unexpected API response:", response.data);
-            }
+            const filteredDoctors = response.data.filter(
+                (user: User) =>
+                    user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
+            );
+            setDoctors(filteredDoctors);
         } catch (error) {
             console.error("Error fetching doctors:", error);
         }

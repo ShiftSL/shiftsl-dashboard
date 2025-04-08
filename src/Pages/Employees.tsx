@@ -105,19 +105,19 @@ const Employees: React.FC = () => {
                 </Grid>
             </Grid>
 
-            <Box className="ward" sx={{ marginTop: "10px" }}>
-                <Select
-                    value={ward}
-                    onChange={handleWardChange}
-                    displayEmpty
-                    sx={{ width: 160, fontSize: "1rem", fontFamily: "inter", fontWeight: 600, padding: "1px" }}
-                >
-                    <MenuItem value="" disabled>Select Ward</MenuItem>
-                    <MenuItem value="ward1">Ward 1</MenuItem>
-                    <MenuItem value="ward2">Ward 2</MenuItem>
-                    <MenuItem value="ward3">Ward 3</MenuItem>
-                </Select>
-            </Box>
+            {/*<Box className="ward" sx={{ marginTop: "10px" }}>*/}
+            {/*    <Select*/}
+            {/*        value={ward}*/}
+            {/*        onChange={handleWardChange}*/}
+            {/*        displayEmpty*/}
+            {/*        sx={{ width: 160, fontSize: "1rem", fontFamily: "inter", fontWeight: 600, padding: "1px" }}*/}
+            {/*    >*/}
+            {/*        <MenuItem value="" disabled>Select Ward</MenuItem>*/}
+            {/*        <MenuItem value="ward1">Ward 1</MenuItem>*/}
+            {/*        <MenuItem value="ward2">Ward 2</MenuItem>*/}
+            {/*        <MenuItem value="ward3">Ward 3</MenuItem>*/}
+            {/*    </Select>*/}
+            {/*</Box>*/}
 
             <Box className="panel" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "20px" }}>
                 {/* Left Section with Tabs */}

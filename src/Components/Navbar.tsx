@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import logo from "../assests/logo.png";
 
 import {
@@ -60,14 +60,12 @@ const menuItems = [
     section: "Main Menu",
     items: [
       { text: "Dashboard", icon: <Dashboard />, route: "/dashboard" },
-      // { text: "Doctors' Roster", icon: <ListAlt />, route: "/doctors" },
-      // { text: "Nurses' Roster", icon: <ListAlt />, route: "/nurses" },
       { text: "Employees", icon: <Groups />, route: "/employees" },
       { text: "Analytics", icon: <BarChart />, route: "/analytics" },
     ],
   },
   {
-    section: "Other Menu",
+    section: "Other",
     items: [
       { text: "Schedules", icon: <CalendarMonth />, route: "/schedules" },
       { text: "Approval", icon: <ListAlt />, route: "/approval" },
@@ -77,8 +75,25 @@ const menuItems = [
 ];
 
 const Navbar: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState("Employees");
+  const [selectedItem, setSelectedItem] = useState("Dashboard");
   const navigate = useNavigate();
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    // Find the menu item that matches the current path
+    for (const section of menuItems) {
+      for (const item of section.items) {
+        if (item.route === currentPath) {
+          setSelectedItem(item.text);
+          return;
+        }
+      }
+    }
+
+    // If no match is found (e.g., on first load at root path), default to Dashboard
+    if (currentPath === "/") {
+      setSelectedItem("Dashboard");
+    }});
 
   return (
     <StyledDrawer variant="permanent" anchor="left">

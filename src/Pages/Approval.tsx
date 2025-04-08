@@ -24,16 +24,20 @@ import {leaveApi} from "../service/api.ts";
 
 const Approval: React.FC = ()=> {
     const [leaveRequests, setLeaveRequests] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchLeaveRequests = async () => {
             try { // API TO GET LEAVE REQUESTS
+                setLoading(true);
                 const response = await leaveApi.getAllLeaves();
                 console.log("Leave Requests Fetched: ")
                 console.log(response)
                 setLeaveRequests(response.data);
             } catch (error) {
                 console.error("Failed to fetch leave requests:", error);
+            }finally {
+                setLoading(false);
             }
         };
 
@@ -100,7 +104,9 @@ const Approval: React.FC = ()=> {
                                                             {req.doctor.firstName.charAt(0)} {req.doctor.lastName}
                                                     </TableCell>
                                                     <TableCell>
-                                                        <><Button className="panel-btn" sx={{
+                                                        <>
+                                                            <Box sx={{ display: "flex", gap: 1 }}>
+                                                            <Button className="panel-btn" sx={{
                                                             backgroundColor: "#2AED8D !important",
                                                             "&:hover": {backgroundColor: "#28C77F!important",},
                                                             }} onClick={async () => {
@@ -150,6 +156,7 @@ const Approval: React.FC = ()=> {
                                                                 >
                                                                     Reject
                                                                 </Button>
+                                                            </Box>
                                                             </>
                                                         </TableCell>
                                                     </TableRow>
