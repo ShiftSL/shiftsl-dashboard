@@ -15,7 +15,6 @@ const Login: React.FC = () => {
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
   // Validating the email format
@@ -52,7 +51,6 @@ const Login: React.FC = () => {
 
     // If email and password valid handling the login logic
     if (valid) {
-      setLoading(true);
       await login(email, password);
       navigate("/dashboard")
     }

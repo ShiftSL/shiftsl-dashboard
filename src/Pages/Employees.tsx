@@ -4,10 +4,7 @@ import {
     Box,
     Button,
     Grid,
-    MenuItem,
     Modal,
-    Select,
-    SelectChangeEvent,
     Table,
     TableBody,
     TableCell,
@@ -21,30 +18,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import "../CSS/Employees.css";
 import AddEmployee from "../Components/AddEmployee.tsx";
 import {userApi} from "../service/api.ts";
-import {User, UserDTO, UserRole} from "../types/user.ts";
+import {User, UserDTO} from "../types/user.ts";
 
 const Employees: React.FC = () => {
-    const [ward, setWard] = useState("");
     const [doctors, setDoctors] = useState<User[]>([]);
     const [admins, setAdmins] = useState<User[]>([]);
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-    const handleWardChange = (event: SelectChangeEvent) => {
-        setWard(event.target.value);
-    };
 
     useEffect(() => {
-        // Fetch the current logged-in user
-        const fetchCurrentUser = async () =>{
-            const user = await userApi.getUser();
-        }
-
-        },[]);
-
-    useEffect(() => {
-        const fetchUsers = async () => {
+        ( async () => {
             try {
                 const response = await userApi.getAllUsers();
                 const filteredDoctors = response.data.filter(
@@ -62,8 +45,8 @@ const Employees: React.FC = () => {
             } catch (error) {
                 console.error("Error Fetching Users", error);
             }
-        }
-        fetchUsers();
+        })
+        ();
     }, []);
 
     const handleDoctorAdded = async (newDoctor: UserDTO) => {
@@ -100,24 +83,10 @@ const Employees: React.FC = () => {
 
                 <Grid item>
                     <Typography variant="h6">
-                        {activeTab === 'members' ? "Doctor's List" : "Admin's List"}
+                        {activeTab === 'members' ? "Doctor's List" : "Admins List"}
                     </Typography>
                 </Grid>
             </Grid>
-
-            {/*<Box className="ward" sx={{ marginTop: "10px" }}>*/}
-            {/*    <Select*/}
-            {/*        value={ward}*/}
-            {/*        onChange={handleWardChange}*/}
-            {/*        displayEmpty*/}
-            {/*        sx={{ width: 160, fontSize: "1rem", fontFamily: "inter", fontWeight: 600, padding: "1px" }}*/}
-            {/*    >*/}
-            {/*        <MenuItem value="" disabled>Select Ward</MenuItem>*/}
-            {/*        <MenuItem value="ward1">Ward 1</MenuItem>*/}
-            {/*        <MenuItem value="ward2">Ward 2</MenuItem>*/}
-            {/*        <MenuItem value="ward3">Ward 3</MenuItem>*/}
-            {/*    </Select>*/}
-            {/*</Box>*/}
 
             <Box className="panel" sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "20px" }}>
                 {/* Left Section with Tabs */}

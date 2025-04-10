@@ -6,13 +6,14 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Slide,
 } from '@mui/material';
+import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 
-const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(
-    props,
-    ref
+// Fixed Transition component with proper typing
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & { children: React.ReactElement },
+    ref: React.Ref<unknown>
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -24,12 +25,16 @@ interface ConfirmDeleteDialogProps {
     shiftId: number | null;
 }
 
-export default function ConfirmDeleteDialog({open, onClose, onConfirm, shiftId,}: ConfirmDeleteDialogProps) {
+export default function ConfirmDeleteDialog({
+                                                open,
+                                                onClose,
+                                                onConfirm,
+                                                shiftId,
+                                            }: ConfirmDeleteDialogProps) {
     return (
         <Dialog
             open={open}
             TransitionComponent={Transition}
-            keepMounted
             onClose={onClose}
             aria-describedby="alert-dialog-slide-description"
         >

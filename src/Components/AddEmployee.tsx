@@ -1,14 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import {
-    Button,
-    TextField,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
-    Typography,
-    Paper,
-} from "@mui/material";
+import {Button, TextField, Select, MenuItem, FormControl, Typography, Paper,} from "@mui/material";
 import { UserDTO, UserRole } from "../types/user.ts";
 import { SelectChangeEvent } from "@mui/material"; // Import SelectChangeEvent
 
