@@ -1,6 +1,6 @@
 import type React from "react"
 import { Box } from "@mui/material"
-import groupImage from "../assests/Group.svg" 
+import groupImage from "../assests/Group.svg"
 
 const GroupIllustration: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const GroupIllustration: React.FC = () => {
       }}
     >
       <img
-        src={groupImage} 
+        src={groupImage as string}
         alt="Team Collaboration"
         style={{
           maxWidth: "100%",

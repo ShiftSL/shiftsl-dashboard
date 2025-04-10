@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css';
-import { Doctor } from "../Interfaces/Doctor.tsx";
 import { userApi } from "../service/api.ts";
 import {User} from "../types/user.ts";
 
@@ -13,7 +12,6 @@ const shiftOptions = [
 
 const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
-        id: initialData?.id || 0,
         title: initialData?.title || "",
         start: initialData?.start || "",
         end: initialData?.end || "",
@@ -22,7 +20,7 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
-    const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [doctors, setDoctors] = useState<User[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
 
     const fetchDoctors = async () => {
@@ -39,7 +37,13 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
     };
 
     useEffect(() => {
-        fetchDoctors();
+        (async () => {
+            try {
+                await fetchDoctors();
+            } catch (err) {
+                console.error("Error inside useEffect:", err);
+            }
+        })();
     }, []);
 
     // Handle doctor selection

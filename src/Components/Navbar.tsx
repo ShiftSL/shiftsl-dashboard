@@ -98,7 +98,7 @@ const Navbar: React.FC = () => {
   return (
     <StyledDrawer variant="permanent" anchor="left">
       <Toolbar>
-        <Logo src={logo} alt="ShiftSL Logo" />
+        <Logo src={logo as string} alt="ShiftSL Logo" />
       </Toolbar>
       <Divider />
       <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>

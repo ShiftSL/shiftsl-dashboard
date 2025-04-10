@@ -6,7 +6,7 @@ const Logo: React.FC = () => {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <img
-        src={logoImage} 
+        src={logoImage as string}
         alt="shiftSL Logo"
         style={{
           height: "40px",

@@ -24,7 +24,7 @@ function Calendar() {
     useEventPositionAdjustment()
     const hasLoadedEvents = useRef(false);
     const eventsService = useState(() => createEventsServicePlugin())[0]
-    const [showForm, setshowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -54,26 +54,29 @@ function Calendar() {
                 totalDoctors: formData.people.length, // should be between 3 or 6
                                 startTime: formattedStart,
                                 endTime: formattedEnd,
-                                doctorIds: formData.people
+                                doctorIds: formData.people.map(id => Number(id))
             });
             console.log("Shift successfully created in backend:", response.data);
             setRefreshTrigger(prev => prev + 1);
         } catch (e) { console.error("error sending to data Backend: " + e) }
 
-        setshowForm(false);
+        setShowForm(false);
 
     };
 
     useEffect(() => {
         if (hasLoadedEvents.current) return;
-        const fetchEvents = async () => {
+
+        hasLoadedEvents.current = true; // 👈 Prevent duplicate fetching early
+
+        (async () => {
             try {
                 setIsLoading(true);
                 const response = await shiftApi.getAllShifts();
 
                 const shifts = response.data;
                 console.log("Shifts from backend:", shifts);
-                // Passing the fetched data to the front end library
+
                 shifts.forEach((shift: any) => {
                     const doctorNames = shift.doctors
                         .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
@@ -86,7 +89,7 @@ function Calendar() {
 
                     eventsService.add({
                         id: shift.id,
-                        title: `${doctorNames}` + '\n'+shift.id,
+                        title: `${doctorNames}` + '\n' + shift.id,
                         start: formattedStart,
                         end: formattedEnd,
                     });
@@ -97,13 +100,9 @@ function Calendar() {
             } finally {
                 setIsLoading(false);
             }
-
-        };
-
-        fetchEvents();
-        hasLoadedEvents.current = true;
-
+        })();
     }, [eventsService, refreshTrigger]);
+
 
     const handleDeleteConfirm = async () => {
         if (selectedShiftId !== null) {
@@ -140,7 +139,7 @@ function Calendar() {
             },
             onClickDateTime:(clickedDateTime) => {
                 console.log("Date time clicked: ", clickedDateTime);
-                setshowForm(true);
+                setShowForm(true);
 
             }
         }
@@ -156,7 +155,7 @@ function Calendar() {
             )}
 
             {showForm &&
-                (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setshowForm(false)} />)}
+                (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setShowForm(false)} />)}
                 <ScheduleXCalendar calendarApp={calendar} />
                 <ConfirmDeleteDialog open={dialogOpen} shiftId={selectedShiftId} onClose={handleDialogClose} onConfirm={handleDeleteConfirm}/>
         </div>

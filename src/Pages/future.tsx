@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Typography, Toolbar, Paper, Zoom } from "@mui/material";
 import { Construction } from "@mui/icons-material";
 
-const drawerWidth = 240;
 
 const Future: React.FC = () => {
     return (

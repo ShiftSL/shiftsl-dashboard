@@ -3,11 +3,13 @@ The Page to accept Approvals to exchange Shifts.
  */
 import React, {useEffect, useState} from "react";
 import {
-    Box, Button,
+    Box,
+    Button,
     Grid,
     Paper,
     Tab,
-    Table, TableBody,
+    Table,
+    TableBody,
     TableCell,
     TableContainer,
     TableHead,
@@ -20,34 +22,30 @@ import {ScheduleXCalendar, useCalendarApp} from "@schedule-x/react";
 import {createViewMonthGrid} from "@schedule-x/calendar";
 import dayjs from "dayjs";
 import {leaveApi} from "../service/api.ts";
+import {Leave, leaveStatus} from "../types/leave.ts";
 
 
 const Approval: React.FC = ()=> {
-    const [leaveRequests, setLeaveRequests] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [leaveRequests, setLeaveRequests] = useState<Leave[]>([]);
+
 
     useEffect(() => {
-        const fetchLeaveRequests = async () => {
+        ( async () => {
             try { // API TO GET LEAVE REQUESTS
-                setLoading(true);
                 const response = await leaveApi.getAllLeaves();
                 console.log("Leave Requests Fetched: ")
                 console.log(response)
-                setLeaveRequests(response.data);
+                setLeaveRequests([response.data]);
             } catch (error) {
                 console.error("Failed to fetch leave requests:", error);
-            }finally {
-                setLoading(false);
             }
-        };
-
-        fetchLeaveRequests();
+        })();
     }, []);
     // Calendar
     const calendar = useCalendarApp({views: [createViewMonthGrid()]})
     // MUI Stuff
     const [activeTab, setActiveTab] = useState(0); // 0 for Leave requests, 1 for Shift Exchanges
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number)=>{setActiveTab(newValue)}
+    const handleTabChange = (_: React.SyntheticEvent, newValue: number)=>{setActiveTab(newValue)}
 
     // Filter for display purposes - only show pending requests in the UI
     const pendingLeaveRequests = leaveRequests.filter(req => req.status === "PENDING");
@@ -112,9 +110,9 @@ const Approval: React.FC = ()=> {
                                                             }} onClick={async () => {
                                                                 try {
                                                                     setLeaveRequests((prev) => prev.map((lr) => lr.id === req.id
-                                                                                        ? { ...lr, status: "APPROVED" } : lr));
-                                                                            const respone = await leaveApi.approveLeave(req.id);
-                                                                            console.log("Approved: ", respone.data);
+                                                                                        ? { ...lr, status: leaveStatus.APPROVED } : lr));
+                                                                            const response = await leaveApi.approveLeave(req.id);
+                                                                            console.log("Approved: ", response.data);
                                                                             setTimeout(() => {
                                                                                 setLeaveRequests((prev) =>
                                                                                     prev.filter((lr) => lr.id !== req.id)
@@ -123,7 +121,7 @@ const Approval: React.FC = ()=> {
                                                                         } catch (e) {
                                                                             console.error("Failed to approve leave request:", e);
                                                                             setLeaveRequests((prev) =>
-                                                                                prev.map((lr) => lr.id === req.id ? { ...lr, status: "PENDING" } : lr));}
+                                                                                prev.map((lr) => lr.id === req.id ? { ...lr, status: leaveStatus.PENDING } : lr));}
                                                                     }}>Approve</Button>
 
                                                                 <Button className="panel-btn" sx={{backgroundColor: "#f11717 !important",
@@ -133,10 +131,10 @@ const Approval: React.FC = ()=> {
                                                                 }}
                                                                     onClick={async () => {
                                                                         try {
-                                                                            setLeaveRequests((prev) => prev.map((lr) => lr.id === req.id ? { ...lr, status: "REJECTED" } : lr)
+                                                                            setLeaveRequests((prev) => prev.map((lr) => lr.id === req.id ? { ...lr, status: leaveStatus.REJECTED } : lr)
                                                                             );
-                                                                            const respone = await leaveApi.rejectLeave(req.id);
-                                                                            console.log("Rejected", respone.data);
+                                                                            const response = await leaveApi.rejectLeave(req.id);
+                                                                            console.log("Rejected", response.data);
                                                                             setTimeout(() => {
                                                                                 setLeaveRequests((prev) =>
                                                                                     prev.filter((lr) => lr.id !== req.id)
@@ -147,7 +145,7 @@ const Approval: React.FC = ()=> {
                                                                             setLeaveRequests((prev) =>
                                                                                 prev.map((lr) =>
                                                                                     lr.id === req.id
-                                                                                        ? { ...lr, status: "PENDING" }
+                                                                                        ? { ...lr, status: leaveStatus.PENDING }
                                                                                         : lr
                                                                                 )
                                                                             );
@@ -210,7 +208,7 @@ const Approval: React.FC = ()=> {
                 </Grid>
                 <Grid item  xs={3} md={4}>
                     <Box className="calendar" sx={{ marginTop: 2 }}>
-                        <Typography variant="h8" fontWeight="bold">Personal Calendar</Typography>
+                        <Typography variant="h6" fontWeight="bold">Personal Calendar</Typography>
                     <ScheduleXCalendar calendarApp={calendar}/>
                     </Box>
                 </Grid>

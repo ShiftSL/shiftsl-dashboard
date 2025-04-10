@@ -1,8 +1,7 @@
 import {Shift} from "./shift.ts";
-import {Doctor} from "../Interfaces/Doctor.tsx";
 import {User} from "./user.ts";
 
-export interface leave{
+export interface Leave{
             type: leaveType,
             cause: string,
             shift: Shift,
