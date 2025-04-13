@@ -13,7 +13,6 @@ import {
     TableRow, Tooltip,
     Typography
 } from "@mui/material";
-import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,11 +28,12 @@ const Employees: React.FC = () => {
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
     const [editUser, setEditUser] = useState<User>(null);
-    const {currentUser, hasRole} = useAuth();
+    const {currentUser} = useAuth();
 
     useEffect(() => {
         ( async () => {
             try {
+                console.log(currentUser?.firstName+" "+currentUser?.lastName+" "+currentUser?.role);
                 const response = await userApi.getAllUsers();
                 const filteredDoctors = response.data.filter(
                     (user: User) =>
@@ -53,6 +53,9 @@ const Employees: React.FC = () => {
         })
         ();
     }, []);
+    const isHRAdmin = ()=> {
+        return currentUser?.role === "HR_ADMIN";
+    }
 
     const handleDoctorAdded = async (newDoctor: UserDTO) => {
         try {
@@ -141,32 +144,36 @@ const Employees: React.FC = () => {
                 </Box>
 
                 {/* Right Section - Add & Filter */}
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-                        variant="contained"
-                        startIcon={<AddCircleOutlineIcon />}
-                        className="panel-btn"
-                        sx={{
-                            color: "#2AED8D",
-                            borderColor: "#2AED8D",
-                            backgroundColor: "#2AED8D !important",
-                            "&:hover": {
-                                backgroundColor: "#28C77F!important",
-                            },
-                        }}
-                        onClick={() => {setAddForm(true); setEditUser(null);}}
-                    >
-                        Add New
-                    </Button>
+                {isHRAdmin() &&(
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddCircleOutlineIcon />}
+                            className="panel-btn"
+                            sx={{
+                                color: "#2AED8D",
+                                borderColor: "#2AED8D",
+                                backgroundColor: "#2AED8D !important",
+                                "&:hover": {
+                                    backgroundColor: "#28C77F!important",
+                                },
+                            }}
+                            onClick={() => {setAddForm(true); setEditUser(null);}}
+                        >
+                            Add New
+                        </Button>
 
-                    <Modal open={addForm} onClose={() => {setAddForm(false); setEditUser(null);}}>
-                        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
-                            <AddEmployee onDoctorAdded={handleDoctorAdded} existingDoctor={editUser} />
-                        </Box>
-                    </Modal>
+                        <Modal open={addForm} onClose={() => {setAddForm(false); setEditUser(null);}}>
+                            <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
+                                <AddEmployee onDoctorAdded={handleDoctorAdded} existingDoctor={editUser} />
+                            </Box>
+                        </Modal>
+                    </Box>)}
+                    </Box>
 
-                </Box>
-            </Box>
+
+
+
 
             <Box className="List" sx={{ padding: "20px", width: "100%" }}>
                 <TableContainer sx={{ maxWidth: "100%" }}>
@@ -179,7 +186,8 @@ const Employees: React.FC = () => {
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>SLMC RegNo</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Email</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Status</TableCell>
-                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Action</TableCell>
+                                {isHRAdmin() && (<TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Action</TableCell>)}
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -191,7 +199,7 @@ const Employees: React.FC = () => {
                                     <TableCell>{user.slmcReg}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
-                                    <TableCell>
+                                    {isHRAdmin() && (<TableCell>
                                         <Tooltip title="Edit">
                                             <IconButton onClick={() => updateUserAdded(user)}>
                                                 <EditIcon color="primary" />
@@ -203,7 +211,8 @@ const Employees: React.FC = () => {
                                             </IconButton>
                                         </Tooltip>
 
-                                    </TableCell>
+                                    </TableCell>)}
+
                                 </TableRow>
                             ))}
                         </TableBody>
