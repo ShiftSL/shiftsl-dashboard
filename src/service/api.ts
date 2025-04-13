@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {User, UserDTO, UserRole} from '../types/user';
+import {User, UserDTO} from '../types/user';
 import {Shift, shiftDTO} from "../types/shift.ts";
 import {Leave} from "../types/leave.ts";
 
@@ -38,7 +38,7 @@ export const userApi = {
     getAllUsers: () => api.get<User[]>('/api/user/get-all'),
 
     // Get Users by Role
-    getUsersByRole:(role: string) => api.get<User[]>(`api/user/role/${UserRole}`),
+    // getUsersByRole:(role: string) => api.get<User[]>(`api/user/role/${UserRole}`),
 
     // Update User
     updateUser: (id:number, user: User) => api.put<User>(`/api/user/${id}`, user),

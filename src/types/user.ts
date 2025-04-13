@@ -17,6 +17,7 @@ export interface UserDTO {
     email: string;
     role: UserRole;
     slmcReg: string
+    firebaseUid?: string;
 }
 
 export enum UserRole {

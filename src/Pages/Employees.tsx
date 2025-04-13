@@ -27,7 +27,7 @@ const Employees: React.FC = () => {
     const [admins, setAdmins] = useState<User[]>([]);
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
-    const [editUser, setEditUser] = useState<User>(null);
+    const [editUser, setEditUser] = useState<User| null>(null);
     const {currentUser} = useAuth();
 
     useEffect(() => {
