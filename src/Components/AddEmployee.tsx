@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Button, TextField, Select, MenuItem, FormControl, Typography, Paper,} from "@mui/material";
 import {User, UserDTO, UserRole} from "../types/user.ts";
 import { SelectChangeEvent } from "@mui/material";
@@ -18,7 +18,33 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded, existingDoctor
         email: existingDoctor?.email || "",
         slmcReg: existingDoctor?.slmcReg || "",
         role: existingDoctor?.role || UserRole.DOCTOR_PERM,
+        firebaseUid: existingDoctor?.firebaseUid||""
     });
+    useEffect(() => {
+        if (existingDoctor) {
+            // When editing a user, populate with their data
+            setFormData({
+                firstName: existingDoctor.firstName || "",
+                lastName: existingDoctor.lastName || "",
+                phoneNo: existingDoctor.phoneNo || "",
+                email: existingDoctor.email || "",
+                slmcReg: existingDoctor.slmcReg || "",
+                role: existingDoctor.role || UserRole.DOCTOR_PERM,
+                firebaseUid: existingDoctor.firebaseUid || ""
+            });
+        } else {
+            // When adding a new user, reset the form
+            setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                role: UserRole.DOCTOR_PERM,
+                phoneNo: "",
+                slmcReg: "",
+                firebaseUid: ""
+            });
+        }
+    }, [existingDoctor]);
 
     const [errors, setErrors] = useState({
         firstName: "",
@@ -76,15 +102,36 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded, existingDoctor
         if (isValid) {
             try {
                 if (existingDoctor) {
+                    const updatedUser: User = {
+                        ...existingDoctor,
+                        ...formData
+                    };
                     try{
-                        const response = await userApi.updateUser(existingDoctor.id, formData);
+                        const response = await userApi.updateUser(existingDoctor.id, updatedUser);
                         console.log("Doctor Updated", response);
+                        setFormData({
+                            firstName: "",
+                            lastName: "",
+                            email: "",
+                            role: UserRole.DOCTOR_PERM,
+                            phoneNo: "",
+                            slmcReg: ""
+                        });
                     }catch (error){
-                        console.log("Error Updating User: ",error)
+                        console.log("Error Updating User: ",error);
+                        setFormData({
+                            firstName: "",
+                            lastName: "",
+                            email: "",
+                            role: UserRole.DOCTOR_PERM,
+                            phoneNo: "",
+                            slmcReg: ""
+                        });
                     }
 
                 }else {
                     onDoctorAdded(formData);
+                    console.log(formData);
                     // to reset the data to empty
                     setFormData({
                         firstName: "",
@@ -94,14 +141,13 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded, existingDoctor
                         phoneNo: "",
                         slmcReg: ""
                     });
-                    console.log(formData);
-
                 }
             }catch (error){
                 console.error("Error Adding/ Updating User: "+error)
             }
         }
     };
+
 
     return (
         <Paper elevation={3} sx={{ padding: 4, maxWidth: "400px", margin: "20px auto" }}>

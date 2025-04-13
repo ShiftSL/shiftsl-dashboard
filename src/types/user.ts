@@ -7,6 +7,7 @@ export interface User {
     email: string;
     role: UserRole;
     slmcReg: string;
+    firebaseUid:string
 }
 
 export interface UserDTO {

@@ -21,6 +21,7 @@ import "../CSS/Employees.css";
 import AddEmployee from "../Components/AddEmployee.tsx";
 import {userApi} from "../service/api.ts";
 import {User, UserDTO} from "../types/user.ts";
+import { useAuth } from '../context/AuthContext'; // Adjust path if needed
 
 const Employees: React.FC = () => {
     const [doctors, setDoctors] = useState<User[]>([]);
@@ -28,6 +29,7 @@ const Employees: React.FC = () => {
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
     const [editUser, setEditUser] = useState<User>(null);
+    const {currentUser, hasRole} = useAuth();
 
     useEffect(() => {
         ( async () => {
@@ -54,6 +56,7 @@ const Employees: React.FC = () => {
 
     const handleDoctorAdded = async (newDoctor: UserDTO) => {
         try {
+            setEditUser(null);
             const response = await userApi.saveUser(newDoctor);
             const savedDoctor = response.data;
 
@@ -151,32 +154,17 @@ const Employees: React.FC = () => {
                                 backgroundColor: "#28C77F!important",
                             },
                         }}
-                        onClick={() => setAddForm(true)}
+                        onClick={() => {setAddForm(true); setEditUser(null);}}
                     >
                         Add New
                     </Button>
 
-                    <Modal open={addForm} onClose={() => setAddForm(false)}>
+                    <Modal open={addForm} onClose={() => {setAddForm(false); setEditUser(null);}}>
                         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
                             <AddEmployee onDoctorAdded={handleDoctorAdded} existingDoctor={editUser} />
                         </Box>
                     </Modal>
 
-                    <Button
-                        variant="outlined"
-                        startIcon={<FilterListIcon />}
-                        className="panel-btn"
-                        sx={{
-                            color: "#2AED8D",
-                            borderColor: "#2AED8D",
-                            backgroundColor: "#2AED8D !important",
-                            "&:hover": {
-                                backgroundColor: "#28C77F!important",
-                            },
-                        }}
-                    >
-                        Filter
-                    </Button>
                 </Box>
             </Box>
 
@@ -188,7 +176,7 @@ const Employees: React.FC = () => {
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>First Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Last Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Mobile</TableCell>
-                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>SLMCRegNo</TableCell>
+                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>SLMC RegNo</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Email</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Status</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Action</TableCell>
@@ -210,8 +198,8 @@ const Employees: React.FC = () => {
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Delete">
-                                            <IconButton>
-                                                <DeleteIcon color="primary" onClick={()=> deleteUser(user.id)} />
+                                            <IconButton onClick={()=> deleteUser(user.id)}>
+                                                <DeleteIcon color="primary"  />
                                             </IconButton>
                                         </Tooltip>
 
