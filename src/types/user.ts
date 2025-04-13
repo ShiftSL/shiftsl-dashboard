@@ -6,7 +6,8 @@ export interface User {
     phoneNo: string;
     email: string;
     role: UserRole;
-
+    slmcReg: string;
+    firebaseUid:string
 }
 
 export interface UserDTO {
@@ -15,6 +16,8 @@ export interface UserDTO {
     phoneNo: string;
     email: string;
     role: UserRole;
+    slmcReg: string
+    firebaseUid?: string;
 }
 
 export enum UserRole {

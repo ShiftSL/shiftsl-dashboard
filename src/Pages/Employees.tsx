@@ -3,32 +3,37 @@ import React, {useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Grid,
+    Grid, IconButton,
     Modal,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
+    TableRow, Tooltip,
     Typography
 } from "@mui/material";
-import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import "../CSS/Employees.css";
 import AddEmployee from "../Components/AddEmployee.tsx";
 import {userApi} from "../service/api.ts";
 import {User, UserDTO} from "../types/user.ts";
+import { useAuth } from '../context/AuthContext'; // Adjust path if needed
 
 const Employees: React.FC = () => {
     const [doctors, setDoctors] = useState<User[]>([]);
     const [admins, setAdmins] = useState<User[]>([]);
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
+    const [editUser, setEditUser] = useState<User| null>(null);
+    const {currentUser} = useAuth();
 
     useEffect(() => {
         ( async () => {
             try {
+                console.log(currentUser?.firstName+" "+currentUser?.lastName+" "+currentUser?.role);
                 const response = await userApi.getAllUsers();
                 const filteredDoctors = response.data.filter(
                     (user: User) =>
@@ -48,9 +53,13 @@ const Employees: React.FC = () => {
         })
         ();
     }, []);
+    const isHRAdmin = ()=> {
+        return currentUser?.role === "HR_ADMIN";
+    }
 
     const handleDoctorAdded = async (newDoctor: UserDTO) => {
         try {
+            setEditUser(null);
             const response = await userApi.saveUser(newDoctor);
             const savedDoctor = response.data;
 
@@ -70,6 +79,18 @@ const Employees: React.FC = () => {
         }
     }
 
+    const updateUserAdded = async (user: User) =>{
+        setEditUser(user);
+        setAddForm(true);
+    }
+    const deleteUser = async (id: number)=>{
+        try{
+            const response =   await userApi.deleteUser(id);
+            console.log(response);
+        }catch (error){
+            console.log("Error Deleting User ", error)
+        }
+    }
     const displayedUsers = activeTab === 'members' ? doctors : admins;
 
     return (
@@ -123,47 +144,36 @@ const Employees: React.FC = () => {
                 </Box>
 
                 {/* Right Section - Add & Filter */}
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-                        variant="contained"
-                        startIcon={<AddCircleOutlineIcon />}
-                        className="panel-btn"
-                        sx={{
-                            color: "#2AED8D",
-                            borderColor: "#2AED8D",
-                            backgroundColor: "#2AED8D !important",
-                            "&:hover": {
-                                backgroundColor: "#28C77F!important",
-                            },
-                        }}
-                        onClick={() => setAddForm(true)}
-                    >
-                        Add New
-                    </Button>
+                {isHRAdmin() &&(
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddCircleOutlineIcon />}
+                            className="panel-btn"
+                            sx={{
+                                color: "#2AED8D",
+                                borderColor: "#2AED8D",
+                                backgroundColor: "#2AED8D !important",
+                                "&:hover": {
+                                    backgroundColor: "#28C77F!important",
+                                },
+                            }}
+                            onClick={() => {setAddForm(true); setEditUser(null);}}
+                        >
+                            Add New
+                        </Button>
 
-                    <Modal open={addForm} onClose={() => setAddForm(false)}>
-                        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
-                            <AddEmployee onDoctorAdded={handleDoctorAdded} />
-                        </Box>
-                    </Modal>
+                        <Modal open={addForm} onClose={() => {setAddForm(false); setEditUser(null);}}>
+                            <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
+                                <AddEmployee onDoctorAdded={handleDoctorAdded} existingDoctor={editUser} />
+                            </Box>
+                        </Modal>
+                    </Box>)}
+                    </Box>
 
-                    <Button
-                        variant="outlined"
-                        startIcon={<FilterListIcon />}
-                        className="panel-btn"
-                        sx={{
-                            color: "#2AED8D",
-                            borderColor: "#2AED8D",
-                            backgroundColor: "#2AED8D !important",
-                            "&:hover": {
-                                backgroundColor: "#28C77F!important",
-                            },
-                        }}
-                    >
-                        Filter
-                    </Button>
-                </Box>
-            </Box>
+
+
+
 
             <Box className="List" sx={{ padding: "20px", width: "100%" }}>
                 <TableContainer sx={{ maxWidth: "100%" }}>
@@ -173,18 +183,36 @@ const Employees: React.FC = () => {
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>First Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Last Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Mobile</TableCell>
+                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>SLMC RegNo</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Email</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Status</TableCell>
+                                {isHRAdmin() && (<TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Action</TableCell>)}
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {displayedUsers.map((user) => (
-                                <TableRow sx={{ backgroundColor: "#FDFDFD" }} key={user.id}>
+                                <TableRow sx={{ backgroundColor: "#FDFDFD" }} key={user.id} >
                                     <TableCell>{user.firstName}</TableCell>
                                     <TableCell>{user.lastName}</TableCell>
                                     <TableCell>{user.phoneNo}</TableCell>
+                                    <TableCell>{user.slmcReg}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
+                                    {isHRAdmin() && (<TableCell>
+                                        <Tooltip title="Edit">
+                                            <IconButton onClick={() => updateUserAdded(user)}>
+                                                <EditIcon color="primary" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Delete">
+                                            <IconButton onClick={()=> deleteUser(user.id)}>
+                                                <DeleteIcon color="primary"  />
+                                            </IconButton>
+                                        </Tooltip>
+
+                                    </TableCell>)}
+
                                 </TableRow>
                             ))}
                         </TableBody>
