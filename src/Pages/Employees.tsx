@@ -3,18 +3,20 @@ import React, {useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Grid,
+    Grid, IconButton,
     Modal,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
+    TableRow, Tooltip,
     Typography
 } from "@mui/material";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import "../CSS/Employees.css";
 import AddEmployee from "../Components/AddEmployee.tsx";
 import {userApi} from "../service/api.ts";
@@ -25,6 +27,7 @@ const Employees: React.FC = () => {
     const [admins, setAdmins] = useState<User[]>([]);
     const [addForm, setAddForm] = useState(false);
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
+    const [editUser, setEditUser] = useState<User>(null);
 
     useEffect(() => {
         ( async () => {
@@ -70,6 +73,18 @@ const Employees: React.FC = () => {
         }
     }
 
+    const updateUserAdded = async (user: User) =>{
+        setEditUser(user);
+        setAddForm(true);
+    }
+    const deleteUser = async (id: number)=>{
+        try{
+            const response =   await userApi.deleteUser(id);
+            console.log(response);
+        }catch (error){
+            console.log("Error Deleting User ", error)
+        }
+    }
     const displayedUsers = activeTab === 'members' ? doctors : admins;
 
     return (
@@ -143,7 +158,7 @@ const Employees: React.FC = () => {
 
                     <Modal open={addForm} onClose={() => setAddForm(false)}>
                         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", p: 3, borderRadius: 2 }}>
-                            <AddEmployee onDoctorAdded={handleDoctorAdded} />
+                            <AddEmployee onDoctorAdded={handleDoctorAdded} existingDoctor={editUser} />
                         </Box>
                     </Modal>
 
@@ -173,18 +188,34 @@ const Employees: React.FC = () => {
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>First Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Last Name</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Mobile</TableCell>
+                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>SLMCRegNo</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Email</TableCell>
                                 <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Status</TableCell>
+                                <TableCell sx={{ fontWeight: "bold", fontSize: "14px", padding: "20px" }}>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {displayedUsers.map((user) => (
-                                <TableRow sx={{ backgroundColor: "#FDFDFD" }} key={user.id}>
+                                <TableRow sx={{ backgroundColor: "#FDFDFD" }} key={user.id} >
                                     <TableCell>{user.firstName}</TableCell>
                                     <TableCell>{user.lastName}</TableCell>
                                     <TableCell>{user.phoneNo}</TableCell>
+                                    <TableCell>{user.slmcReg}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.role}</TableCell>
+                                    <TableCell>
+                                        <Tooltip title="Edit">
+                                            <IconButton onClick={() => updateUserAdded(user)}>
+                                                <EditIcon color="primary" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Delete">
+                                            <IconButton>
+                                                <DeleteIcon color="primary" onClick={()=> deleteUser(user.id)} />
+                                            </IconButton>
+                                        </Tooltip>
+
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -1,20 +1,23 @@
 import React, { ChangeEvent, useState } from "react";
 import {Button, TextField, Select, MenuItem, FormControl, Typography, Paper,} from "@mui/material";
-import { UserDTO, UserRole } from "../types/user.ts";
-import { SelectChangeEvent } from "@mui/material"; // Import SelectChangeEvent
+import {User, UserDTO, UserRole} from "../types/user.ts";
+import { SelectChangeEvent } from "@mui/material";
+import {userApi} from "../service/api.ts"; // Import SelectChangeEvent
 
 // Define props interface
 interface AddEmployeeProps {
+    existingDoctor?: User| null;
     onDoctorAdded: (newDoctor: UserDTO) => void;
 }
 
-const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
+const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded, existingDoctor }) => {
     const [formData, setFormData] = useState<UserDTO>({
-        firstName: "",
-        lastName: "",
-        phoneNo: "",
-        email: "",
-        role: UserRole.DOCTOR_PERM,
+        firstName: existingDoctor?.firstName || "",
+        lastName: existingDoctor?.lastName || "",
+        phoneNo: existingDoctor?.phoneNo || "",
+        email: existingDoctor?.email || "",
+        slmcReg: existingDoctor?.slmcReg || "",
+        role: existingDoctor?.role || UserRole.DOCTOR_PERM,
     });
 
     const [errors, setErrors] = useState({
@@ -22,6 +25,7 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
         lastName: "",
         phoneNo: "",
         email: "",
+        slmcReg: ""
     });
 
     const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +40,11 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Validate form fields
-        let formErrors = { ...errors };
+        let formErrors = {...errors};
         let isValid = true;
 
         if (!formData.firstName) {
@@ -62,78 +66,109 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
             formErrors.phoneNo = "Phone Number is required";
             isValid = false;
         }
+        if (formData.slmcReg.length != 5) {
+            formErrors.slmcReg = "SLMC Reg No Invalid Please Check";
+            isValid = false;
+        }
 
         setErrors(formErrors);
 
         if (isValid) {
-            onDoctorAdded(formData);
-            setFormData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                role: UserRole.DOCTOR_PERM,
-                phoneNo: "",
-            });
-            console.log(formData);
+            try {
+                if (existingDoctor) {
+                    try{
+                        const response = await userApi.updateUser(existingDoctor.id, formData);
+                        console.log("Doctor Updated", response);
+                    }catch (error){
+                        console.log("Error Updating User: ",error)
+                    }
+
+                }else {
+                    onDoctorAdded(formData);
+                    // to reset the data to empty
+                    setFormData({
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        role: UserRole.DOCTOR_PERM,
+                        phoneNo: "",
+                        slmcReg: ""
+                    });
+                    console.log(formData);
+
+                }
+            }catch (error){
+                console.error("Error Adding/ Updating User: "+error)
+            }
         }
     };
 
     return (
-        <Paper elevation={3} sx={{ padding: 3, maxWidth: "400px", margin: "20px auto" }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Add New Doctor
+        <Paper elevation={3} sx={{ padding: 4, maxWidth: "400px", margin: "20px auto" }}>
+            <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                {existingDoctor ? "Update Doctor" : "Add New Doctor"}
             </Typography>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <TextField
+                    size="medium"
                     fullWidth
                     label="First Name"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleTextChange}
-                    margin="normal"
                     required
                     error={!!errors.firstName}
                     helperText={errors.firstName}
                 />
                 <TextField
+                    size="medium"
                     fullWidth
                     label="Last Name"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleTextChange}
-                    margin="normal"
                     required
                     error={!!errors.lastName}
                     helperText={errors.lastName}
                 />
                 <TextField
+                    size="medium"
                     fullWidth
                     label="Email"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleTextChange}
-                    margin="normal"
                     required
                     error={!!errors.email}
                     helperText={errors.email}
                 />
                 <TextField
+                    size="medium"
                     fullWidth
                     label="Phone Number"
                     name="phoneNo"
                     type="tel"
                     value={formData.phoneNo}
                     onChange={handleTextChange}
-                    margin="normal"
                     required
                     error={!!errors.phoneNo}
                     helperText={errors.phoneNo}
                 />
+                <TextField
+                    size="medium"
+                    fullWidth
+                    label="SLMC Registration No"
+                    name="slmcReg"
+                    value={formData.slmcReg}
+                    onChange={handleTextChange}
+                    required
+                    error={!!errors.slmcReg}
+                    helperText={errors.slmcReg}
+                />
 
-                <FormControl fullWidth margin="normal">
-
+                <FormControl fullWidth size="medium">
                     <Select
                         name="role"
                         value={formData.role}
@@ -146,8 +181,8 @@ const AddEmployee: React.FC<AddEmployeeProps> = ({ onDoctorAdded }) => {
                     </Select>
                 </FormControl>
 
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
-                    Add Doctor
+                <Button type="submit" variant="contained" color="primary" fullWidth>
+                    {existingDoctor ? "Update Doctor" : "Add Doctor"}
                 </Button>
             </form>
         </Paper>

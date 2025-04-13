@@ -39,6 +39,12 @@ export const userApi = {
 
     // Get Users by Role
     // getUsersByRole:(role: string) => api.get<User[]>(`api/user/role/${UserRole}`)
+
+    // Update User
+    updateUser: (id:number, user: UserDTO) => api.put<User>(`/api/user/${id}`, user),
+
+    // Delete User
+    deleteUser: (id: number) => api.delete(`/api/user/${id}`)
 };
 export const shiftApi = {
     // Create a New shift

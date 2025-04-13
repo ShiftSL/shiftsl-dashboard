@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import { Box } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -69,8 +69,10 @@ const App: React.FC = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-            {/* Protected Routes */}
+            {/*Default  Path*/}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
+            {/* Protected Routes */}
             <Route
               path="*"
               element={
@@ -86,7 +88,7 @@ const App: React.FC = () => {
                       <Route path="/schedules" element={<Future/>}/>
                       <Route path="/analytics" element={<Future/>}/>
                       <Route path="/payroll" element={<Future/>}/>
-
+                      <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                   </Box>
                 </Box>

@@ -67,7 +67,7 @@ function Calendar() {
     useEffect(() => {
         if (hasLoadedEvents.current) return;
 
-        hasLoadedEvents.current = true; // 👈 Prevent duplicate fetching early
+        hasLoadedEvents.current = true;
 
         (async () => {
             try {
@@ -129,7 +129,7 @@ function Calendar() {
         views: [createViewWeek(),
             createViewMonthGrid(), createViewMonthAgenda(),
         ],
-        events: [],
+
         plugins: [eventsService],
         callbacks: {
             onEventClick:async (event) => {
