@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ShiftFormProps, ShiftFormData } from "../Interfaces/Types.tsx";
 import '../CSS/AssignDoctorForm.css';
-import { userApi } from "../service/api.ts";
-import {User} from "../types/user.ts";
+
 
 const shiftOptions = [
     { label: "7 AM - 1 PM", startHour: 7, endHour: 13 },
@@ -10,7 +9,8 @@ const shiftOptions = [
     { label: "7 PM - 7 AM", startHour: 19, endHour: 7 },
 ]; // Shift Options to Choose From
 
-const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData }) => {
+
+const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initialData, doctors }) => {
     const [formData, setFormData] = useState<ShiftFormData>({
         title: initialData?.title || "",
         start: initialData?.start || "",
@@ -20,31 +20,31 @@ const AssignDoctorForm: React.FC<ShiftFormProps> = ({ onSubmit, onCancel, initia
 
     const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedShift, setSelectedShift] = useState<string>("");
-    const [doctors, setDoctors] = useState<User[]>([]);
+    // const [doctors, setDoctors] = useState<User[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
 
-    const fetchDoctors = async () => {
-        try {
-            const response = await userApi.getAllUsers();
-            const filteredDoctors = response.data.filter(
-                (user: User) =>
-                    user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
-            );
-            setDoctors(filteredDoctors);
-        } catch (error) {
-            console.error("Error fetching doctors:", error);
-        }
-    };
-
-    useEffect(() => {
-        (async () => {
-            try {
-                await fetchDoctors();
-            } catch (err) {
-                console.error("Error inside useEffect:", err);
-            }
-        })();
-    }, []);
+    // const fetchDoctors = async () => {
+    //     try {
+    //         const response = await userApi.getAllUsers();
+    //         const filteredDoctors = response.data.filter(
+    //             (user: User) =>
+    //                 user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
+    //         );
+    //         setDoctors(filteredDoctors);
+    //     } catch (error) {
+    //         console.error("Error fetching doctors:", error);
+    //     }
+    // };
+    //
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             await fetchDoctors();
+    //         } catch (err) {
+    //             console.error("Error inside useEffect:", err);
+    //         }
+    //     })();
+    // }, []);
 
     // Handle doctor selection
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

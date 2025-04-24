@@ -172,6 +172,7 @@ const Navbar: React.FC = () => {
                 primaryTypographyProps={{
                   fontSize: "14px",
                   fontWeight: 500,
+                  
                 }}
               />
             </ListItemButton>
