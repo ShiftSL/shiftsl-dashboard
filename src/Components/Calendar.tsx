@@ -17,8 +17,9 @@ import '../CSS/Calendar.css'
 import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
 
 import AssignDoctorForm from "./AssignDoctorForm";
-import {shiftApi} from "../service/api.ts";
+import {shiftApi, userApi} from "../service/api.ts";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog.tsx";
+import {User} from "../types/user.ts";
 
 function Calendar() {
     useEventPositionAdjustment()
@@ -30,6 +31,7 @@ function Calendar() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedShiftId, setSelectedShiftId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [doctors, setDoctors] = useState<User[]>([]);
 
     const handleCreateEvent = async (formData: ShiftFormData) => {
         try {
@@ -64,45 +66,100 @@ function Calendar() {
 
     };
 
+    // useEffect(() => {
+    //     if (hasLoadedEvents.current) return;
+    //
+    //     hasLoadedEvents.current = true;
+    //
+    //     (async () => {
+    //         try {
+    //             setIsLoading(true);
+    //             const response = await shiftApi.getAllShifts();
+    //
+    //             const shifts = response.data;
+    //             console.log("Shifts from backend:", shifts);
+    //
+    //             shifts.forEach((shift: any) => {
+    //                 const doctorNames = shift.doctors
+    //                     .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
+    //                     .join(", ");
+    //
+    //                 const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
+    //                 const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
+    //
+    //                 console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
+    //
+    //                 eventsService.add({
+    //                     id: shift.id,
+    //                     title: `${doctorNames}` + '\n' + shift.id,
+    //                     start: formattedStart,
+    //                     end: formattedEnd,
+    //                 });
+    //             });
+    //
+    //         } catch (error) {
+    //             console.error("Error fetching events:", error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     })();
+    // }, [eventsService, refreshTrigger]);
+
+    const fetchData = async ()=>{
+        try{
+            setIsLoading(true);
+            const [shiftres, empres] = await Promise.all([
+                shiftApi.getAllShifts(), userApi.getAllUsers()
+            ])
+
+            // Shift Fetching
+            const shifts = shiftres.data;
+            console.log("Shifts from backend:", shifts);
+
+            shifts.forEach((shift: any) => {
+                const doctorNames = shift.doctors
+                    .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
+                    .join(", ");
+
+                const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
+                const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
+
+                console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
+
+                eventsService.add({
+                    id: shift.id,
+                    title: `${doctorNames}` + '\n' + shift.id,
+                    start: formattedStart,
+                    end: formattedEnd,
+                });
+            });
+
+            // Employee Fetching
+
+            const filteredDoctors = empres.data.filter(
+                (user: User) =>
+                    user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
+            );
+            setDoctors(filteredDoctors);
+        }catch (e){
+            console.error(("Error fetching Shifts / Doctors"))
+        }finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (hasLoadedEvents.current) return;
 
         hasLoadedEvents.current = true;
-
         (async () => {
             try {
-                setIsLoading(true);
-                const response = await shiftApi.getAllShifts();
-
-                const shifts = response.data;
-                console.log("Shifts from backend:", shifts);
-
-                shifts.forEach((shift: any) => {
-                    const doctorNames = shift.doctors
-                        .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
-                        .join(", ");
-
-                    const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
-                    const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
-
-                    console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
-
-                    eventsService.add({
-                        id: shift.id,
-                        title: `${doctorNames}` + '\n' + shift.id,
-                        start: formattedStart,
-                        end: formattedEnd,
-                    });
-                });
-
-            } catch (error) {
-                console.error("Error fetching events:", error);
-            } finally {
-                setIsLoading(false);
+                await fetchData();
+            } catch (err) {
+                console.error("Error inside useEffect:", err);
             }
         })();
     }, [eventsService, refreshTrigger]);
-
 
     const handleDeleteConfirm = async () => {
         if (selectedShiftId !== null) {
@@ -155,7 +212,7 @@ function Calendar() {
             )}
 
             {showForm &&
-                (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setShowForm(false)} />)}
+                (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setShowForm(false)}  doctors={doctors}/>)}
                 <ScheduleXCalendar calendarApp={calendar} />
                 <ConfirmDeleteDialog open={dialogOpen} shiftId={selectedShiftId} onClose={handleDialogClose} onConfirm={handleDeleteConfirm}/>
         </div>
