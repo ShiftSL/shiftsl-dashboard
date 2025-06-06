@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
 
 import {
@@ -14,15 +14,13 @@ import { ShiftFormData } from "../Interfaces/Types.tsx"
 import '@schedule-x/theme-default/dist/index.css'
 import '../CSS/Calendar.css'
 
-import useEventPositionAdjustment from "../Hooks/AdjustEventPositions.tsx";
-
 import AssignDoctorForm from "./AssignDoctorForm";
-import {shiftApi, userApi} from "../service/api.ts";
+import {shiftApi} from "../service/api.ts";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog.tsx";
 import {User} from "../types/user.ts";
-
+import {DataContext} from "../App.tsx";
 function Calendar() {
-    useEventPositionAdjustment()
+    
     const hasLoadedEvents = useRef(false);
     const eventsService = useState(() => createEventsServicePlugin())[0]
     const [showForm, setShowForm] = useState(false);
@@ -32,7 +30,65 @@ function Calendar() {
     const [selectedShiftId, setSelectedShiftId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [doctors, setDoctors] = useState<User[]>([]);
+    const empdata = useContext(DataContext);
 
+
+
+    const fetchData = async ()=>{
+        try{
+            setIsLoading(true);
+            const shiftres = await shiftApi.getAllShifts()
+
+            // Shift Fetching
+            const shifts = shiftres.data;
+            console.log("Shifts from backend:", shifts);
+
+            shifts.forEach((shift: any) => {
+                const doctorNames = shift.doctors
+                    .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
+                    .join(", ");
+
+                const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
+                const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
+
+                console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
+
+                eventsService.add({
+                    id: shift.id,
+                    title: `${doctorNames}` + '\n' + shift.id,
+                    start: formattedStart,
+                    end: formattedEnd,
+                });
+            });
+
+            // Employee Fetching
+            if (!empdata.length){
+                console.warn("Employees Context Not Available")
+            }
+            const filteredDoctors = empdata.filter(
+                (user: User) =>
+                    user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
+            );
+            setDoctors(filteredDoctors);
+        }catch (e){
+            console.error(("Error fetching Shifts / Doctors"))
+        }finally {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (hasLoadedEvents.current) return;
+
+        hasLoadedEvents.current = true;
+        (async () => {
+            try {
+                await fetchData();
+            } catch (err) {
+                console.error("Error inside useEffect:", err);
+            }
+        })();
+    }, [eventsService, refreshTrigger]);
     const handleCreateEvent = async (formData: ShiftFormData) => {
         try {
             const convertToISO = (dateTime: string) => {
@@ -65,101 +121,6 @@ function Calendar() {
         setShowForm(false);
 
     };
-
-    // useEffect(() => {
-    //     if (hasLoadedEvents.current) return;
-    //
-    //     hasLoadedEvents.current = true;
-    //
-    //     (async () => {
-    //         try {
-    //             setIsLoading(true);
-    //             const response = await shiftApi.getAllShifts();
-    //
-    //             const shifts = response.data;
-    //             console.log("Shifts from backend:", shifts);
-    //
-    //             shifts.forEach((shift: any) => {
-    //                 const doctorNames = shift.doctors
-    //                     .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
-    //                     .join(", ");
-    //
-    //                 const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
-    //                 const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
-    //
-    //                 console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
-    //
-    //                 eventsService.add({
-    //                     id: shift.id,
-    //                     title: `${doctorNames}` + '\n' + shift.id,
-    //                     start: formattedStart,
-    //                     end: formattedEnd,
-    //                 });
-    //             });
-    //
-    //         } catch (error) {
-    //             console.error("Error fetching events:", error);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     })();
-    // }, [eventsService, refreshTrigger]);
-
-    const fetchData = async ()=>{
-        try{
-            setIsLoading(true);
-            const [shiftres, empres] = await Promise.all([
-                shiftApi.getAllShifts(), userApi.getAllUsers()
-            ])
-
-            // Shift Fetching
-            const shifts = shiftres.data;
-            console.log("Shifts from backend:", shifts);
-
-            shifts.forEach((shift: any) => {
-                const doctorNames = shift.doctors
-                    .map((doc: any) => `Dr. ${doc.firstName.charAt(0)} ${doc.lastName}`)
-                    .join(", ");
-
-                const formattedStart = shift.startTime.replace("T", " ").slice(0, 16);
-                const formattedEnd = shift.endTime.replace("T", " ").slice(0, 16);
-
-                console.log("Adding shift:", shift.id, formattedStart, formattedEnd);
-
-                eventsService.add({
-                    id: shift.id,
-                    title: `${doctorNames}` + '\n' + shift.id,
-                    start: formattedStart,
-                    end: formattedEnd,
-                });
-            });
-
-            // Employee Fetching
-
-            const filteredDoctors = empres.data.filter(
-                (user: User) =>
-                    user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
-            );
-            setDoctors(filteredDoctors);
-        }catch (e){
-            console.error(("Error fetching Shifts / Doctors"))
-        }finally {
-            setIsLoading(false);
-        }
-    }
-
-    useEffect(() => {
-        if (hasLoadedEvents.current) return;
-
-        hasLoadedEvents.current = true;
-        (async () => {
-            try {
-                await fetchData();
-            } catch (err) {
-                console.error("Error inside useEffect:", err);
-            }
-        })();
-    }, [eventsService, refreshTrigger]);
 
     const handleDeleteConfirm = async () => {
         if (selectedShiftId !== null) {
@@ -203,6 +164,7 @@ function Calendar() {
     })
 
     return (
+
         <div>
             {isLoading && (
                 <div className="loading-overlay">
@@ -213,9 +175,12 @@ function Calendar() {
 
             {showForm &&
                 (<AssignDoctorForm onSubmit={handleCreateEvent} onCancel={() => setShowForm(false)}  doctors={doctors}/>)}
-                <ScheduleXCalendar calendarApp={calendar} />
+
+                    <ScheduleXCalendar calendarApp={calendar} />
+
                 <ConfirmDeleteDialog open={dialogOpen} shiftId={selectedShiftId} onClose={handleDialogClose} onConfirm={handleDeleteConfirm}/>
         </div>
+
 
     )
 }

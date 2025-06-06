@@ -1,5 +1,5 @@
 import "../Components/AddEmployee.tsx"
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {
     Box,
     Button,
@@ -20,7 +20,8 @@ import "../CSS/Employees.css";
 import AddEmployee from "../Components/AddEmployee.tsx";
 import {userApi} from "../service/api.ts";
 import {User, UserDTO} from "../types/user.ts";
-import { useAuth } from '../context/AuthContext'; // Adjust path if needed
+import { useAuth } from '../context/AuthContext';
+import{DataContext} from "../App.tsx";
 
 const Employees: React.FC = () => {
     const [doctors, setDoctors] = useState<User[]>([]);
@@ -29,24 +30,24 @@ const Employees: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'members' | 'admins'>('members');
     const [editUser, setEditUser] = useState<User| null>(null);
     const {currentUser} = useAuth();
+    const response = useContext(DataContext);
 
     useEffect(() => {
         ( async () => {
             try {
                 console.log(currentUser?.firstName+" "+currentUser?.lastName+" "+currentUser?.role);
-                const response = await userApi.getAllUsers();
-                const filteredDoctors = response.data.filter(
+                const filteredDoctors = response.filter(
                     (user: User) =>
                         user.role === "DOCTOR_PERM" || user.role === "DOCTOR_TEMP"
                 );
                 setDoctors(filteredDoctors);
 
-                const filteredAdmins = response.data.filter(
+                const filteredAdmins = response.filter(
                     (user: User) =>
                         user.role === "HR_ADMIN" || user.role === "WARD_ADMIN"
                 );
                 setAdmins(filteredAdmins);
-                console.log(response.data);
+                console.log(response);
             } catch (error) {
                 console.error("Error Fetching Users", error);
             }

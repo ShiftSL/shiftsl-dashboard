@@ -1,4 +1,4 @@
-import React from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import { Box } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -11,6 +11,9 @@ import LoginPage from "./Pages/login";
 import ForgotPasswordPage from "./Pages/ForgotPassword";
 import { AuthProvider } from "./context/AuthContext";
 import Future from "./Pages/future.tsx";
+import {User} from "./types/user.ts";
+import {shiftApi, userApi} from "./service/api.ts";
+import {Shift} from "./types/shift.ts";
 
 // Custom Theme
 const theme = createTheme({
@@ -55,11 +58,27 @@ const theme = createTheme({
     },
   },
 });
-
+// those curly braces are super important! As if not for the useContext will discard what is before the comma
+export const DataContext = createContext<User[]>([]);
+export const ShiftContext = createContext<Shift[]>([])
 const App: React.FC = () => {
-
+  const [emp,setEmp] = useState<User[]>([])
+  const [shifts, setShifts] = useState<Shift[]>([])
+  useEffect(() => {
+   (async ()=>{
+      try{
+      const response = await userApi.getAllUsers();
+      const shiftres = await shiftApi.getAllShifts()
+      setEmp(response.data)
+        setShifts(shiftres.data)
+      }catch (e){
+      console.error("Error Fetching Users ",e)
+    }})();
+  }, []);
 
   return (
+      <DataContext.Provider value={emp}>
+        <ShiftContext.Provider value={shifts}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -79,11 +98,10 @@ const App: React.FC = () => {
                 <Box sx={{ display: "flex" }}>
                   <Navbar />
                   <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/approval" element={<Approval />} />
                       <Route path="/employees" element={<Employees />} />
+                      <Route path="/approval" element={<Approval />} />
                       <Route path="/anlytics" element={<Future />} />
                       <Route path="/schedules" element={<Future/>}/>
                       <Route path="/analytics" element={<Future/>}/>
@@ -98,6 +116,8 @@ const App: React.FC = () => {
         </AuthProvider>
       </Router>
     </ThemeProvider>
+        </ShiftContext.Provider>
+      </DataContext.Provider>
   );
 };
 

@@ -40,9 +40,11 @@ const useEventPositionAdjustment = () => {
         observer.observe(document.body, { childList: true, subtree: true });
 
         // Initial adjustment
-        adjustEventPositions();
+        const timeout = setTimeout(() => {
+            adjustEventPositions();
+        }, 1300);
 
-        return () => observer.disconnect(); // Cleanup observer on unmount
+        return () => {observer.disconnect(); clearTimeout(timeout) }// Cleanup observer on unmount
     }, []);
 };
 
